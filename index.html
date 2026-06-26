@@ -7,6 +7,7 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
+    /* ===== ОБЩИЕ ПЕРЕМЕННЫЕ (темы) ===== */
     :root {
       --bg-body: #f8f9fa;
       --text-color: #212529;
@@ -313,222 +314,166 @@
   <div class="container">
     <h2 class="section-title" data-i18n="news_title">Новости биатлона</h2>
     <ul class="nav nav-tabs justify-content-center" id="newsTabs" role="tablist">
-      <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#world" data-i18n="tab_world">Мир</button></li>
-      <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#russia" data-i18n="tab_russia">Россия</button></li>
-      <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#transfers" data-i18n="tab_transfers">Трансферы</button></li>
+      <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#tab-world" data-i18n="tab_world">Мир</button></li>
+      <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-russia" data-i18n="tab_russia">Россия</button></li>
+      <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-transfers" data-i18n="tab_transfers">Трансферы</button></li>
     </ul>
     <div class="tab-content" id="newsTabContent">
-      <!-- ===== МИР ===== -->
-      <div class="tab-pane fade show active" id="world">
-        <div class="news-card">
-          <div class="date">26 июня 2026</div>
-          <div class="title">IBU утвердил изменения в календаре Кубка мира на сезон 2026/27</div>
-          <div class="summary">Сезон стартует в Эстерсунде 29 ноября. В календаре 10 этапов, включая новый этап в Румынии.</div>
-        </div>
-        <div class="news-card">
-          <div class="date">24 июня 2026</div>
-          <div class="title">Йоханнес Бё объявил о намерении завершить карьеру после Олимпиады-2026</div>
-          <div class="summary">Норвежский биатлонист подтвердил, что сезон 2026/27 станет для него последним.</div>
-        </div>
-        <div class="news-card">
-          <div class="date">22 июня 2026</div>
-          <div class="title">Сборная Франции провела контрольные старты в Лилле</div>
-          <div class="summary">Лучшие результаты показали Эмильен Жаклен и Жюлия Симон.</div>
-        </div>
-        <div class="news-card">
-          <div class="date">20 июня 2026</div>
-          <div class="title">Швеция объявила состав на летний чемпионат мира</div>
-          <div class="summary">В составе – Самуэльссон, Эберг, Магнуссон и молодая смена.</div>
-        </div>
-        <div class="news-card">
-          <div class="date">18 июня 2026</div>
-          <div class="title">Германия и Норвегия провели совместный сбор в Оберхофе</div>
-          <div class="summary">Стороны обменялись опытом по подготовке к олимпийскому сезону.</div>
-        </div>
-      </div>
-
-      <!-- ===== РОССИЯ ===== -->
-      <div class="tab-pane fade" id="russia">
-        <div class="news-card">
-          <div class="date">26 июня 2026</div>
-          <div class="title">Карим Халили показал лучший результат на сборе в Увате</div>
-          <div class="summary">Халили выиграл контрольную гонку с чистой стрельбой и лучшим кругом. Тренеры довольны его формой.</div>
-        </div>
-        <div class="news-card">
-          <div class="date">25 июня 2026</div>
-          <div class="title">Виктория Сливко вернулась к тренировкам после болезни</div>
-          <div class="summary">Спортсменка приступила к работе в щадящем режиме, готовится к летнему чемпионату России.</div>
-        </div>
-        <div class="news-card">
-          <div class="date">24 июня 2026</div>
-          <div class="title">СБР утвердил состав сборной на летний чемпионат мира</div>
-          <div class="summary">В состав вошли Халили, Бажин, Латыпов, Сливко, Резцова и молодые спортсмены.</div>
-        </div>
-        <div class="news-card">
-          <div class="date">23 июня 2026</div>
-          <div class="title">Юниорская сборная выиграла командный зачёт на Кубке Андерсен</div>
-          <div class="summary">Российские юниоры взяли 4 золота и 3 серебра в личных гонках.</div>
-        </div>
-        <div class="news-card">
-          <div class="date">21 июня 2026</div>
-          <div class="title">Антон Шипулин назначен тренером-консультантом мужской сборной</div>
-          <div class="summary">Легендарный биатлонист будет помогать молодым спортсменам и делиться опытом.</div>
-        </div>
-        <div class="news-card">
-          <div class="date">19 июня 2026</div>
-          <div class="title">Сборная России завершила сбор в Сочи</div>
-          <div class="summary">Заключительные контрольные старты показали хорошую готовность команды к сезону.</div>
-        </div>
-      </div>
-
-      <!-- ===== ТРАНСФЕРЫ ===== -->
-      <div class="tab-pane fade" id="transfers">
-        <div class="news-card">
-          <div class="date">Трансферное окно – обновление</div>
-
-          <div class="transfer-item">
-            <span class="icon"><i class="fas fa-arrow-right"></i></span>
-            <div class="details">
-              <span class="player">Дюжева</span> Новосибирская область ➡️ <span class="club">Московская область</span>
-            </div>
-          </div>
-
-          <div class="transfer-item">
-            <span class="icon"><i class="fas fa-arrow-right"></i></span>
-            <div class="details">
-              <span class="player">Еремин, Гришина, Домичек</span> Новосибирская область ➡️ <span class="club">ХМАО-Югра</span>
-            </div>
-          </div>
-
-          <div class="transfer-item">
-            <span class="icon"><i class="fas fa-arrow-right"></i></span>
-            <div class="details">
-              <span class="player">Евменов</span> Мордовия ➡️ <span class="club">Московская область</span>
-            </div>
-          </div>
-
-          <div class="transfer-item">
-            <span class="icon"><i class="fas fa-arrow-right"></i></span>
-            <div class="details">
-              <span class="player">Томшина</span> Красноярский край ➡️ <span class="club">ХМАО-Югра</span>
-            </div>
-          </div>
-
-          <div class="transfer-item">
-            <span class="icon"><i class="fas fa-arrow-right"></i></span>
-            <div class="details">
-              <span class="player">Томшин</span> Свердловская область ➡️ <span class="club">ХМАО-Югра</span>
-            </div>
-          </div>
-
-          <div class="transfer-item">
-            <span class="icon"><i class="fas fa-arrow-right"></i></span>
-            <div class="details">
-              <span class="player">Фоминых</span> Кировская область ➡️ <span class="club">ХМАО-Югра</span>
-            </div>
-          </div>
-
-          <div class="transfer-item">
-            <span class="icon"><i class="fas fa-arrow-right"></i></span>
-            <div class="details">
-              <span class="player">Батманова</span> Татарстан ➡️ <span class="club">ХМАО-Югра</span>
-            </div>
-          </div>
-
-          <div class="transfer-item">
-            <span class="icon"><i class="fas fa-arrow-right"></i></span>
-            <div class="details">
-              <span class="player">Бектуганов</span> ХМАО-Югра ➡️ <span class="club">Пермский край</span>
-            </div>
-          </div>
-
-          <div class="transfer-item">
-            <span class="icon"><i class="fas fa-arrow-right"></i></span>
-            <div class="details">
-              <span class="player">Емерхонов</span> Татарстан ➡️ <span class="club">Тюменская область</span>
-            </div>
-          </div>
-
-        </div>
-      </div>
+      <div class="tab-pane fade show active" id="tab-world"></div>
+      <div class="tab-pane fade" id="tab-russia"></div>
+      <div class="tab-pane fade" id="tab-transfers"></div>
     </div>
   </div>
 </section>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 <script>
-  // =========================================================================
-  //  ТЕМА И ЛОГОТИП
-  // =========================================================================
-  let currentTheme = 'light';
+// =========================================================================
+//  ДАННЫЕ В МАССИВАХ (новости, трансферы)
+// =========================================================================
+const newsData = {
+  world: [
+    { date: '26 июня 2026', title: 'IBU утвердил изменения в календаре Кубка мира на сезон 2026/27', summary: 'Сезон стартует в Эстерсунде 29 ноября. В календаре 10 этапов, включая новый этап в Румынии.' },
+    { date: '24 июня 2026', title: 'Йоханнес Бё объявил о намерении завершить карьеру после Олимпиады-2026', summary: 'Норвежский биатлонист подтвердил, что сезон 2026/27 станет для него последним.' },
+    { date: '22 июня 2026', title: 'Сборная Франции провела контрольные старты в Лилле', summary: 'Лучшие результаты показали Эмильен Жаклен и Жюлия Симон.' },
+    { date: '20 июня 2026', title: 'Швеция объявила состав на летний чемпионат мира', summary: 'В составе – Самуэльссон, Эберг, Магнуссон и молодая смена.' },
+    { date: '18 июня 2026', title: 'Германия и Норвегия провели совместный сбор в Оберхофе', summary: 'Стороны обменялись опытом по подготовке к олимпийскому сезону.' }
+  ],
+  russia: [
+    { date: '26 июня 2026', title: 'Карим Халили показал лучший результат на сборе в Увате', summary: 'Халили выиграл контрольную гонку с чистой стрельбой и лучшим кругом. Тренеры довольны его формой.' },
+    { date: '25 июня 2026', title: 'Виктория Сливко вернулась к тренировкам после болезни', summary: 'Спортсменка приступила к работе в щадящем режиме, готовится к летнему чемпионату России.' },
+    { date: '24 июня 2026', title: 'СБР утвердил состав сборной на летний чемпионат мира', summary: 'В состав вошли Халили, Бажин, Латыпов, Сливко, Резцова и молодые спортсмены.' },
+    { date: '23 июня 2026', title: 'Юниорская сборная выиграла командный зачёт на Кубке Андерсен', summary: 'Российские юниоры взяли 4 золота и 3 серебра в личных гонках.' },
+    { date: '21 июня 2026', title: 'Антон Шипулин назначен тренером-консультантом мужской сборной', summary: 'Легендарный биатлонист будет помогать молодым спортсменам и делиться опытом.' },
+    { date: '19 июня 2026', title: 'Сборная России завершила сбор в Сочи', summary: 'Заключительные контрольные старты показали хорошую готовность команды к сезону.' }
+  ],
+  transfers: [
+    { from: 'Новосибирская область', to: 'Московская область', players: ['Дюжева'] },
+    { from: 'Новосибирская область', to: 'ХМАО-Югра', players: ['Еремин', 'Гришина', 'Домичек'] },
+    { from: 'Мордовия', to: 'Московская область', players: ['Евменов'] },
+    { from: 'Красноярский край', to: 'ХМАО-Югра', players: ['Томшина'] },
+    { from: 'Свердловская область', to: 'ХМАО-Югра', players: ['Томшин'] },
+    { from: 'Кировская область', to: 'ХМАО-Югра', players: ['Фоминых'] },
+    { from: 'Татарстан', to: 'ХМАО-Югра', players: ['Батманова'] },
+    { from: 'ХМАО-Югра', to: 'Пермский край', players: ['Бектуганов'] },
+    { from: 'Татарстан', to: 'Тюменская область', players: ['Емерхонов'] }
+  ]
+};
 
-  function toggleTheme() {
-    const body = document.body;
-    const btn = document.getElementById('themeToggle');
-    const logo = document.getElementById('logoImg');
+// =========================================================================
+//  РЕНДЕРИНГ НОВОСТЕЙ
+// =========================================================================
+function renderNews() {
+  // Контейнеры
+  const worldContainer = document.getElementById('tab-world');
+  const russiaContainer = document.getElementById('tab-russia');
+  const transfersContainer = document.getElementById('tab-transfers');
 
-    if (currentTheme === 'light') {
-      body.classList.add('dark-theme');
-      btn.innerHTML = '<i class="fas fa-sun"></i>';
-      logo.src = 'images/logo-dark.png';
-      currentTheme = 'dark';
-    } else {
-      body.classList.remove('dark-theme');
-      btn.innerHTML = '<i class="fas fa-moon"></i>';
-      logo.src = 'images/logo-light.png';
-      currentTheme = 'light';
-    }
+  // Мир
+  worldContainer.innerHTML = newsData.world.map(item => `
+    <div class="news-card">
+      <div class="date">${item.date}</div>
+      <div class="title">${item.title}</div>
+      <div class="summary">${item.summary}</div>
+    </div>
+  `).join('');
+
+  // Россия
+  russiaContainer.innerHTML = newsData.russia.map(item => `
+    <div class="news-card">
+      <div class="date">${item.date}</div>
+      <div class="title">${item.title}</div>
+      <div class="summary">${item.summary}</div>
+    </div>
+  `).join('');
+
+  // Трансферы
+  transfersContainer.innerHTML = `
+    <div class="news-card">
+      <div class="date">Трансферное окно – обновление</div>
+      ${newsData.transfers.map(t => `
+        <div class="transfer-item">
+          <span class="icon"><i class="fas fa-arrow-right"></i></span>
+          <div class="details">
+            <span class="player">${t.players.join(', ')}</span>
+            ${t.from} ➡️ <span class="club">${t.to}</span>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
+// =========================================================================
+//  ТЕМА, ЛОГОТИП, ЯЗЫК (без изменений)
+// =========================================================================
+let currentTheme = 'light';
+function toggleTheme() {
+  const body = document.body;
+  const btn = document.getElementById('themeToggle');
+  const logo = document.getElementById('logoImg');
+  if (currentTheme === 'light') {
+    body.classList.add('dark-theme');
+    btn.innerHTML = '<i class="fas fa-sun"></i>';
+    logo.src = 'images/logo-dark.png';
+    currentTheme = 'dark';
+  } else {
+    body.classList.remove('dark-theme');
+    btn.innerHTML = '<i class="fas fa-moon"></i>';
+    logo.src = 'images/logo-light.png';
+    currentTheme = 'light';
   }
+}
 
-  // =========================================================================
-  //  УВЕЛИЧЕНИЕ ЛОГОТИПА
-  // =========================================================================
-  let logoExpanded = false;
+let logoExpanded = false;
+function toggleLogo() {
+  const wrapper = document.getElementById('logoWrapper');
+  logoExpanded = !logoExpanded;
+  wrapper.classList.toggle('logo-expanded', logoExpanded);
+}
 
-  function toggleLogo() {
-    const wrapper = document.getElementById('logoWrapper');
-    logoExpanded = !logoExpanded;
-    wrapper.classList.toggle('logo-expanded', logoExpanded);
+const translations = {
+  ru: {
+    news_title: "Новости биатлона",
+    tab_world: "Мир",
+    tab_russia: "Россия",
+    tab_transfers: "Трансферы"
+  },
+  en: {
+    news_title: "Biathlon News",
+    tab_world: "World",
+    tab_russia: "Russia",
+    tab_transfers: "Transfers"
   }
+};
+let currentLang = 'ru';
 
-  // =========================================================================
-  //  ЯЗЫК
-  // =========================================================================
-  const translations = {
-    ru: {
-      news_title: "Новости биатлона",
-      tab_world: "Мир",
-      tab_russia: "Россия",
-      tab_transfers: "Трансферы"
-    },
-    en: {
-      news_title: "Biathlon News",
-      tab_world: "World",
-      tab_russia: "Russia",
-      tab_transfers: "Transfers"
-    }
-  };
-  let currentLang = 'ru';
-
-  function updateLanguage(lang) {
-    currentLang = lang;
-    document.querySelectorAll('[data-i18n]').forEach(el => {
-      const key = el.dataset.i18n;
-      el.textContent = translations[lang][key] || key;
-    });
-    document.querySelectorAll('.lang-btn').forEach(btn => {
-      btn.classList.toggle('active', btn.dataset.lang === lang);
-    });
-  }
-
-  document.querySelectorAll('.lang-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
-      if (this.dataset.lang === currentLang) return;
-      updateLanguage(this.dataset.lang);
-    });
+function updateLanguage(lang) {
+  currentLang = lang;
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.dataset.i18n;
+    el.textContent = translations[lang][key] || key;
   });
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.lang === lang);
+  });
+}
 
-  updateLanguage('ru');
+document.querySelectorAll('.lang-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    if (this.dataset.lang === currentLang) return;
+    updateLanguage(this.dataset.lang);
+  });
+});
+
+// =========================================================================
+//  ИНИЦИАЛИЗАЦИЯ
+// =========================================================================
+renderNews();
+updateLanguage('ru');
+document.getElementById('lastUpdated').textContent = '2026-06-26';
 </script>
+
 </body>
 </html>
