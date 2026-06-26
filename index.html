@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
+        /* Все стили те же, что были ранее (я их не менял) */
         :root {
             --primary: #1a237e;
             --accent: #ff6f00;
@@ -300,18 +301,17 @@
 </head>
 <body>
 
-<!-- Навбар с логотипом -->
+<!-- Навбар -->
 <nav class="navbar-custom">
     <div class="container">
         <div class="d-flex justify-content-between align-items-center flex-wrap">
             <a href="#" class="brand">
-                <!-- Сюда вставьте ваш логотип -->
                 <img src="images/logo.png" alt="Biathlon Market" onerror="this.style.display='none'">
                 Biathlon<span>Market</span>
             </a>
             <span class="text-light-emphasis small">
                 <i class="far fa-calendar-alt me-1"></i>
-                Обновлено: <span id="lastUpdated">загрузка...</span>
+                Обновлено: <span id="lastUpdated">2026-06-26</span>
             </span>
         </div>
     </div>
@@ -396,7 +396,7 @@
         </div>
     </div>
 
-    <div id="loadingIndicator" class="loader"></div>
+    <div id="loadingIndicator" class="loader" style="display:none;"></div>
 </main>
 
 <!-- Модальное окно -->
@@ -424,7 +424,150 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-// ===== ЗАГРУЗКА ДАННЫХ =====
+// ===== ВСТРОЕННЫЕ ДАННЫЕ (ваши 8 спортсменов) =====
+const data = {
+    "lastUpdated": "2026-06-26",
+    "athletes": [
+        {
+            "id": 1,
+            "name": "Карим Халили",
+            "region": "Московская область",
+            "age": 25,
+            "category": "top-men",
+            "speed_sec": 22.8,
+            "shoot_lying": 92,
+            "shoot_standing": 88,
+            "points": 1427,
+            "stability": 95,
+            "rating": 94,
+            "price": 470000,
+            "photo": "halili.jpg",
+            "change": 2,
+            "change_comment": "Победитель рейтинга СБР, 1427 очков"
+        },
+        {
+            "id": 2,
+            "name": "Кирилл Бажин",
+            "region": "Свердловская область",
+            "age": 28,
+            "category": "top-men",
+            "speed_sec": 23.5,
+            "shoot_lying": 90,
+            "shoot_standing": 87,
+            "points": 1360,
+            "stability": 92,
+            "rating": 91,
+            "price": 455000,
+            "photo": "bazhin.jpg",
+            "change": 1,
+            "change_comment": "Второе место в рейтинге СБР, 1360 очков"
+        },
+        {
+            "id": 3,
+            "name": "Эдуард Латыпов",
+            "region": "Республика Башкортостан",
+            "age": 31,
+            "category": "top-men",
+            "speed_sec": 23.8,
+            "shoot_lying": 88,
+            "shoot_standing": 85,
+            "points": 1151,
+            "stability": 88,
+            "rating": 88,
+            "price": 440000,
+            "photo": "latypov.jpg",
+            "change": 0,
+            "change_comment": "Третье место в рейтинге СБР"
+        },
+        {
+            "id": 4,
+            "name": "Александр Поварницын",
+            "region": "Тюменская область",
+            "age": 30,
+            "category": "top-men",
+            "speed_sec": 24.0,
+            "shoot_lying": 86,
+            "shoot_standing": 84,
+            "points": 1106,
+            "stability": 85,
+            "rating": 86,
+            "price": 430000,
+            "photo": "povarnitsyn.jpg",
+            "change": -1,
+            "change_comment": "Четвёртое место в рейтинге СБР"
+        },
+        {
+            "id": 5,
+            "name": "Александр Логинов",
+            "region": "Тюменская область",
+            "age": 34,
+            "category": "top-men",
+            "speed_sec": 23.2,
+            "shoot_lying": 85,
+            "shoot_standing": 82,
+            "points": 830,
+            "stability": 82,
+            "rating": 84,
+            "price": 420000,
+            "photo": "loginov.jpg",
+            "change": -2,
+            "change_comment": "Десятое место в рейтинге СБР"
+        },
+        {
+            "id": 6,
+            "name": "Наталия Шевченко",
+            "region": "Свердловская область",
+            "age": 26,
+            "category": "top-women",
+            "speed_sec": 24.5,
+            "shoot_lying": 93,
+            "shoot_standing": 90,
+            "points": 1405,
+            "stability": 93,
+            "rating": 93,
+            "price": 465000,
+            "photo": "shevchenko.jpg",
+            "change": 3,
+            "change_comment": "Победительница рейтинга СБР среди женщин"
+        },
+        {
+            "id": 7,
+            "name": "Кристина Резцова",
+            "region": "Московская область",
+            "age": 29,
+            "category": "top-women",
+            "speed_sec": 24.8,
+            "shoot_lying": 90,
+            "shoot_standing": 88,
+            "points": 1338,
+            "stability": 90,
+            "rating": 90,
+            "price": 450000,
+            "photo": "reztsova.jpg",
+            "change": 2,
+            "change_comment": "Второе место в рейтинге СБР среди женщин"
+        },
+        {
+            "id": 8,
+            "name": "Анастасия Халили",
+            "region": "Московская область",
+            "age": 27,
+            "category": "top-women",
+            "speed_sec": 25.0,
+            "shoot_lying": 89,
+            "shoot_standing": 86,
+            "points": 927,
+            "stability": 87,
+            "rating": 87,
+            "price": 435000,
+            "photo": "ahalili.jpg",
+            "change": 4,
+            "change_comment": "Шестое место в рейтинге СБР среди женщин"
+        }
+    ]
+};
+
+// ===== ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ =====
 let allAthletes = [];
 let filteredAthletes = [];
 let currentPage = 1;
@@ -433,19 +576,10 @@ let currentFilter = 'all';
 let currentAgeFilter = 'all';
 let currentSort = { column: 'rating', direction: 'desc' };
 
-async function loadData() {
-    try {
-        const response = await fetch('data/data.json');
-        const data = await response.json();
-        allAthletes = data.athletes || [];
-        document.getElementById('lastUpdated').textContent = data.lastUpdated || 'неизвестно';
-    } catch (error) {
-        // Если файла нет - показываем сообщение
-        console.error('Ошибка загрузки data.json:', error);
-        document.getElementById('lastUpdated').textContent = 'ошибка загрузки';
-        allAthletes = [];
-    }
-    
+// ===== ЗАГРУЗКА ДАННЫХ (прямо из переменной) =====
+function loadData() {
+    allAthletes = data.athletes || [];
+    document.getElementById('lastUpdated').textContent = data.lastUpdated || 'неизвестно';
     applyFilters();
     updateStats();
     document.getElementById('loadingIndicator').style.display = 'none';
@@ -532,7 +666,6 @@ function renderTable() {
             'other': 'category-other'
         }[athlete.category] || 'category-other';
         
-        // Отображение изменения
         let changeHtml = '';
         if (athlete.change !== undefined) {
             if (athlete.change > 0) {
@@ -628,7 +761,6 @@ function openModal(id) {
     document.getElementById('modalTitle').textContent = athlete.name;
     const body = document.getElementById('modalBody');
     
-    // Блок изменения
     let changeBlock = '';
     if (athlete.change !== undefined && athlete.change_comment) {
         const sign = athlete.change > 0 ? '+' : '';
