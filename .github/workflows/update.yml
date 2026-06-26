@@ -1,1 +1,22 @@
+name: Update data
+on:
+  schedule:
+    - cron: '0 0 * * 0'  # каждое воскресенье в полночь
+  workflow_dispatch:  # можно запустить вручную
 
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - run: pip install requests beautifulsoup4
+      - run: python parser.py
+      - run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data.json
+          git commit -m "Auto-update data" || echo "No changes"
+          git push
