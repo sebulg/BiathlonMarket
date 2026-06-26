@@ -37,26 +37,47 @@
       margin: 0;
       padding: 0;
     }
+    /* ===== НАВБАР ===== */
     .navbar-custom {
       background: var(--dark-blue);
       border-bottom: 3px solid var(--red);
       padding: 0.6rem 0;
       transition: background 0.3s;
     }
-    .navbar-custom .navbar-brand {
+    .navbar-custom .brand {
       font-weight: 800;
       font-size: 1.6rem;
       color: white;
       display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .navbar-custom .brand .brand-row {
+      display: flex;
       align-items: center;
       gap: 10px;
     }
-    .navbar-custom .navbar-brand span { color: var(--red); }
-    .navbar-custom .navbar-brand .logo-text {
-      background: rgba(255,255,255,0.15);
-      padding: 0.1rem 0.8rem;
-      border-radius: 30px;
-      border: 1px solid rgba(255,255,255,0.2);
+    .navbar-custom .brand span { color: var(--red); }
+    .navbar-custom .brand img {
+      height: 40px;
+      width: auto;
+      transition: transform 0.3s;
+    }
+    .navbar-custom .brand.logo-expanded img {
+      transform: scale(1.4);
+    }
+    .navbar-custom .brand .logo-caption {
+      font-size: 0.8rem;
+      opacity: 0;
+      transition: opacity 0.3s;
+      text-align: center;
+      color: white;
+      margin-top: 2px;
+    }
+    .navbar-custom .brand.logo-expanded .logo-caption {
+      opacity: 1;
     }
     .navbar-custom .nav-link {
       color: rgba(255,255,255,0.8);
@@ -93,6 +114,7 @@
     }
     .theme-btn i { font-size: 1rem; }
 
+    /* ===== HERO ===== */
     .hero {
       min-height: 100vh;
       display: flex;
@@ -103,6 +125,7 @@
       color: var(--hero-text);
       padding: 2rem;
       transition: background 0.3s;
+      position: relative;
     }
     .hero .logo-big {
       font-size: 8rem;
@@ -157,6 +180,7 @@
       50% { transform: translateX(-50%) translateY(-10px); }
     }
 
+    /* ===== НОВОСТИ ===== */
     .news-section {
       padding: 3rem 0;
       background: var(--bg-body);
@@ -233,7 +257,8 @@
       .hero .logo-big { font-size: 5rem; }
       .hero h1 { font-size: 2.5rem; }
       .hero p { font-size: 1rem; }
-      .navbar-custom .navbar-brand { font-size: 1.3rem; }
+      .navbar-custom .brand { font-size: 1.3rem; }
+      .navbar-custom .brand img { height: 32px; }
       .navbar-custom .update-info { font-size: 0.7rem; gap: 6px; }
       .lang-btn, .theme-btn { font-size: 0.65rem; padding: 0.1rem 0.5rem; }
       .news-section .section-title { font-size: 2rem; }
@@ -245,10 +270,13 @@
 <!-- ===== НАВБАР ===== -->
 <nav class="navbar navbar-expand-md navbar-custom">
   <div class="container">
-    <a class="navbar-brand" href="index.html">
-      <span class="logo-text">BM</span>
-      Biathlon<span>Market</span>
-    </a>
+    <div class="brand" id="logoWrapper" onclick="toggleLogo()">
+      <div class="brand-row">
+        <img id="logoImg" src="images/logo-light.png" alt="Biathlon Market">
+        <span>Biathlon<span>Market</span></span>
+      </div>
+      <span class="logo-caption">Biathlon Market</span>
+    </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
       <span class="navbar-toggler-icon" style="filter: invert(1);"></span>
     </button>
@@ -430,23 +458,42 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
   // =========================================================================
-  //  ТЕМА И ЯЗЫК
+  //  ТЕМА И ЛОГОТИП
   // =========================================================================
   let currentTheme = 'light';
+
   function toggleTheme() {
     const body = document.body;
     const btn = document.getElementById('themeToggle');
+    const logo = document.getElementById('logoImg');
+
     if (currentTheme === 'light') {
       body.classList.add('dark-theme');
       btn.innerHTML = '<i class="fas fa-sun"></i>';
+      logo.src = 'images/logo-dark.png';
       currentTheme = 'dark';
     } else {
       body.classList.remove('dark-theme');
       btn.innerHTML = '<i class="fas fa-moon"></i>';
+      logo.src = 'images/logo-light.png';
       currentTheme = 'light';
     }
   }
 
+  // =========================================================================
+  //  УВЕЛИЧЕНИЕ ЛОГОТИПА
+  // =========================================================================
+  let logoExpanded = false;
+
+  function toggleLogo() {
+    const wrapper = document.getElementById('logoWrapper');
+    logoExpanded = !logoExpanded;
+    wrapper.classList.toggle('logo-expanded', logoExpanded);
+  }
+
+  // =========================================================================
+  //  ЯЗЫК
+  // =========================================================================
   const translations = {
     ru: {
       news_title: "Новости биатлона",
@@ -462,6 +509,7 @@
     }
   };
   let currentLang = 'ru';
+
   function updateLanguage(lang) {
     currentLang = lang;
     document.querySelectorAll('[data-i18n]').forEach(el => {
@@ -472,12 +520,14 @@
       btn.classList.toggle('active', btn.dataset.lang === lang);
     });
   }
+
   document.querySelectorAll('.lang-btn').forEach(btn => {
     btn.addEventListener('click', function() {
       if (this.dataset.lang === currentLang) return;
       updateLanguage(this.dataset.lang);
     });
   });
+
   updateLanguage('ru');
 </script>
 </body>
