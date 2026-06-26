@@ -5,12 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Biathlon Market – рейтинг биатлонистов</title>
 
-  <!-- Bootstrap 5 + иконки -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
   <style>
-    /* ===== ПЕРЕМЕННЫЕ ДЛЯ ТЕМ ===== */
+    /* ===== ПЕРЕМЕННЫЕ ===== */
     :root {
       --bg-body: #f8f9fa;
       --text-color: #212529;
@@ -71,7 +70,6 @@
       align-items: center;
       gap: 0;
       cursor: pointer;
-      transition: transform 0.3s;
     }
     .navbar-custom .brand .brand-row {
       display: flex;
@@ -191,6 +189,17 @@
       box-shadow: var(--card-shadow);
       transition: background 0.3s, box-shadow 0.3s;
     }
+    .table-custom tbody {
+      background: var(--card-bg);
+      transition: background 0.3s;
+    }
+    .table-custom tr {
+      background: var(--card-bg);
+      transition: background 0.3s;
+    }
+    .table-custom tr:hover {
+      background: var(--hover-bg);
+    }
     .table-custom thead {
       background: var(--dark-blue);
       color: white;
@@ -210,10 +219,6 @@
       border-bottom: 1px solid var(--border-color);
       font-size: 0.9rem;
       color: var(--text-color);
-    }
-    .table-custom tr:hover {
-      background: var(--hover-bg);
-      cursor: pointer;
     }
 
     .athlete-photo {
@@ -418,10 +423,9 @@
 <nav class="navbar-custom">
   <div class="container">
     <div class="d-flex justify-content-between align-items-center flex-wrap">
-      <!-- Логотип с обёрткой для клика -->
       <div class="brand" id="logoWrapper" onclick="toggleLogo()">
         <div class="brand-row">
-          <img id="logoImg" src="images/logo-light.png" alt="Biathlon Market" onerror="this.style.display='none'">
+          <img id="logoImg" src="images/logo-light.png?v=2" alt="Biathlon Market" onerror="this.style.display='none'">
           <span>Biathlon<span>Market</span></span>
         </div>
         <span class="logo-caption">Biathlon Market</span>
@@ -441,7 +445,6 @@
 
 <main class="container">
 
-  <!-- ===== СТАТИСТИКА ===== -->
   <div class="stats-bar">
     <div class="row">
       <div class="col-3 col-md-3 stat-item">
@@ -463,7 +466,6 @@
     </div>
   </div>
 
-  <!-- ===== ВКЛАДКИ + ПОИСК ===== -->
   <div class="tab-section">
     <ul class="nav nav-tabs" id="categoryTabs" role="tablist">
       <li class="nav-item"><button class="nav-link active" data-category="all" data-i18n="tab_all">Все</button></li>
@@ -486,7 +488,6 @@
     </div>
   </div>
 
-  <!-- ===== ТАБЛИЦА ===== -->
   <div class="table-custom">
     <div class="table-responsive">
       <table class="table table-custom table-hover mb-0" id="athletesTable">
@@ -504,9 +505,7 @@
             <th style="width:30px;"></th>
           </tr>
         </thead>
-        <tbody id="athletesBody">
-          <!-- рендерится JS -->
-        </tbody>
+        <tbody id="athletesBody"></tbody>
       </table>
     </div>
     <div class="d-flex justify-content-between align-items-center p-2">
@@ -518,7 +517,6 @@
   </div>
 </main>
 
-<!-- ===== МОДАЛЬНОЕ ОКНО ===== -->
 <div class="modal fade" id="athleteModal" tabindex="-1">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
@@ -615,7 +613,7 @@ const translations = {
 };
 
 // =========================================================================
-//  УПРАВЛЕНИЕ ТЕМОЙ
+//  ТЕМА
 // =========================================================================
 let currentTheme = 'light';
 
@@ -626,19 +624,19 @@ function toggleTheme() {
 
   if (currentTheme === 'light') {
     body.classList.add('dark-theme');
-    logo.src = 'images/logo-dark.png';
+    logo.src = 'images/logo-dark.png?v=2';
     themeBtn.innerHTML = '<i class="fas fa-sun"></i>';
     currentTheme = 'dark';
   } else {
     body.classList.remove('dark-theme');
-    logo.src = 'images/logo-light.png';
+    logo.src = 'images/logo-light.png?v=2';
     themeBtn.innerHTML = '<i class="fas fa-moon"></i>';
     currentTheme = 'light';
   }
 }
 
 // =========================================================================
-//  УВЕЛИЧЕНИЕ ЛОГОТИПА
+//  ЛОГОТИП (увеличение)
 // =========================================================================
 let logoExpanded = false;
 
@@ -649,7 +647,7 @@ function toggleLogo() {
 }
 
 // =========================================================================
-//  ПЕРЕКЛЮЧЕНИЕ ЯЗЫКА
+//  ЯЗЫК
 // =========================================================================
 let currentLang = 'ru';
 
@@ -675,12 +673,11 @@ function updateLanguage(lang) {
 }
 
 // =========================================================================
-//  ДАННЫЕ – 14 СПОРТСМЕНОВ
+//  ДАННЫЕ (14 спортсменов)
 // =========================================================================
 const data = {
   "lastUpdated": "2026-06-26",
   "athletes": [
-    // Мужчины (Россия)
     {
       "id": 1,
       "name": "Карим Халили",
@@ -698,10 +695,7 @@ const data = {
       "change": 2,
       "change_comment": "Лидер рейтинга СБР 2025/26",
       "season_info": "Сезон 2025/26: 6 побед на этапах Кубка России, лучший круг 22.8 сек.",
-      "achievements": [
-        "Чемпион России 2025 (спринт)",
-        "Призёр этапов Кубка IBU"
-      ]
+      "achievements": ["Чемпион России 2025 (спринт)", "Призёр этапов Кубка IBU"]
     },
     {
       "id": 2,
@@ -720,10 +714,7 @@ const data = {
       "change": 1,
       "change_comment": "Второй в рейтинге СБР",
       "season_info": "Сезон 2025/26: 4 победы, стабильно в топ-3.",
-      "achievements": [
-        "Бронзовый призёр чемпионата России 2024 (эстафета)",
-        "Участник Кубка мира 2025"
-      ]
+      "achievements": ["Бронзовый призёр чемпионата России 2024 (эстафета)", "Участник Кубка мира 2025"]
     },
     {
       "id": 3,
@@ -771,7 +762,6 @@ const data = {
         "Победитель этапов Кубка мира"
       ]
     },
-    // Женщины (Россия)
     {
       "id": 5,
       "name": "Наталия Шевченко",
@@ -789,10 +779,7 @@ const data = {
       "change": 3,
       "change_comment": "Лидер женского рейтинга",
       "season_info": "Сезон 2025/26: 7 побед на Кубке России.",
-      "achievements": [
-        "Серебряный призёр чемпионата Европы 2025",
-        "Победительница этапов Кубка IBU"
-      ]
+      "achievements": ["Серебряный призёр чемпионата Европы 2025", "Победительница этапов Кубка IBU"]
     },
     {
       "id": 6,
@@ -811,10 +798,7 @@ const data = {
       "change": 2,
       "change_comment": "Вторая в женском рейтинге",
       "season_info": "Сезон 2025/26: 5 побед, стабильность.",
-      "achievements": [
-        "Бронзовый призёр Олимпийских игр 2022 (эстафета)",
-        "Призёр этапов Кубка мира"
-      ]
+      "achievements": ["Бронзовый призёр Олимпийских игр 2022 (эстафета)", "Призёр этапов Кубка мира"]
     },
     {
       "id": 7,
@@ -833,12 +817,8 @@ const data = {
       "change": 4,
       "change_comment": "Прогресс",
       "season_info": "Сезон 2025/26: 3 победы, улучшает стрельбу.",
-      "achievements": [
-        "Чемпионка России 2025 (масс-старт)",
-        "Участница Кубка мира"
-      ]
+      "achievements": ["Чемпионка России 2025 (масс-старт)", "Участница Кубка мира"]
     },
-    // Юниоры (Россия)
     {
       "id": 8,
       "name": "Иван Соколов",
@@ -856,10 +836,7 @@ const data = {
       "change": 5,
       "change_comment": "Лидер юниоров",
       "season_info": "Сезон 2025/26: 2 победы на юниорских Кубках.",
-      "achievements": [
-        "Чемпион мира среди юниоров 2026 (спринт)",
-        "Серебряный призёр юниорского ЧМ 2025"
-      ]
+      "achievements": ["Чемпион мира среди юниоров 2026 (спринт)", "Серебряный призёр юниорского ЧМ 2025"]
     },
     {
       "id": 9,
@@ -878,12 +855,8 @@ const data = {
       "change": 7,
       "change_comment": "Лидер юниорок",
       "season_info": "Сезон 2025/26: 3 победы на юниорских стартах.",
-      "achievements": [
-        "Чемпионка России среди юниоров 2026",
-        "Бронзовый призёр юниорского ЧЕ 2025"
-      ]
+      "achievements": ["Чемпионка России среди юниоров 2026", "Бронзовый призёр юниорского ЧЕ 2025"]
     },
-    // Завершившие (легенды)
     {
       "id": 10,
       "name": "Уле-Эйнар Бьорндален",
@@ -901,11 +874,7 @@ const data = {
       "change": 0,
       "change_comment": "Легенда, завершил карьеру",
       "season_info": "Сезон 2025/26: не бежал",
-      "achievements": [
-        "8-кратный олимпийский чемпион",
-        "20-кратный чемпион мира",
-        "6-кратный обладатель Кубка мира"
-      ]
+      "achievements": ["8-кратный олимпийский чемпион", "20-кратный чемпион мира", "6-кратный обладатель Кубка мира"]
     },
     {
       "id": 11,
@@ -924,11 +893,7 @@ const data = {
       "change": 0,
       "change_comment": "Завершил карьеру в 2020",
       "season_info": "Сезон 2025/26: не бежал",
-      "achievements": [
-        "7-кратный олимпийский чемпион",
-        "11-кратный чемпион мира",
-        "7-кратный обладатель Кубка мира"
-      ]
+      "achievements": ["7-кратный олимпийский чемпион", "11-кратный чемпион мира", "7-кратный обладатель Кубка мира"]
     },
     {
       "id": 12,
@@ -947,11 +912,7 @@ const data = {
       "change": 0,
       "change_comment": "Завершила карьеру",
       "season_info": "Сезон 2025/26: не бежала",
-      "achievements": [
-        "4-кратная олимпийская чемпионка",
-        "6-кратная чемпионка мира",
-        "2-кратная обладательница Кубка мира"
-      ]
+      "achievements": ["4-кратная олимпийская чемпионка", "6-кратная чемпионка мира", "2-кратная обладательница Кубка мира"]
     },
     {
       "id": 13,
@@ -970,13 +931,8 @@ const data = {
       "change": 0,
       "change_comment": "Завершил карьеру",
       "season_info": "Сезон 2025/26: не бежал",
-      "achievements": [
-        "4-кратный олимпийский чемпион",
-        "12-кратный чемпион мира",
-        "2-кратный обладатель Кубка мира"
-      ]
+      "achievements": ["4-кратный олимпийский чемпион", "12-кратный чемпион мира", "2-кратный обладатель Кубка мира"]
     },
-    // Действующий иностранец
     {
       "id": 14,
       "name": "Йоханнес Бё",
@@ -994,17 +950,13 @@ const data = {
       "change": 1,
       "change_comment": "Действующий лидер",
       "season_info": "Сезон 2025/26: доминирует в Кубке мира.",
-      "achievements": [
-        "5-кратный олимпийский чемпион",
-        "13-кратный чемпион мира",
-        "3-кратный обладатель Кубка мира"
-      ]
+      "achievements": ["5-кратный олимпийский чемпион", "13-кратный чемпион мира", "3-кратный обладатель Кубка мира"]
     }
   ]
 };
 
 // =========================================================================
-//  ОСНОВНАЯ ЛОГИКА (фильтры, рендер, пагинация, модалка)
+//  ОСНОВНАЯ ЛОГИКА
 // =========================================================================
 let allAthletes = [];
 let filteredAthletes = [];
@@ -1163,11 +1115,11 @@ function renderMedals(achievements) {
   if (!achievements || !achievements.length) return '';
   return achievements.map(text => {
     let medalClass = 'medal-gold';
-    if (text.toLowerCase().includes('бронз') || text.toLowerCase().includes('bronze')) medalClass = 'medal-bronze';
-    else if (text.toLowerCase().includes('серебр') || text.toLowerCase().includes('silver')) medalClass = 'medal-silver';
-    else if (text.toLowerCase().includes('золот') || text.toLowerCase().includes('gold') ||
-             text.toLowerCase().includes('чемпион') || text.toLowerCase().includes('победитель')) medalClass = 'medal-gold';
-    else medalClass = text.toLowerCase().includes('призёр') ? 'medal-silver' : 'medal-gold';
+    const low = text.toLowerCase();
+    if (low.includes('бронз') || low.includes('bronze')) medalClass = 'medal-bronze';
+    else if (low.includes('серебр') || low.includes('silver')) medalClass = 'medal-silver';
+    else if (low.includes('золот') || low.includes('gold') || low.includes('чемпион') || low.includes('победитель')) medalClass = 'medal-gold';
+    else medalClass = low.includes('призёр') ? 'medal-silver' : 'medal-gold';
     return `<span class="medal-icon ${medalClass}" title="${text}"><i class="fas fa-medal"></i></span>`;
   }).join(' ');
 }
@@ -1245,7 +1197,7 @@ function renderParam(label, value, unit) {
 }
 
 // =========================================================================
-//  ОБРАБОТЧИКИ СОБЫТИЙ
+//  СОБЫТИЯ
 // =========================================================================
 document.querySelectorAll('#categoryTabs .nav-link').forEach(tab => {
   tab.addEventListener('click', function(e) {
@@ -1294,7 +1246,7 @@ document.querySelectorAll('.lang-btn').forEach(btn => {
 });
 
 // =========================================================================
-//  ЗАПУСК
+//  СТАРТ
 // =========================================================================
 loadData();
 updateLanguage('ru');
