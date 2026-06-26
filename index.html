@@ -20,6 +20,10 @@
       --red: #c62828;
       --hero-bg: linear-gradient(135deg, #0a0e27 0%, #1a237e 100%);
       --hero-text: white;
+      --disclaimer-color: rgba(255,255,255,0.7);
+      --game-bg: #e9ecef;
+      --target-color: #c62828;
+      --target-hit: #2e7d32;
     }
     body.dark-theme {
       --bg-body: #0a0e1a;
@@ -31,6 +35,10 @@
       --red: #ef5350;
       --hero-bg: linear-gradient(135deg, #050812 0%, #0d1b3e 100%);
       --hero-text: #e8eaf6;
+      --disclaimer-color: rgba(255,255,255,0.5);
+      --game-bg: #1a1a2e;
+      --target-color: #ef5350;
+      --target-hit: #66bb6a;
     }
     body {
       font-family: 'Segoe UI', Tahoma, sans-serif;
@@ -113,14 +121,27 @@
       padding: 2rem;
       transition: background 0.3s;
       position: relative;
+      flex-direction: column;
     }
     .hero .hero-logo {
       max-width: 300px;
       width: 80%;
       height: auto;
       display: block;
-      margin: 0 auto 1.5rem;
+      margin: 0 auto 1rem;
       filter: drop-shadow(0 4px 20px rgba(0,0,0,0.3));
+    }
+    .hero .disclaimer {
+      font-size: 0.8rem;
+      color: var(--disclaimer-color);
+      max-width: 600px;
+      margin: 0 auto 1rem;
+      font-style: italic;
+      transition: color 0.3s;
+      padding: 0.5rem 1rem;
+      background: rgba(0,0,0,0.2);
+      border-radius: 8px;
+      backdrop-filter: blur(4px);
     }
     .hero h1 { font-size: 3.5rem; font-weight: 800; margin-bottom: 0.5rem; }
     .hero h1 span { color: var(--red); }
@@ -217,6 +238,96 @@
     }
     .btn-refresh:hover { background: var(--dark-blue); transform: scale(1.02); }
 
+    /* ===== МИНИ-ИГРА ===== */
+    .game-section {
+      padding: 3rem 0;
+      background: var(--bg-body);
+      transition: background 0.3s;
+    }
+    .game-section .section-title {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 1.5rem;
+      color: var(--dark-blue);
+      text-align: center;
+    }
+    .game-container {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 2rem;
+      box-shadow: var(--card-shadow);
+      max-width: 700px;
+      margin: 0 auto;
+      transition: background 0.3s;
+    }
+    .game-field {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      background: var(--game-bg);
+      border-radius: 12px;
+      border: 2px solid var(--border-color);
+      margin: 0 auto;
+      overflow: hidden;
+      cursor: crosshair;
+      transition: background 0.3s;
+    }
+    .game-target {
+      position: absolute;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: radial-gradient(circle, var(--target-color) 40%, #fff 42%, var(--target-color) 44%, #fff 46%, var(--target-color) 48%);
+      box-shadow: 0 0 20px rgba(198, 40, 40, 0.6);
+      cursor: pointer;
+      transition: transform 0.1s;
+      animation: pulse 1s infinite alternate;
+    }
+    .game-target:hover { transform: scale(1.1); }
+    .game-target.hit {
+      background: radial-gradient(circle, var(--target-hit) 40%, #fff 42%, var(--target-hit) 44%, #fff 46%, var(--target-hit) 48%);
+      pointer-events: none;
+      animation: none;
+      transform: scale(0.8);
+      opacity: 0.7;
+    }
+    @keyframes pulse {
+      0% { box-shadow: 0 0 20px rgba(198,40,40,0.4); }
+      100% { box-shadow: 0 0 40px rgba(198,40,40,0.9); }
+    }
+    .game-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 1rem;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .game-controls .info { font-size: 1.1rem; font-weight: 600; }
+    .game-controls .btn-game {
+      background: var(--dark-blue);
+      color: white;
+      border: none;
+      padding: 0.5rem 1.5rem;
+      border-radius: 30px;
+      font-weight: 600;
+      transition: 0.3s;
+      cursor: pointer;
+    }
+    .game-controls .btn-game:hover { background: var(--red); transform: scale(1.02); }
+    .game-result {
+      margin-top: 1.5rem;
+      padding: 1.5rem;
+      background: var(--bg-body);
+      border-radius: 12px;
+      text-align: center;
+      font-size: 1.1rem;
+      border-left: 4px solid var(--red);
+      display: none;
+    }
+    .game-result .athlete-name { font-weight: 800; color: var(--dark-blue); }
+    .game-result .fact { font-style: italic; color: var(--text-color); opacity: 0.8; margin-top: 0.5rem; }
+
     /* ===== КНОПКА УСТАНОВКИ ===== */
     .install-section {
       background: var(--card-bg);
@@ -260,17 +371,6 @@
     .transfer-item .player { font-weight: 700; }
     .transfer-item .club { font-weight: 600; color: var(--dark-blue); }
 
-    @media (max-width: 767px) {
-      .hero .hero-logo { max-width: 200px; }
-      .hero h1 { font-size: 2.5rem; }
-      .hero p { font-size: 1rem; }
-      .navbar-custom .brand { font-size: 1.3rem; }
-      .navbar-custom .brand img { height: 32px; }
-      .navbar-custom .update-info { font-size: 0.7rem; gap: 6px; }
-      .lang-btn, .theme-btn { font-size: 0.65rem; padding: 0.1rem 0.5rem; }
-      .news-section .section-title { font-size: 2rem; }
-    }
-    /* ===== FULLSCREEN LOGO OVERLAY ===== */
     .logo-fullscreen-overlay {
       position: fixed;
       top: 0;
@@ -315,6 +415,19 @@
     }
     .logo-fullscreen-overlay .fullscreen-close:hover { transform: rotate(90deg); color: var(--red); }
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    @media (max-width: 767px) {
+      .hero .hero-logo { max-width: 200px; }
+      .hero h1 { font-size: 2.5rem; }
+      .hero p { font-size: 1rem; }
+      .hero .disclaimer { font-size: 0.7rem; padding: 0.3rem 0.8rem; }
+      .navbar-custom .brand { font-size: 1.3rem; }
+      .navbar-custom .brand img { height: 32px; }
+      .navbar-custom .update-info { font-size: 0.7rem; gap: 6px; }
+      .lang-btn, .theme-btn { font-size: 0.65rem; padding: 0.1rem 0.5rem; }
+      .news-section .section-title { font-size: 2rem; }
+      .game-target { width: 45px; height: 45px; }
+    }
   </style>
 </head>
 <body>
@@ -348,6 +461,9 @@
 <section class="hero">
   <div class="container">
     <img id="heroLogoImg" src="images/logo-light.png" alt="Biathlon Market" class="hero-logo">
+    <div class="disclaimer" id="disclaimerText">
+      ⚠️ ДИСКЛЕЙМЕР: Рейтинги были сделаны на неточных основаниях, просим относиться к этому без критики.
+    </div>
     <h1>Biathlon <span>Market</span></h1>
     <p>Рейтинг биатлонистов по уникальной формуле. Цены, аналитика, трансферы.</p>
     <a href="ratings.html" class="btn-hero"><i class="fas fa-arrow-right me-2"></i>Перейти к рейтингу</a>
@@ -371,6 +487,26 @@
       <div class="tab-pane fade show active" id="tab-world"><div class="news-list" id="worldNewsList"></div><div class="text-center mt-2"><button class="btn-show-more" onclick="toggleNews('world')"><i class="fas fa-chevron-down"></i> Смотреть ещё</button></div></div>
       <div class="tab-pane fade" id="tab-russia"><div class="news-list" id="russiaNewsList"></div><div class="text-center mt-2"><button class="btn-show-more" onclick="toggleNews('russia')"><i class="fas fa-chevron-down"></i> Смотреть ещё</button></div></div>
       <div class="tab-pane fade" id="tab-transfers"><div class="news-list" id="transfersNewsList"></div><div class="text-center mt-2"><button class="btn-show-more" onclick="toggleNews('transfers')"><i class="fas fa-chevron-down"></i> Смотреть ещё</button></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== МИНИ-ИГРА ===== -->
+<section class="game-section" id="game">
+  <div class="container">
+    <h2 class="section-title">🎯 Проверь свою точность!</h2>
+    <div class="game-container">
+      <div class="game-field" id="gameField">
+        <!-- Мишени появляются здесь -->
+      </div>
+      <div class="game-controls">
+        <div class="info" id="gameInfo">Выстрелов: 0 / 5</div>
+        <div class="info" id="gameTimer">⏱️ 0.0 с</div>
+        <button class="btn-game" id="startGameBtn" onclick="startGame()">Начать стрельбу</button>
+      </div>
+      <div class="game-result" id="gameResult">
+        <div id="resultText"></div>
+      </div>
     </div>
   </div>
 </section>
@@ -497,6 +633,129 @@ function refreshAllNews() {
 }
 
 // ========================================================================
+//  МИНИ-ИГРА
+// ========================================================================
+let gameActive = false;
+let gameShots = 0;
+let gameStartTime = 0;
+let gameTimerInterval = null;
+let gameTargets = [];
+
+function startGame() {
+  const field = document.getElementById('gameField');
+  const info = document.getElementById('gameInfo');
+  const timer = document.getElementById('gameTimer');
+  const resultDiv = document.getElementById('gameResult');
+  const startBtn = document.getElementById('startGameBtn');
+
+  gameActive = false;
+  gameShots = 0;
+  gameStartTime = 0;
+  if (gameTimerInterval) clearInterval(gameTimerInterval);
+  resultDiv.style.display = 'none';
+  field.innerHTML = '';
+  info.textContent = 'Выстрелов: 0 / 5';
+  timer.textContent = '⏱️ 0.0 с';
+  startBtn.textContent = 'Начать стрельбу';
+  startBtn.disabled = false;
+
+  const targets = [];
+  for (let i = 0; i < 5; i++) {
+    targets.push(createTarget(i));
+  }
+  gameTargets = targets;
+  showTarget(0);
+  gameActive = true;
+  startBtn.textContent = 'Идёт стрельба...';
+  startBtn.disabled = true;
+}
+
+function createTarget(index) {
+  const field = document.getElementById('gameField');
+  const rect = field.getBoundingClientRect();
+  const size = Math.min(rect.width, rect.height) * 0.12;
+  const maxX = rect.width - size;
+  const maxY = rect.height - size;
+  return { index, x: Math.random() * maxX, y: Math.random() * maxY, size, hit: false };
+}
+
+function showTarget(index) {
+  const field = document.getElementById('gameField');
+  const target = gameTargets[index];
+  if (!target) return;
+  field.querySelectorAll('.game-target').forEach(el => el.remove());
+  const div = document.createElement('div');
+  div.className = 'game-target';
+  div.style.width = target.size + 'px';
+  div.style.height = target.size + 'px';
+  div.style.left = target.x + 'px';
+  div.style.top = target.y + 'px';
+  div.dataset.index = target.index;
+  div.addEventListener('click', function(e) {
+    e.stopPropagation();
+    if (!gameActive || this.classList.contains('hit')) return;
+    if (gameShots === 0) {
+      gameStartTime = Date.now();
+      gameTimerInterval = setInterval(updateTimer, 100);
+    }
+    this.classList.add('hit');
+    target.hit = true;
+    gameShots++;
+    document.getElementById('gameInfo').textContent = `Выстрелов: ${gameShots} / 5`;
+    if (gameShots === 5) {
+      gameActive = false;
+      clearInterval(gameTimerInterval);
+      const elapsed = (Date.now() - gameStartTime) / 1000;
+      document.getElementById('gameTimer').textContent = `⏱️ ${elapsed.toFixed(1)} с`;
+      showResult(elapsed);
+      document.getElementById('startGameBtn').textContent = 'Играть снова';
+      document.getElementById('startGameBtn').disabled = false;
+    } else {
+      setTimeout(() => { showTarget(gameShots); }, 300);
+    }
+  });
+  field.appendChild(div);
+}
+
+function updateTimer() {
+  if (!gameStartTime) return;
+  const elapsed = (Date.now() - gameStartTime) / 1000;
+  document.getElementById('gameTimer').textContent = `⏱️ ${elapsed.toFixed(1)} с`;
+}
+
+function showResult(time) {
+  const resultDiv = document.getElementById('gameResult');
+  const textDiv = document.getElementById('resultText');
+  let athlete = '', fact = '';
+  if (time < 3.0) {
+    athlete = 'Йоханнес Бё';
+    fact = 'Йоханнес Бё – пятикратный олимпийский чемпион и 13-кратный чемпион мира. Он славится своей невероятной скоростью на лыжне.';
+  } else if (time < 5.0) {
+    athlete = 'Мартен Фуркад';
+    fact = 'Мартен Фуркад – 7-кратный олимпийский чемпион и 11-кратный чемпион мира. Его стрельба стоя – одна из лучших в истории.';
+  } else if (time < 8.0) {
+    athlete = 'Антон Шипулин';
+    fact = 'Антон Шипулин – олимпийский чемпион 2014 года в эстафете. Он известен своей феноменальной выносливостью.';
+  } else if (time < 12.0) {
+    athlete = 'Карим Халили';
+    fact = 'Карим Халили – лидер рейтинга СБР 2025/26, он выиграл 6 этапов Кубка России в этом сезоне.';
+  } else {
+    athlete = 'Виктория Сливко';
+    fact = 'Виктория Сливко – одна из сильнейших российских биатлонисток, призёр чемпионата Европы 2025 года.';
+  }
+  resultDiv.style.display = 'block';
+  textDiv.innerHTML = `
+    <div style="font-size:1.4rem; font-weight:700; color:var(--dark-blue);">
+      🎯 Ваше время: <span style="color:var(--red);">${time.toFixed(1)} с</span>
+    </div>
+    <div style="margin-top:0.5rem;">
+      Вы стреляете как <span class="athlete-name">${athlete}</span>!
+    </div>
+    <div class="fact">💡 Интересный факт: ${fact}</div>
+  `;
+}
+
+// ========================================================================
 //  ТЕМА, ЛОГОТИП, FULLSCREEN, ЯЗЫК
 // ========================================================================
 let currentTheme = 'light';
@@ -507,6 +766,7 @@ function toggleTheme() {
   const logoNav = document.getElementById('navLogoImg');
   const heroLogo = document.getElementById('heroLogoImg');
   const fullLogo = document.getElementById('fullscreenLogoImg');
+  const disclaimer = document.getElementById('disclaimerText');
   if (currentTheme === 'light') {
     body.classList.add('dark-theme');
     btn.innerHTML = '<i class="fas fa-sun"></i>';
@@ -558,13 +818,20 @@ document.querySelectorAll('.lang-btn').forEach(b => {
 });
 
 // ========================================================================
-//  INIT
+//  ИНИЦИАЛИЗАЦИЯ
 // ========================================================================
 renderNews('world');
 renderNews('russia');
 renderNews('transfers');
 updateLanguage('ru');
 document.getElementById('lastUpdated').textContent = '2026-06-27';
+
+// Обработчик для кнопки "Играть снова"
+document.getElementById('startGameBtn').addEventListener('click', function() {
+  if (this.textContent === 'Играть снова') {
+    startGame();
+  }
+});
 </script>
 </body>
 </html>
