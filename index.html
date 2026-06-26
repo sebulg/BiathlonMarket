@@ -185,6 +185,20 @@
       color: var(--dark-blue);
       text-align: center;
     }
+    .nav-tabs .nav-link {
+      color: var(--text-color);
+      font-weight: 600;
+      border: none;
+      border-bottom: 3px solid transparent;
+    }
+    .nav-tabs .nav-link.active {
+      color: var(--dark-blue);
+      background: transparent;
+      border-bottom: 3px solid var(--red);
+    }
+    .tab-content {
+      padding-top: 1.5rem;
+    }
     .news-list {
       max-height: 600px;
       overflow: hidden;
@@ -242,11 +256,12 @@
       background: var(--dark-blue);
       color: white;
       border: none;
-      padding: 0.5rem 2rem;
+      padding: 0.4rem 1.5rem;
       border-radius: 30px;
       font-weight: 600;
       transition: 0.3s;
       cursor: pointer;
+      font-size: 0.9rem;
     }
     .btn-show-more:hover {
       background: var(--red);
@@ -462,7 +477,7 @@
         <li class="nav-item"><a class="nav-link" href="ratings.html"><i class="fas fa-table"></i> Рейтинг</a></li>
       </ul>
       <div class="update-info">
-        <span><i class="far fa-calendar-alt me-1"></i><span id="lastUpdated">2026-06-26</span></span>
+        <span><i class="far fa-calendar-alt me-1"></i><span id="lastUpdated">2026-06-27</span></span>
         <button class="theme-btn" id="themeToggle" onclick="toggleTheme()">
           <i class="fas fa-moon"></i>
         </button>
@@ -489,17 +504,46 @@
   <div class="container">
     <div class="d-flex justify-content-between align-items-center flex-wrap mb-3">
       <h2 class="section-title mb-0" data-i18n="news_title">Новости биатлона</h2>
-      <button class="btn-refresh" onclick="refreshNews()" title="Обновить новости (имитация)">
+      <button class="btn-refresh" onclick="refreshAllNews()" title="Обновить новости (имитация)">
         <i class="fas fa-sync-alt"></i> Обновить
       </button>
     </div>
-    <div class="news-list" id="newsList">
-      <!-- Новости будут вставлены JS -->
-    </div>
-    <div class="text-center mt-3">
-      <button class="btn-show-more" id="showMoreBtn" onclick="toggleNews()">
-        <i class="fas fa-chevron-down"></i> Смотреть ещё
-      </button>
+
+    <!-- Вкладки -->
+    <ul class="nav nav-tabs justify-content-center" id="newsTabs" role="tablist">
+      <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#tab-world" data-i18n="tab_world">Мир</button></li>
+      <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-russia" data-i18n="tab_russia">Россия</button></li>
+      <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-transfers" data-i18n="tab_transfers">Трансферы</button></li>
+    </ul>
+
+    <div class="tab-content" id="newsTabContent">
+      <!-- Мир -->
+      <div class="tab-pane fade show active" id="tab-world">
+        <div class="news-list" id="worldNewsList"></div>
+        <div class="text-center mt-2">
+          <button class="btn-show-more" onclick="toggleNews('world')">
+            <i class="fas fa-chevron-down"></i> Смотреть ещё
+          </button>
+        </div>
+      </div>
+      <!-- Россия -->
+      <div class="tab-pane fade" id="tab-russia">
+        <div class="news-list" id="russiaNewsList"></div>
+        <div class="text-center mt-2">
+          <button class="btn-show-more" onclick="toggleNews('russia')">
+            <i class="fas fa-chevron-down"></i> Смотреть ещё
+          </button>
+        </div>
+      </div>
+      <!-- Трансферы -->
+      <div class="tab-pane fade" id="tab-transfers">
+        <div class="news-list" id="transfersNewsList"></div>
+        <div class="text-center mt-2">
+          <button class="btn-show-more" onclick="toggleNews('transfers')">
+            <i class="fas fa-chevron-down"></i> Смотреть ещё
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -535,23 +579,27 @@
 
 <script>
 // =========================================================================
-//  НОВОСТИ (с актуальными датами июня 2026)
+//  ДАННЫЕ НОВОСТЕЙ (три категории)
 // =========================================================================
-const allNews = [
-  { date: '2026-06-27', title: 'Карим Халили выиграл контрольную гонку в Увате', summary: 'Халили показал чистую стрельбу и лучшее время круга. Тренеры отметили его отличную форму перед сезоном.' },
+const worldNews = [
   { date: '2026-06-26', title: 'Йоханнес Бё объявил о завершении карьеры после Олимпиады-2026', summary: 'Норвежский биатлонист подтвердил, что следующий сезон станет для него последним.' },
-  { date: '2026-06-25', title: 'Сборная России провела открытую тренировку в Сочи', summary: 'Спортсмены отрабатывали стрельбу в сложных погодных условиях. Все готовятся к летнему чемпионату мира.' },
-  { date: '2026-06-24', title: 'IBU утвердил изменения в календаре Кубка мира', summary: 'В следующем сезоне добавится новый этап в Румынии, а традиционные старты в Холменколлене останутся.' },
-  { date: '2026-06-23', title: 'Антон Шипулин назначен тренером-консультантом сборной', summary: 'Легендарный биатлонист будет помогать молодым спортсменам и делиться опытом.' },
-  { date: '2026-06-22', title: 'Виктория Сливко вернулась к тренировкам после болезни', summary: 'Спортсменка приступила к работе в щадящем режиме и готовится к летнему чемпионату России.' },
-  { date: '2026-06-21', title: 'Юниорская сборная выиграла Кубок Андерсен', summary: 'Российские юниоры завоевали 4 золота и 3 серебра в личных гонках.' },
-  { date: '2026-06-20', title: 'Сборная Франции провела контрольные старты в Лилле', summary: 'Лучшие результаты показали Эмильен Жаклен и Жюлия Симон.' },
-  { date: '2026-06-19', title: 'Германия и Норвегия провели совместный сбор в Оберхофе', summary: 'Стороны обменялись опытом подготовки к олимпийскому сезону.' },
-  { date: '2026-06-18', title: 'СБР утвердил состав на летний чемпионат мира', summary: 'В состав вошли Халили, Бажин, Латыпов, Сливко, Резцова и молодые спортсмены.' }
+  { date: '2026-06-25', title: 'IBU утвердил изменения в календаре Кубка мира на сезон 2026/27', summary: 'Сезон стартует в Эстерсунде 29 ноября. В календаре 10 этапов, включая новый этап в Румынии.' },
+  { date: '2026-06-24', title: 'Сборная Франции провела контрольные старты в Лилле', summary: 'Лучшие результаты показали Эмильен Жаклен и Жюлия Симон.' },
+  { date: '2026-06-23', title: 'Швеция объявила состав на летний чемпионат мира', summary: 'В составе – Самуэльссон, Эберг, Магнуссон и молодая смена.' },
+  { date: '2026-06-22', title: 'Германия и Норвегия провели совместный сбор в Оберхофе', summary: 'Стороны обменялись опытом подготовки к олимпийскому сезону.' },
+  { date: '2026-06-21', title: 'Ветераны биатлона провели выставочную гонку в Хольменколлене', summary: 'Бьорндален, Фуркад и Свендсен приняли участие в благотворительном старте.' }
 ];
 
-// Трансферы (отдельно)
-const transfers = [
+const russiaNews = [
+  { date: '2026-06-27', title: 'Карим Халили выиграл контрольную гонку в Увате', summary: 'Халили показал чистую стрельбу и лучшее время круга. Тренеры отметили его отличную форму перед сезоном.' },
+  { date: '2026-06-26', title: 'Виктория Сливко вернулась к тренировкам после болезни', summary: 'Спортсменка приступила к работе в щадящем режиме и готовится к летнему чемпионату России.' },
+  { date: '2026-06-25', title: 'СБР утвердил состав на летний чемпионат мира', summary: 'В состав вошли Халили, Бажин, Латыпов, Сливко, Резцова и молодые спортсмены.' },
+  { date: '2026-06-24', title: 'Антон Шипулин назначен тренером-консультантом мужской сборной', summary: 'Легендарный биатлонист будет помогать молодым спортсменам и делиться опытом.' },
+  { date: '2026-06-23', title: 'Юниорская сборная выиграла командный зачёт на Кубке Андерсен', summary: 'Российские юниоры завоевали 4 золота и 3 серебра в личных гонках.' },
+  { date: '2026-06-22', title: 'Сборная России завершила сбор в Сочи', summary: 'Заключительные контрольные старты показали хорошую готовность команды к сезону.' }
+];
+
+const transfersNews = [
   { from: 'Новосибирская область', to: 'Московская область', players: ['Дюжева'] },
   { from: 'Новосибирская область', to: 'ХМАО-Югра', players: ['Еремин', 'Гришина', 'Домичек'] },
   { from: 'Мордовия', to: 'Московская область', players: ['Евменов'] },
@@ -564,79 +612,118 @@ const transfers = [
 ];
 
 // =========================================================================
+//  СОСТОЯНИЯ ДЛЯ КАЖДОЙ ВКЛАДКИ (развёрнуто/свёрнуто)
+// =========================================================================
+const newsState = {
+  world: { expanded: false },
+  russia: { expanded: false },
+  transfers: { expanded: false }
+};
+
+// =========================================================================
 //  РЕНДЕРИНГ НОВОСТЕЙ
 // =========================================================================
-let newsExpanded = false;
+function renderNews(category) {
+  const containerId = category + 'NewsList';
+  const container = document.getElementById(containerId);
+  if (!container) return;
 
-function renderNews() {
-  const container = document.getElementById('newsList');
-  // Показываем последние 5 новостей (или все, если expanded)
-  const visibleCount = newsExpanded ? allNews.length : 5;
-  const visibleNews = allNews.slice(0, visibleCount);
+  let items = [];
+  if (category === 'world') items = worldNews;
+  else if (category === 'russia') items = russiaNews;
+  else if (category === 'transfers') items = transfersNews;
 
-  let html = visibleNews.map(item => {
-    // форматируем дату
-    const dateObj = new Date(item.date);
-    const dateStr = dateObj.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' });
-    return `
-      <div class="news-card">
-        <div class="date">${dateStr}</div>
-        <div class="title">${item.title}</div>
-        <div class="summary">${item.summary}</div>
+  const expanded = newsState[category].expanded;
+  const visibleCount = expanded ? items.length : 5;
+  const visibleItems = items.slice(0, visibleCount);
+
+  let html = '';
+  if (category === 'transfers') {
+    // Трансферы – особый формат
+    html = visibleItems.map(t => `
+      <div class="transfer-item">
+        <span class="icon"><i class="fas fa-arrow-right"></i></span>
+        <div class="details">
+          <span class="player">${t.players.join(', ')}</span>
+          ${t.from} ➡️ <span class="club">${t.to}</span>
+        </div>
       </div>
-    `;
-  }).join('');
-
-  // Добавляем блок трансферов, если показаны все новости (или если expanded)
-  // Мы добавим трансферы всегда в конце, но если expanded - покажем их как отдельную новость.
-  if (newsExpanded) {
-    html += `
-      <div class="news-card">
-        <div class="date">Трансферное окно – обновление</div>
-        ${transfers.map(t => `
-          <div class="transfer-item">
-            <span class="icon"><i class="fas fa-arrow-right"></i></span>
-            <div class="details">
-              <span class="player">${t.players.join(', ')}</span>
-              ${t.from} ➡️ <span class="club">${t.to}</span>
-            </div>
-          </div>
-        `).join('')}
-      </div>
-    `;
+    `).join('');
+    // Оборачиваем в карточку
+    html = `<div class="news-card"><div class="date">Трансферное окно – обновление</div>${html}</div>`;
+  } else {
+    // Обычные новости
+    html = visibleItems.map(item => {
+      const dateObj = new Date(item.date);
+      const dateStr = dateObj.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' });
+      return `
+        <div class="news-card">
+          <div class="date">${dateStr}</div>
+          <div class="title">${item.title}</div>
+          <div class="summary">${item.summary}</div>
+        </div>
+      `;
+    }).join('');
   }
 
   container.innerHTML = html;
 
   // Обновляем кнопку
-  const btn = document.getElementById('showMoreBtn');
-  if (newsExpanded) {
-    btn.innerHTML = '<i class="fas fa-chevron-up"></i> Скрыть';
-  } else {
-    btn.innerHTML = '<i class="fas fa-chevron-down"></i> Смотреть ещё';
+  const btn = container.parentElement.querySelector('.btn-show-more');
+  if (btn) {
+    if (expanded) {
+      btn.innerHTML = '<i class="fas fa-chevron-up"></i> Скрыть';
+    } else {
+      btn.innerHTML = '<i class="fas fa-chevron-down"></i> Смотреть ещё';
+    }
   }
 }
 
-function toggleNews() {
-  newsExpanded = !newsExpanded;
-  renderNews();
+function toggleNews(category) {
+  newsState[category].expanded = !newsState[category].expanded;
+  renderNews(category);
 }
 
 // =========================================================================
-//  ИМИТАЦИЯ ОБНОВЛЕНИЯ НОВОСТЕЙ
+//  ИМИТАЦИЯ ОБНОВЛЕНИЯ (добавляет новую запись во все категории)
 // =========================================================================
-function refreshNews() {
-  // Добавляем новую "свежую" новость в начало массива
-  const newDate = new Date().toISOString().slice(0,10);
-  allNews.unshift({
-    date: newDate,
-    title: `📢 Новости обновлены ${new Date().toLocaleTimeString()}`,
-    summary: 'Данные обновлены вручную. В реальном проекте здесь может быть загрузка с сервера или RSS-ленты.'
+function refreshAllNews() {
+  const now = new Date();
+  const dateStr = now.toISOString().slice(0,10);
+  const timeStr = now.toLocaleTimeString();
+
+  // Добавляем в мир
+  worldNews.unshift({
+    date: dateStr,
+    title: `🌍 Новости обновлены (${timeStr})`,
+    summary: 'Обновление новостей вручную. В реальном проекте здесь может быть загрузка с внешнего источника.'
   });
-  // Ограничим массив, чтобы не разрастался
-  if (allNews.length > 20) allNews.pop();
-  renderNews();
-  // Показать уведомление
+
+  // Добавляем в Россию
+  russiaNews.unshift({
+    date: dateStr,
+    title: `🇷🇺 Новости обновлены (${timeStr})`,
+    summary: 'Обновление новостей вручную. В реальном проекте здесь может быть загрузка с внешнего источника.'
+  });
+
+  // Добавляем в трансферы (фиктивный)
+  transfersNews.unshift({
+    from: 'Новое',
+    to: 'Обновление',
+    players: ['📢 Сегодня']
+  });
+
+  // Ограничим массивы, чтобы не разрастались
+  if (worldNews.length > 20) worldNews.pop();
+  if (russiaNews.length > 20) russiaNews.pop();
+  if (transfersNews.length > 20) transfersNews.pop();
+
+  // Перерендерим все вкладки (но сохраним состояния развёрнутости)
+  renderNews('world');
+  renderNews('russia');
+  renderNews('transfers');
+
+  // Уведомление
   const btn = document.querySelector('.btn-refresh');
   btn.innerHTML = '<i class="fas fa-check"></i> Обновлено!';
   setTimeout(() => {
@@ -691,7 +778,7 @@ function startGame() {
 function createTarget(index) {
   const field = document.getElementById('gameField');
   const rect = field.getBoundingClientRect();
-  const size = Math.min(rect.width, rect.height) * 0.12; // ~12% от размера поля
+  const size = Math.min(rect.width, rect.height) * 0.12;
   const maxX = rect.width - size;
   const maxY = rect.height - size;
   return {
@@ -767,7 +854,6 @@ function showResult(time) {
   const resultDiv = document.getElementById('gameResult');
   const textDiv = document.getElementById('resultText');
 
-  // Сравнение с биатлонистами на основе времени
   let athlete = '';
   let fact = '';
 
@@ -851,14 +937,20 @@ document.addEventListener('keydown', function(e) {
 });
 
 // =========================================================================
-//  ЯЗЫК (только для заголовков, новости пока на русском)
+//  ЯЗЫК (только для заголовков)
 // =========================================================================
 const translations = {
   ru: {
-    news_title: "Новости биатлона"
+    news_title: "Новости биатлона",
+    tab_world: "Мир",
+    tab_russia: "Россия",
+    tab_transfers: "Трансферы"
   },
   en: {
-    news_title: "Biathlon News"
+    news_title: "Biathlon News",
+    tab_world: "World",
+    tab_russia: "Russia",
+    tab_transfers: "Transfers"
   }
 };
 let currentLang = 'ru';
@@ -884,12 +976,13 @@ document.querySelectorAll('.lang-btn').forEach(btn => {
 // =========================================================================
 //  ИНИЦИАЛИЗАЦИЯ
 // =========================================================================
-// Показываем последние 5 новостей
-renderNews();
+renderNews('world');
+renderNews('russia');
+renderNews('transfers');
 updateLanguage('ru');
 document.getElementById('lastUpdated').textContent = '2026-06-27';
 
-// Добавляем обработчик для кнопки "Играть снова" (она уже есть)
+// Обработчик для кнопки "Играть снова"
 document.getElementById('startGameBtn').addEventListener('click', function() {
   if (this.textContent === 'Играть снова') {
     startGame();
