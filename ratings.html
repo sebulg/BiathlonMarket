@@ -349,6 +349,12 @@
       flex-wrap: wrap;
       gap: 0.5rem;
       margin-top: 0.5rem;
+      max-height: 80px;
+      overflow: hidden;
+      transition: max-height 0.5s ease;
+    }
+    .achievement-list.expanded {
+      max-height: 9999px;
     }
     .achievement-item {
       background: var(--bg-body);
@@ -358,6 +364,22 @@
       display: inline-flex;
       align-items: center;
       gap: 5px;
+    }
+    .btn-show-all-achievements {
+      background: var(--dark-blue);
+      color: white;
+      border: none;
+      padding: 0.3rem 1.2rem;
+      border-radius: 30px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      transition: 0.3s;
+      cursor: pointer;
+      margin-top: 0.5rem;
+    }
+    .btn-show-all-achievements:hover {
+      background: var(--red);
+      transform: scale(1.02);
     }
 
     /* ===== ПАГИНАЦИЯ ===== */
@@ -491,7 +513,7 @@
       <li class="nav-item"><button class="nav-link" data-category="retired" data-i18n="tab_retired">⏳ Завершившие</button></li>
     </ul>
 
-    <!-- Дополнительные фильтры (пол и страна) -->
+    <!-- Дополнительные фильтры -->
     <div class="extra-filters" id="extraFilters">
       <span class="label" data-i18n="country_label">Страна:</span>
       <button class="filter-btn country-btn active" data-country="all" data-i18n="country_all">Все</button>
@@ -504,7 +526,6 @@
       <button class="filter-btn" data-age="24-30" data-i18n="age_24_30">24-30</button>
       <button class="filter-btn" data-age="31+" data-i18n="age_31">31+</button>
 
-      <!-- Скрытые кнопки для пола юниоров/юношей -->
       <span class="label ms-2 gender-label" id="genderLabel" style="display:none;" data-i18n="gender_label">Пол:</span>
       <button class="filter-btn gender-btn" id="genderMen" style="display:none;" data-gender="male" data-i18n="gender_men">Муж.</button>
       <button class="filter-btn gender-btn" id="genderWomen" style="display:none;" data-gender="female" data-i18n="gender_women">Жен.</button>
@@ -583,6 +604,8 @@ const translations = {
     modal_details: "Детальные параметры", modal_speed: "Скорость", modal_shoot_lying: "Стрельба лёжа",
     modal_shoot_standing: "Стрельба стоя", modal_points: "Результаты (очки)", modal_stability: "Стабильность",
     retired_season: "Сезон 2025/26: не бежал",
+    show_all: "Показать все достижения",
+    hide_all: "Скрыть достижения",
   },
   en: {
     total: "Total", avg_rating: "Avg rating", max_price: "Max price (€)", categories: "Categories",
@@ -599,6 +622,8 @@ const translations = {
     modal_details: "Detailed parameters", modal_speed: "Speed", modal_shoot_lying: "Prone shooting",
     modal_shoot_standing: "Standing shooting", modal_points: "Results (points)", modal_stability: "Stability",
     retired_season: "Season 2025/26: did not compete",
+    show_all: "Show all achievements",
+    hide_all: "Hide achievements",
   }
 };
 
@@ -625,12 +650,12 @@ function toggleTheme() {
   }
 }
 
+let logoExpanded = false;
 function toggleLogo() {
   const wrapper = document.getElementById('logoWrapper');
   logoExpanded = !logoExpanded;
   wrapper.classList.toggle('logo-expanded', logoExpanded);
 }
-let logoExpanded = false;
 
 // =========================================================================
 //  ЯЗЫК
@@ -666,7 +691,7 @@ document.querySelectorAll('.lang-btn').forEach(btn => {
 });
 
 // =========================================================================
-//  ДАННЫЕ – 70+ СПОРТСМЕНОВ С ПОЛЕМ gender И НОВЫМИ КАТЕГОРИЯМИ
+//  ДАННЫЕ – ИСПРАВЛЕННЫЕ (Тивиков, Саидов, Каринский – юноши, добавлен Благовский)
 // =========================================================================
 const data = {
   "lastUpdated": "2026-06-26",
@@ -728,44 +753,48 @@ const data = {
     { "id":50, "name":"Екатерина Лянгина", "region":"Республика Карелия", "age":17, "category":"junior", "gender":"female", "speed_sec":25.5, "shoot_lying":85, "shoot_standing":82, "points":520, "stability":77, "rating":77, "price":385000, "photo":"lyangina.jpg", "change":5, "change_comment":"Юная звезда", "season_info":"Сезон 2025/26: 2 победы на юниорских стартах.", "achievements":["Чемпионка России среди юниоров"] },
     { "id":51, "name":"Милена Чумакова", "region":"Пермский край", "age":18, "category":"junior", "gender":"female", "speed_sec":25.6, "shoot_lying":84, "shoot_standing":81, "points":500, "stability":75, "rating":75, "price":375000, "photo":"chumakova.jpg", "change":4, "change_comment":"Прогрессирует", "season_info":"Сезон 2025/26: призёр юниорских соревнований.", "achievements":["Бронзовый призёр юниорского ЧР"] },
     { "id":52, "name":"Юлия Собянина", "region":"ХМАО-Югра", "age":18, "category":"junior", "gender":"female", "speed_sec":25.7, "shoot_lying":83, "shoot_standing":80, "points":490, "stability":74, "rating":74, "price":370000, "photo":"sobyanina.jpg", "change":3, "change_comment":"Перспективная", "season_info":"Сезон 2025/26: первый сезон в юниорской сборной.", "achievements":[] },
-    // ===== НОВЫЕ ЮНИОРЫ (возраст 17-18, как Тивиков и Саидов) =====
-    { "id":53, "name":"Георгий Каринский", "region":"Москва", "age":18, "category":"junior", "gender":"male", "speed_sec":24.8, "shoot_lying":86, "shoot_standing":83, "points":580, "stability":79, "rating":80, "price":400000, "photo":"karinsky.jpg", "change":4, "change_comment":"Бронзовый призёр Первенства России 2025", "season_info":"Сезон 2025/26: бронза в индивидуальной гонке и смешанной эстафете.", "achievements":["Дважды бронзовый призёр Первенства России 15-16 лет"] },
-    { "id":54, "name":"Александр Денежкин", "region":"Москва", "age":20, "category":"junior", "gender":"male", "speed_sec":24.6, "shoot_lying":85, "shoot_standing":82, "points":560, "stability":78, "rating":79, "price":395000, "photo":"denezhkin.jpg", "change":3, "change_comment":"КМС, представляет Москву", "season_info":"Сезон 2025/26: в резерве юниорской сборной.", "achievements":["Кандидат в мастера спорта (КМС)"] },
-    { "id":55, "name":"Максим Саидов", "region":"Москва", "age":17, "category":"junior", "gender":"male", "speed_sec":24.9, "shoot_lying":87, "shoot_standing":84, "points":590, "stability":80, "rating":81, "price":405000, "photo":"saidov.jpg", "change":5, "change_comment":"Серебряный призёр Первенства России 2025", "season_info":"Сезон 2025/26: серебро в кросс-спринте на Первенстве России.", "achievements":["Серебряный призёр Первенства России 2025 (эстафета)"] },
-    { "id":56, "name":"Егор Тивиков", "region":"Москва", "age":18, "category":"junior", "gender":"male", "speed_sec":24.7, "shoot_lying":86, "shoot_standing":83, "points":570, "stability":79, "rating":80, "price":400000, "photo":"tivikov.jpg", "change":4, "change_comment":"Серебряный призёр Первенства России 2025", "season_info":"Сезон 2025/26: серебро в кросс-спринте на Первенстве России.", "achievements":["Серебряный призёр Первенства России 2025 (эстафета)","КМС"] },
-    { "id":57, "name":"Савелий Третьяков", "region":"Москва", "age":17, "category":"junior", "gender":"male", "speed_sec":24.8, "shoot_lying":85, "shoot_standing":82, "points":540, "stability":77, "rating":78, "price":390000, "photo":"tretyakov.jpg", "change":3, "change_comment":"Серебряный призёр Первенства России 2025", "season_info":"Сезон 2025/26: серебро в эстафете на Первенстве России.", "achievements":["Серебряный призёр Первенства России 2025 (эстафета)"] },
-    // ===== ЮНОШИ (категория youth, возраст 15-16) =====
-    { "id":58, "name":"Артем Смирнов", "region":"Москва", "age":16, "category":"youth", "gender":"male", "speed_sec":25.0, "shoot_lying":84, "shoot_standing":81, "points":480, "stability":74, "rating":74, "price":370000, "photo":"smirnov_youth.jpg", "change":3, "change_comment":"Перспективный юноша", "season_info":"Сезон 2025/26: победитель Первенства Москвы.", "achievements":["Чемпион Москвы 2025 (юноши)"] },
-    { "id":59, "name":"Дмитрий Кузнецов", "region":"Санкт-Петербург", "age":15, "category":"youth", "gender":"male", "speed_sec":25.2, "shoot_lying":83, "shoot_standing":80, "points":460, "stability":72, "rating":72, "price":360000, "photo":"kuznetsov_youth.jpg", "change":4, "change_comment":"Талантливый юноша", "season_info":"Сезон 2025/26: призёр Первенства Санкт-Петербурга.", "achievements":[] },
-    { "id":60, "name":"Анастасия Федорова", "region":"Тюменская область", "age":16, "category":"youth", "gender":"female", "speed_sec":25.4, "shoot_lying":86, "shoot_standing":83, "points":500, "stability":76, "rating":77, "price":385000, "photo":"fedorova_youth.jpg", "change":5, "change_comment":"Лидер юношеской сборной", "season_info":"Сезон 2025/26: победитель Первенства Тюменской области.", "achievements":["Чемпионка Тюменской области 2025"] },
-    { "id":61, "name":"Егор Новосельцев", "region":"Москва", "age":16, "category":"youth", "gender":"male", "speed_sec":25.1, "shoot_lying":85, "shoot_standing":82, "points":490, "stability":75, "rating":76, "price":380000, "photo":"novoseltsev_youth.jpg", "change":4, "change_comment":"Победитель кросс-эстафеты Первенства России 2023", "season_info":"Сезон 2025/26: в юниорской сборной Москвы.", "achievements":["Победитель кросс-эстафеты Первенства России 2023 (13-14 лет)"] },
-    { "id":62, "name":"София Петрова", "region":"Красноярский край", "age":15, "category":"youth", "gender":"female", "speed_sec":25.6, "shoot_lying":85, "shoot_standing":82, "points":480, "stability":74, "rating":75, "price":375000, "photo":"petrova_youth.jpg", "change":3, "change_comment":"Перспективная юниорка", "season_info":"Сезон 2025/26: призёр Первенства края.", "achievements":[] },
-    { "id":63, "name":"Илья Соколов (мл.)", "region":"ХМАО-Югра", "age":16, "category":"youth", "gender":"male", "speed_sec":25.3, "shoot_lying":84, "shoot_standing":81, "points":470, "stability":73, "rating":73, "price":365000, "photo":"sokolov_ml_youth.jpg", "change":3, "change_comment":"Набирает форму", "season_info":"Сезон 2025/26: дебютант юношеских стартов.", "achievements":[] },
+    // ===== ЮНОШИ (youth, возраст 15-16) =====
+    // Артём Смирнов (юноша)
+    { "id":53, "name":"Артём Смирнов", "region":"Москва", "age":16, "category":"youth", "gender":"male", "speed_sec":25.0, "shoot_lying":84, "shoot_standing":81, "points":480, "stability":74, "rating":74, "price":370000, "photo":"smirnov_youth.jpg", "change":3, "change_comment":"Перспективный юноша", "season_info":"Сезон 2025/26: победитель Первенства Москвы.", "achievements":["Чемпион Москвы 2025 (юноши)"] },
+    // Дмитрий Кузнецов (юноша)
+    { "id":54, "name":"Дмитрий Кузнецов", "region":"Санкт-Петербург", "age":15, "category":"youth", "gender":"male", "speed_sec":25.2, "shoot_lying":83, "shoot_standing":80, "points":460, "stability":72, "rating":72, "price":360000, "photo":"kuznetsov_youth.jpg", "change":4, "change_comment":"Талантливый юноша", "season_info":"Сезон 2025/26: призёр Первенства Санкт-Петербурга.", "achievements":[] },
+    // Анастасия Фёдорова (юниорка)
+    { "id":55, "name":"Анастасия Федорова", "region":"Тюменская область", "age":16, "category":"youth", "gender":"female", "speed_sec":25.4, "shoot_lying":86, "shoot_standing":83, "points":500, "stability":76, "rating":77, "price":385000, "photo":"fedorova_youth.jpg", "change":5, "change_comment":"Лидер юношеской сборной", "season_info":"Сезон 2025/26: победитель Первенства Тюменской области.", "achievements":["Чемпионка Тюменской области 2025"] },
+    // Егор Новосельцев (юноша)
+    { "id":56, "name":"Егор Новосельцев", "region":"Москва", "age":16, "category":"youth", "gender":"male", "speed_sec":25.1, "shoot_lying":85, "shoot_standing":82, "points":490, "stability":75, "rating":76, "price":380000, "photo":"novoseltsev_youth.jpg", "change":4, "change_comment":"Победитель кросс-эстафеты Первенства России 2023", "season_info":"Сезон 2025/26: в юниорской сборной Москвы.", "achievements":["Победитель кросс-эстафеты Первенства России 2023 (13-14 лет)"] },
+    // София Петрова (юниорка)
+    { "id":57, "name":"София Петрова", "region":"Красноярский край", "age":15, "category":"youth", "gender":"female", "speed_sec":25.6, "shoot_lying":85, "shoot_standing":82, "points":480, "stability":74, "rating":75, "price":375000, "photo":"petrova_youth.jpg", "change":3, "change_comment":"Перспективная юниорка", "season_info":"Сезон 2025/26: призёр Первенства края.", "achievements":[] },
+    // Илья Соколов (мл.) (юноша)
+    { "id":58, "name":"Илья Соколов (мл.)", "region":"ХМАО-Югра", "age":16, "category":"youth", "gender":"male", "speed_sec":25.3, "shoot_lying":84, "shoot_standing":81, "points":470, "stability":73, "rating":73, "price":365000, "photo":"sokolov_ml_youth.jpg", "change":3, "change_comment":"Набирает форму", "season_info":"Сезон 2025/26: дебютант юношеских стартов.", "achievements":[] },
+    // ===== ИСПРАВЛЕННЫЕ: Тивиков, Саидов, Каринский – ЮНОШИ (youth) =====
+    { "id":59, "name":"Егор Тивиков", "region":"Москва", "age":16, "category":"youth", "gender":"male", "speed_sec":24.7, "shoot_lying":86, "shoot_standing":83, "points":570, "stability":79, "rating":80, "price":400000, "photo":"tivikov.jpg", "change":4, "change_comment":"Серебряный призёр Первенства России 2025", "season_info":"Сезон 2025/26: серебро в кросс-спринте на Первенстве России.", "achievements":["Серебряный призёр Первенства России 2025 (эстафета)","КМС"] },
+    { "id":60, "name":"Максим Саидов", "region":"Москва", "age":16, "category":"youth", "gender":"male", "speed_sec":24.9, "shoot_lying":87, "shoot_standing":84, "points":590, "stability":80, "rating":81, "price":405000, "photo":"saidov.jpg", "change":5, "change_comment":"Серебряный призёр Первенства России 2025", "season_info":"Сезон 2025/26: серебро в кросс-спринте на Первенстве России.", "achievements":["Серебряный призёр Первенства России 2025 (эстафета)"] },
+    { "id":61, "name":"Георгий Каринский", "region":"Москва", "age":18, "category":"youth", "gender":"male", "speed_sec":24.8, "shoot_lying":86, "shoot_standing":83, "points":580, "stability":79, "rating":80, "price":400000, "photo":"karinsky.jpg", "change":4, "change_comment":"Бронзовый призёр Первенства России 2025", "season_info":"Сезон 2025/26: бронза в индивидуальной гонке и смешанной эстафете.", "achievements":["Дважды бронзовый призёр Первенства России 15-16 лет"] },
+    // ===== НОВЫЙ: Герман Благовский (юноша) =====
+    { "id":62, "name":"Герман Благовский", "region":"Москва", "age":16, "category":"youth", "gender":"male", "speed_sec":24.8, "shoot_lying":85, "shoot_standing":82, "points":540, "stability":77, "rating":78, "price":390000, "photo":"blagovsky.jpg", "change":4, "change_comment":"Перспективный юноша из Москвы", "season_info":"Сезон 2025/26: в составе юношеской сборной Москвы.", "achievements":["Призёр Первенства Москвы 2025"] },
     // ===== ЗАВЕРШИВШИЕ =====
-    { "id":64, "name":"Уле-Эйнар Бьорндален", "region":"Норвегия", "age":50, "category":"retired", "gender":"male", "speed_sec":21.5, "shoot_lying":92, "shoot_standing":89, "points":2500, "stability":99, "rating":99, "price":980000, "photo":"bjorndalen.jpg", "change":0, "change_comment":"Легенда, завершил карьеру", "season_info":"Сезон 2025/26: не бежал", "achievements":["8-кратный олимпийский чемпион","20-кратный чемпион мира","6-кратный обладатель Кубка мира"] },
-    { "id":65, "name":"Мартен Фуркад", "region":"Франция", "age":37, "category":"retired", "gender":"male", "speed_sec":22.0, "shoot_lying":95, "shoot_standing":93, "points":2300, "stability":98, "rating":98, "price":950000, "photo":"fourcade.jpg", "change":0, "change_comment":"Завершил карьеру в 2020", "season_info":"Сезон 2025/26: не бежал", "achievements":["7-кратный олимпийский чемпион","11-кратный чемпион мира","7-кратный обладатель Кубка мира"] },
-    { "id":66, "name":"Дарья Домрачева", "region":"Беларусь", "age":38, "category":"retired", "gender":"female", "speed_sec":23.0, "shoot_lying":94, "shoot_standing":91, "points":2100, "stability":96, "rating":96, "price":920000, "photo":"domracheva.jpg", "change":0, "change_comment":"Завершила карьеру", "season_info":"Сезон 2025/26: не бежала", "achievements":["4-кратная олимпийская чемпионка","6-кратная чемпионка мира","2-кратная обладательница Кубка мира"] },
-    { "id":67, "name":"Эмиль Хегле Свендсен", "region":"Норвегия", "age":39, "category":"retired", "gender":"male", "speed_sec":22.5, "shoot_lying":89, "shoot_standing":86, "points":1900, "stability":94, "rating":93, "price":880000, "photo":"svendsen.jpg", "change":0, "change_comment":"Завершил карьеру", "season_info":"Сезон 2025/26: не бежал", "achievements":["4-кратный олимпийский чемпион","12-кратный чемпион мира","2-кратный обладатель Кубка мира"] },
-    { "id":68, "name":"Антон Шипулин", "region":"Свердловская область", "age":38, "category":"retired", "gender":"male", "speed_sec":22.2, "shoot_lying":93, "shoot_standing":90, "points":2100, "stability":97, "rating":97, "price":970000, "photo":"shiplulin.jpg", "change":0, "change_comment":"Легенда, завершил карьеру в 2020", "season_info":"Сезон 2025/26: не бежал", "achievements":["Олимпийский чемпион 2014 (эстафета)","Бронзовый призёр Олимпийских игр 2010 (эстафета)","Чемпион мира 2017 (эстафета)","Многократный чемпион России"] },
+    { "id":63, "name":"Уле-Эйнар Бьорндален", "region":"Норвегия", "age":50, "category":"retired", "gender":"male", "speed_sec":21.5, "shoot_lying":92, "shoot_standing":89, "points":2500, "stability":99, "rating":99, "price":980000, "photo":"bjorndalen.jpg", "change":0, "change_comment":"Легенда, завершил карьеру", "season_info":"Сезон 2025/26: не бежал", "achievements":["8-кратный олимпийский чемпион","20-кратный чемпион мира","6-кратный обладатель Кубка мира"] },
+    { "id":64, "name":"Мартен Фуркад", "region":"Франция", "age":37, "category":"retired", "gender":"male", "speed_sec":22.0, "shoot_lying":95, "shoot_standing":93, "points":2300, "stability":98, "rating":98, "price":950000, "photo":"fourcade.jpg", "change":0, "change_comment":"Завершил карьеру в 2020", "season_info":"Сезон 2025/26: не бежал", "achievements":["7-кратный олимпийский чемпион","11-кратный чемпион мира","7-кратный обладатель Кубка мира"] },
+    { "id":65, "name":"Дарья Домрачева", "region":"Беларусь", "age":38, "category":"retired", "gender":"female", "speed_sec":23.0, "shoot_lying":94, "shoot_standing":91, "points":2100, "stability":96, "rating":96, "price":920000, "photo":"domracheva.jpg", "change":0, "change_comment":"Завершила карьеру", "season_info":"Сезон 2025/26: не бежала", "achievements":["4-кратная олимпийская чемпионка","6-кратная чемпионка мира","2-кратная обладательница Кубка мира"] },
+    { "id":66, "name":"Эмиль Хегле Свендсен", "region":"Норвегия", "age":39, "category":"retired", "gender":"male", "speed_sec":22.5, "shoot_lying":89, "shoot_standing":86, "points":1900, "stability":94, "rating":93, "price":880000, "photo":"svendsen.jpg", "change":0, "change_comment":"Завершил карьеру", "season_info":"Сезон 2025/26: не бежал", "achievements":["4-кратный олимпийский чемпион","12-кратный чемпион мира","2-кратный обладатель Кубка мира"] },
+    { "id":67, "name":"Антон Шипулин", "region":"Свердловская область", "age":38, "category":"retired", "gender":"male", "speed_sec":22.2, "shoot_lying":93, "shoot_standing":90, "points":2100, "stability":97, "rating":97, "price":970000, "photo":"shiplulin.jpg", "change":0, "change_comment":"Легенда, завершил карьеру в 2020", "season_info":"Сезон 2025/26: не бежал", "achievements":["Олимпийский чемпион 2014 (эстафета)","Бронзовый призёр Олимпийских игр 2010 (эстафета)","Чемпион мира 2017 (эстафета)","Многократный чемпион России"] },
     // ===== ИНОСТРАНЕЦ (действующий) =====
-    { "id":69, "name":"Йоханнес Бё", "region":"Норвегия", "age":30, "category":"foreign", "gender":"male", "speed_sec":21.8, "shoot_lying":91, "shoot_standing":88, "points":2000, "stability":97, "rating":97, "price":960000, "photo":"boe.jpg", "change":1, "change_comment":"Действующий лидер", "season_info":"Сезон 2025/26: доминирует в Кубке мира.", "achievements":["5-кратный олимпийский чемпион","13-кратный чемпион мира","3-кратный обладатель Кубка мира"] }
+    { "id":68, "name":"Йоханнес Бё", "region":"Норвегия", "age":30, "category":"foreign", "gender":"male", "speed_sec":21.8, "shoot_lying":91, "shoot_standing":88, "points":2000, "stability":97, "rating":97, "price":960000, "photo":"boe.jpg", "change":1, "change_comment":"Действующий лидер", "season_info":"Сезон 2025/26: доминирует в Кубке мира.", "achievements":["5-кратный олимпийский чемпион","13-кратный чемпион мира","3-кратный обладатель Кубка мира"] }
   ]
 };
 
 // =========================================================================
-//  ОСНОВНАЯ ЛОГИКА С НОВЫМИ ФИЛЬТРАМИ
+//  ОСНОВНАЯ ЛОГИКА
 // =========================================================================
 let allAthletes = [];
 let filteredAthletes = [];
 let currentPage = 1;
 const perPage = 20;
 
-// Фильтры
-let currentCategory = 'all';      // all, top-men, top-women, junior, youth, retired
-let currentCountry = 'all';      // all, russia, world
-let currentAge = 'all';          // all, u23, 24-30, 31+
-let currentGender = 'all';       // all, male, female (используется только для junior/youth)
-
+let currentCategory = 'all';
+let currentCountry = 'all';
+let currentAge = 'all';
+let currentGender = 'all';
 let currentSort = { column: 'rating', direction: 'desc' };
 
 function loadData() {
@@ -790,19 +819,15 @@ function updateStats() {
 function applyFilters() {
   let result = [...allAthletes];
 
-  // Фильтр по основной категории (вкладка)
   if (currentCategory !== 'all') {
     result = result.filter(a => a.category === currentCategory);
   }
 
-  // Фильтр по полу (только для junior/youth, но применяем всегда, если не all)
   if (currentGender !== 'all' && (currentCategory === 'junior' || currentCategory === 'youth')) {
     result = result.filter(a => a.gender === currentGender);
   }
 
-  // Фильтр по стране
   if (currentCountry === 'russia') {
-    // Российские регионы: содержат "область", "край", "Республика", "Москва", "Санкт-Петербург", "Удмуртия", "Мордовия", "Пермский", "ХМАО"
     const russianRegions = ['область', 'край', 'Республика', 'Москва', 'Санкт-Петербург', 'Удмуртия', 'Мордовия', 'Пермский', 'ХМАО', 'Югра'];
     result = result.filter(a => russianRegions.some(reg => a.region.includes(reg)));
   } else if (currentCountry === 'world') {
@@ -810,7 +835,6 @@ function applyFilters() {
     result = result.filter(a => !russianRegions.some(reg => a.region.includes(reg)));
   }
 
-  // Фильтр по возрасту
   if (currentAge === 'u23') {
     result = result.filter(a => a.age < 23);
   } else if (currentAge === '24-30') {
@@ -819,13 +843,11 @@ function applyFilters() {
     result = result.filter(a => a.age >= 31);
   }
 
-  // Поиск
   const term = document.getElementById('searchInput').value.toLowerCase().trim();
   if (term) {
     result = result.filter(a => a.name.toLowerCase().includes(term) || a.region.toLowerCase().includes(term));
   }
 
-  // Сортировка
   result.sort((a,b) => {
     let va = a[currentSort.column] ?? '', vb = b[currentSort.column] ?? '';
     if (typeof va === 'string') { va = va.toLowerCase(); vb = vb.toLowerCase(); }
@@ -909,7 +931,7 @@ function goToPage(p) {
   window.scrollTo(0,0);
 }
 
-// ===== МОДАЛКА И МЕДАЛИ (без изменений) =====
+// ===== МОДАЛКА С КНОПКОЙ "ВСЕ ДОСТИЖЕНИЯ" =====
 function renderMedals(achievements) {
   if (!achievements || !achievements.length) return '';
   return achievements.map(text => {
@@ -937,10 +959,27 @@ function openModal(id) {
     changeBlock = `<div class="comment-box"><strong>${t.modal_change}</strong> <span style="color:${color};font-weight:700;">${sign}${a.change}</span><br>${a.change_comment}</div>`;
   }
 
+  // Достижения – с кнопкой "Показать все"
   let achievementsHtml = '';
+  let showAllBtn = '';
   if (a.achievements && a.achievements.length) {
-    achievementsHtml = `<div class="mt-2"><strong>${t.modal_achievements}</strong>
-      <div class="achievement-list">${a.achievements.map(text => `<span class="achievement-item" title="${text}">${renderMedals([text])} ${text}</span>`).join('')}</div></div>`;
+    const allAchievements = a.achievements.map(text => 
+      `<span class="achievement-item" title="${text}">${renderMedals([text])} ${text}</span>`
+    ).join('');
+
+    achievementsHtml = `
+      <div class="mt-2">
+        <strong>${t.modal_achievements}</strong>
+        <div class="achievement-list" id="achievementList">
+          ${allAchievements}
+        </div>
+        ${a.achievements.length > 3 ? `
+          <button class="btn-show-all-achievements" id="showAllAchievementsBtn" onclick="toggleAllAchievements()">
+            ${t.show_all}
+          </button>
+        ` : ''}
+      </div>
+    `;
   }
 
   let seasonHtml = '';
@@ -973,6 +1012,27 @@ function openModal(id) {
     </div>
   `;
   new bootstrap.Modal(document.getElementById('athleteModal')).show();
+
+  // Сбрасываем состояние достижений при открытии новой модалки
+  achievementsExpanded = false;
+  const list = document.getElementById('achievementList');
+  if (list) list.classList.remove('expanded');
+  const btn = document.getElementById('showAllAchievementsBtn');
+  if (btn) btn.textContent = translations[currentLang].show_all;
+}
+
+// Глобальная переменная для состояния достижений
+let achievementsExpanded = false;
+
+function toggleAllAchievements() {
+  const list = document.getElementById('achievementList');
+  const btn = document.getElementById('showAllAchievementsBtn');
+  const t = translations[currentLang];
+  if (!list || !btn) return;
+
+  achievementsExpanded = !achievementsExpanded;
+  list.classList.toggle('expanded', achievementsExpanded);
+  btn.textContent = achievementsExpanded ? t.hide_all : t.show_all;
 }
 
 function renderParam(label, value, unit) {
@@ -981,10 +1041,9 @@ function renderParam(label, value, unit) {
 }
 
 // =========================================================================
-//  ОБРАБОТЧИКИ СОБЫТИЙ ДЛЯ НОВЫХ ФИЛЬТРОВ
+//  ОБРАБОТЧИКИ СОБЫТИЙ ДЛЯ ФИЛЬТРОВ
 // =========================================================================
 
-// Вкладки
 document.querySelectorAll('#categoryTabs .nav-link').forEach(tab => {
   tab.addEventListener('click', function(e) {
     e.preventDefault();
@@ -992,7 +1051,6 @@ document.querySelectorAll('#categoryTabs .nav-link').forEach(tab => {
     this.classList.add('active');
     currentCategory = this.dataset.category;
 
-    // Показываем/скрываем кнопки пола для юниоров/юношей
     const genderLabel = document.getElementById('genderLabel');
     const genderMen = document.getElementById('genderMen');
     const genderWomen = document.getElementById('genderWomen');
@@ -1007,7 +1065,6 @@ document.querySelectorAll('#categoryTabs .nav-link').forEach(tab => {
       genderMen.style.display = 'none';
       genderWomen.style.display = 'none';
       genderAll.style.display = 'none';
-      // Сбрасываем пол на "все"
       currentGender = 'all';
       document.querySelectorAll('.gender-btn').forEach(b => b.classList.remove('active'));
       genderAll.classList.add('active');
@@ -1016,7 +1073,6 @@ document.querySelectorAll('#categoryTabs .nav-link').forEach(tab => {
   });
 });
 
-// Кнопки страны
 document.querySelectorAll('.country-btn').forEach(btn => {
   btn.addEventListener('click', function() {
     document.querySelectorAll('.country-btn').forEach(b => b.classList.remove('active'));
@@ -1026,7 +1082,6 @@ document.querySelectorAll('.country-btn').forEach(btn => {
   });
 });
 
-// Кнопки возраста
 document.querySelectorAll('[data-age]').forEach(btn => {
   btn.addEventListener('click', function() {
     document.querySelectorAll('[data-age]').forEach(b => b.classList.remove('active'));
@@ -1036,7 +1091,6 @@ document.querySelectorAll('[data-age]').forEach(btn => {
   });
 });
 
-// Кнопки пола (только для юниоров/юношей)
 document.querySelectorAll('.gender-btn').forEach(btn => {
   btn.addEventListener('click', function() {
     document.querySelectorAll('.gender-btn').forEach(b => b.classList.remove('active'));
@@ -1046,7 +1100,6 @@ document.querySelectorAll('.gender-btn').forEach(btn => {
   });
 });
 
-// Сортировка
 document.querySelectorAll('[data-sort]').forEach(th => {
   th.addEventListener('click', function() {
     const col = this.dataset.sort;
@@ -1056,7 +1109,6 @@ document.querySelectorAll('[data-sort]').forEach(th => {
   });
 });
 
-// Поиск
 let searchTimeout;
 document.getElementById('searchInput').addEventListener('input', function() {
   clearTimeout(searchTimeout);
