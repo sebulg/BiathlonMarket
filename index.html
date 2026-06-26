@@ -1,1 +1,740 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biathlon Market - Трансферный рынок биатлона</title>
+    
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #1a237e;
+            --accent: #ff6f00;
+            --bg-dark: #0a0e27;
+            --text-light: #e8eaf6;
+        }
 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-light);
+            min-height: 100vh;
+        }
+
+        .navbar-custom {
+            background: linear-gradient(135deg, #0a0e27 0%, #1a237e 100%);
+            border-bottom: 2px solid var(--accent);
+            padding: 1rem 0;
+        }
+
+        .navbar-custom .brand {
+            font-weight: 800;
+            font-size: 1.8rem;
+            color: white;
+            text-decoration: none;
+        }
+
+        .navbar-custom .brand span {
+            color: var(--accent);
+        }
+
+        .stats-bar {
+            background: rgba(26, 35, 126, 0.3);
+            border-radius: 15px;
+            padding: 1.5rem 2rem;
+            margin: 1.5rem 0;
+            border: 1px solid rgba(255, 111, 0, 0.2);
+        }
+
+        .stat-item .number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--accent);
+        }
+
+        .stat-item .label {
+            font-size: 0.9rem;
+            color: #9fa8da;
+        }
+
+        .table-custom {
+            background: rgba(26, 35, 126, 0.2);
+            border-radius: 15px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 111, 0, 0.1);
+        }
+
+        .table-custom thead {
+            background: linear-gradient(135deg, #1a237e, #0d47a1);
+        }
+
+        .table-custom th {
+            color: white;
+            font-weight: 600;
+            padding: 1rem 0.75rem;
+            cursor: pointer;
+            border-bottom: 2px solid var(--accent);
+        }
+
+        .table-custom td {
+            padding: 0.75rem;
+            vertical-align: middle;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            color: #c5cae9;
+        }
+
+        .table-custom tr:hover {
+            background: rgba(255, 111, 0, 0.05);
+            cursor: pointer;
+        }
+
+        .athlete-photo {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--accent);
+        }
+
+        .athlete-name {
+            color: white;
+            font-weight: 600;
+        }
+
+        .athlete-region {
+            font-size: 0.75rem;
+            color: #9fa8da;
+        }
+
+        .rating-badge {
+            background: linear-gradient(135deg, var(--accent), #ff9100);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            display: inline-block;
+        }
+
+        .price-tag {
+            color: #69f0ae;
+            font-weight: 700;
+        }
+
+        .category-badge {
+            padding: 0.2rem 0.6rem;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .category-top-men { background: #1a237e; color: white; }
+        .category-top-women { background: #880e4f; color: white; }
+        .category-junior { background: #004d40; color: white; }
+        .category-other { background: #4a148c; color: white; }
+
+        .filter-section {
+            background: rgba(26, 35, 126, 0.2);
+            border-radius: 15px;
+            padding: 1.5rem;
+            border: 1px solid rgba(255, 111, 0, 0.1);
+            margin-bottom: 1.5rem;
+        }
+
+        .filter-btn {
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #c5cae9;
+            background: transparent;
+            padding: 0.4rem 1.2rem;
+            border-radius: 20px;
+            transition: all 0.3s;
+            margin: 0.2rem;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        .search-input {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            border-radius: 25px;
+            padding: 0.6rem 1.5rem;
+            width: 100%;
+        }
+
+        .search-input:focus {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--accent);
+            box-shadow: none;
+            color: white;
+        }
+
+        .search-input::placeholder {
+            color: #9fa8da;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #0a0e27, #1a237e);
+            color: white;
+            border: 1px solid rgba(255, 111, 0, 0.3);
+        }
+
+        .modal-header {
+            border-bottom: 2px solid var(--accent);
+        }
+
+        .modal-header .btn-close {
+            filter: invert(1);
+        }
+
+        .modal-athlete-photo {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--accent);
+        }
+
+        .param-bar {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 5px;
+        }
+
+        .param-bar .fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), #ff9100);
+            border-radius: 10px;
+        }
+
+        .loader {
+            border: 3px solid rgba(255, 111, 0, 0.1);
+            border-top: 3px solid var(--accent);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 2rem auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .pagination-custom .page-link {
+            background: rgba(26, 35, 126, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .pagination-custom .page-link:hover {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+
+        .pagination-custom .page-item.active .page-link {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+
+        @media (max-width: 768px) {
+            .stats-bar .stat-item {
+                margin-bottom: 1rem;
+            }
+            .table-custom {
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Навбар -->
+<nav class="navbar-custom">
+    <div class="container">
+        <a href="#" class="brand">
+            <i class="fas fa-crosshairs"></i>Biathlon<span>Market</span>
+        </a>
+        <div>
+            <span class="text-light-emphasis small">
+                <i class="far fa-calendar-alt me-1"></i>
+                Обновлено: <span id="lastUpdated">загрузка...</span>
+            </span>
+        </div>
+    </div>
+</nav>
+
+<main class="container">
+
+    <!-- Статистика -->
+    <div class="stats-bar">
+        <div class="row">
+            <div class="col-md-3 col-6 stat-item">
+                <div class="number" id="totalAthletes">0</div>
+                <div class="label">Всего спортсменов</div>
+            </div>
+            <div class="col-md-3 col-6 stat-item">
+                <div class="number" id="avgRating">0</div>
+                <div class="label">Средний рейтинг</div>
+            </div>
+            <div class="col-md-3 col-6 stat-item">
+                <div class="number" id="topPrice">0</div>
+                <div class="label">Макс. цена (€)</div>
+            </div>
+            <div class="col-md-3 col-6 stat-item">
+                <div class="number" id="totalCategories">0</div>
+                <div class="label">Категорий</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Фильтры -->
+    <div class="filter-section">
+        <div class="row g-3">
+            <div class="col-md-4">
+                <input type="text" class="search-input" id="searchInput" placeholder="🔍 Поиск по имени...">
+            </div>
+            <div class="col-md-8">
+                <div class="d-flex flex-wrap align-items-center gap-2">
+                    <span class="text-light-emphasis small me-2">Категория:</span>
+                    <button class="filter-btn active" data-filter="all">Все</button>
+                    <button class="filter-btn" data-filter="top-men">🏆 Мужчины</button>
+                    <button class="filter-btn" data-filter="top-women">🏆 Женщины</button>
+                    <button class="filter-btn" data-filter="junior">🌟 Юниоры</button>
+                    
+                    <span class="text-light-emphasis small ms-3 me-2">Возраст:</span>
+                    <button class="filter-btn active" data-age="all">Все</button>
+                    <button class="filter-btn" data-age="u23">U-23</button>
+                    <button class="filter-btn" data-age="24-30">24-30</button>
+                    <button class="filter-btn" data-age="31+">31+</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Таблица -->
+    <div class="table-custom">
+        <div class="table-responsive">
+            <table class="table table-custom table-hover mb-0" id="athletesTable">
+                <thead>
+                    <tr>
+                        <th style="width: 50px;">#</th>
+                        <th style="width: 60px;">Фото</th>
+                        <th data-sort="name">Имя <i class="fas fa-sort"></i></th>
+                        <th data-sort="age">Возраст <i class="fas fa-sort"></i></th>
+                        <th data-sort="region">Регион <i class="fas fa-sort"></i></th>
+                        <th data-sort="category">Категория <i class="fas fa-sort"></i></th>
+                        <th data-sort="rating">Рейтинг <i class="fas fa-sort"></i></th>
+                        <th data-sort="price">Цена (€) <i class="fas fa-sort"></i></th>
+                        <th style="width: 40px;"></th>
+                    </tr>
+                </thead>
+                <tbody id="athletesBody">
+                    <!-- Данные загружаются через JS -->
+                </tbody>
+            </table>
+        </div>
+        <div class="d-flex justify-content-between align-items-center p-3">
+            <div class="text-light-emphasis small" id="paginationInfo">Показано 0 из 0</div>
+            <nav>
+                <ul class="pagination pagination-custom mb-0" id="paginationControls"></ul>
+            </nav>
+        </div>
+    </div>
+
+    <div id="loadingIndicator" class="loader"></div>
+</main>
+
+<!-- Модальное окно -->
+<div class="modal fade" id="athleteModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitle">Карточка спортсмена</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="modalBody"></div>
+        </div>
+    </div>
+</div>
+
+<footer class="container py-4 mt-4">
+    <div class="text-center text-light-emphasis small">
+        <i class="fas fa-database me-1"></i> Данные обновляются каждые 2 недели
+        <span class="mx-3">|</span>
+        <i class="fas fa-users me-1"></i> Biathlon Market v1.0
+    </div>
+</footer>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+// ===== ДАННЫЕ (ВРЕМЕННО, ПОТОМ БУДЕШЬ ЗАГРУЖАТЬ ИЗ JSON) =====
+const sampleData = {
+    "lastUpdated": "2026-06-26",
+    "athletes": [
+        {
+            "id": 1,
+            "name": "Карим Халили",
+            "region": "Московская область",
+            "age": 25,
+            "category": "top-men",
+            "speed_sec": 22.8,
+            "shoot_lying": 92,
+            "shoot_standing": 88,
+            "points": 1427,
+            "stability": 95,
+            "rating": 94,
+            "price": 470000,
+            "photo": "halili.jpg"
+        },
+        {
+            "id": 2,
+            "name": "Антон Смирнов",
+            "region": "Тюменская область",
+            "age": 28,
+            "category": "top-men",
+            "speed_sec": 23.1,
+            "shoot_lying": 89,
+            "shoot_standing": 85,
+            "points": 1200,
+            "stability": 88,
+            "rating": 89,
+            "price": 445000,
+            "photo": "smirnov.jpg"
+        },
+        {
+            "id": 3,
+            "name": "Екатерина Иванова",
+            "region": "Санкт-Петербург",
+            "age": 22,
+            "category": "top-women",
+            "speed_sec": 24.2,
+            "shoot_lying": 95,
+            "shoot_standing": 91,
+            "points": 1100,
+            "stability": 92,
+            "rating": 91,
+            "price": 455000,
+            "photo": "ivanova.jpg"
+        },
+        {
+            "id": 4,
+            "name": "Дмитрий Петров",
+            "region": "Красноярский край",
+            "age": 19,
+            "category": "junior",
+            "speed_sec": 23.8,
+            "shoot_lying": 86,
+            "shoot_standing": 82,
+            "points": 800,
+            "stability": 80,
+            "rating": 84,
+            "price": 420000,
+            "photo": "petrov.jpg"
+        }
+    ]
+};
+
+// ===== ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ =====
+let allAthletes = [];
+let filteredAthletes = [];
+let currentPage = 1;
+const perPage = 20;
+let currentFilter = 'all';
+let currentAgeFilter = 'all';
+let currentSort = { column: 'rating', direction: 'desc' };
+
+// ===== ЗАГРУЗКА ДАННЫХ =====
+async function loadData() {
+    try {
+        // Сначала пробуем загрузить из файла
+        const response = await fetch('data/data.json');
+        const data = await response.json();
+        allAthletes = data.athletes || [];
+        document.getElementById('lastUpdated').textContent = data.lastUpdated || 'неизвестно';
+    } catch (error) {
+        // Если файла нет - используем пример
+        console.log('Загружаем пример данных');
+        allAthletes = sampleData.athletes;
+        document.getElementById('lastUpdated').textContent = sampleData.lastUpdated;
+    }
+    
+    applyFilters();
+    updateStats();
+    document.getElementById('loadingIndicator').style.display = 'none';
+}
+
+// ===== СТАТИСТИКА =====
+function updateStats() {
+    document.getElementById('totalAthletes').textContent = allAthletes.length;
+    const avgRating = allAthletes.reduce((sum, a) => sum + a.rating, 0) / allAthletes.length;
+    document.getElementById('avgRating').textContent = avgRating.toFixed(1);
+    const topPrice = Math.max(...allAthletes.map(a => a.price));
+    document.getElementById('topPrice').textContent = (topPrice / 1000).toFixed(0) + 'k';
+    const categories = new Set(allAthletes.map(a => a.category));
+    document.getElementById('totalCategories').textContent = categories.size;
+}
+
+// ===== ФИЛЬТРЫ =====
+function applyFilters() {
+    let result = [...allAthletes];
+    
+    if (currentFilter !== 'all') {
+        result = result.filter(a => a.category === currentFilter);
+    }
+    
+    if (currentAgeFilter !== 'all') {
+        result = result.filter(a => {
+            if (currentAgeFilter === 'u23') return a.age < 23;
+            if (currentAgeFilter === '24-30') return a.age >= 24 && a.age <= 30;
+            if (currentAgeFilter === '31+') return a.age >= 31;
+            return true;
+        });
+    }
+    
+    const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
+    if (searchTerm) {
+        result = result.filter(a => 
+            a.name.toLowerCase().includes(searchTerm) ||
+            a.region.toLowerCase().includes(searchTerm)
+        );
+    }
+    
+    result.sort((a, b) => {
+        let valA = a[currentSort.column];
+        let valB = b[currentSort.column];
+        if (typeof valA === 'string') {
+            valA = valA.toLowerCase();
+            valB = valB.toLowerCase();
+        }
+        if (valA < valB) return currentSort.direction === 'asc' ? -1 : 1;
+        if (valA > valB) return currentSort.direction === 'asc' ? 1 : -1;
+        return 0;
+    });
+    
+    filteredAthletes = result;
+    currentPage = 1;
+    renderTable();
+}
+
+// ===== РЕНДЕР ТАБЛИЦЫ =====
+function renderTable() {
+    const tbody = document.getElementById('athletesBody');
+    const start = (currentPage - 1) * perPage;
+    const end = start + perPage;
+    const pageData = filteredAthletes.slice(start, end);
+    
+    if (pageData.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="9" class="text-center py-4 text-light-emphasis">Спортсмены не найдены</td></tr>`;
+        return;
+    }
+    
+    tbody.innerHTML = pageData.map((athlete, index) => {
+        const globalIndex = start + index + 1;
+        const categoryClass = {
+            'top-men': 'category-top-men',
+            'top-women': 'category-top-women',
+            'junior': 'category-junior',
+            'other': 'category-other'
+        }[athlete.category] || 'category-other';
+        
+        return `
+            <tr onclick="openModal(${athlete.id})">
+                <td class="text-light-emphasis">${globalIndex}</td>
+                <td>
+                    <img src="images/athletes/${athlete.photo || 'default.jpg'}" 
+                         alt="${athlete.name}" 
+                         class="athlete-photo"
+                         onerror="this.src='images/athletes/default.jpg'">
+                </td>
+                <td>
+                    <div class="athlete-name">${athlete.name}</div>
+                    <div class="athlete-region">${athlete.region || '—'}</div>
+                </td>
+                <td>${athlete.age}</td>
+                <td>${athlete.region || '—'}</td>
+                <td><span class="category-badge ${categoryClass}">${athlete.category}</span></td>
+                <td><span class="rating-badge">${athlete.rating}</span></td>
+                <td><span class="price-tag">€${athlete.price.toLocaleString()}</span></td>
+                <td><i class="fas fa-chevron-right text-light-emphasis"></i></td>
+            </tr>
+        `;
+    }).join('');
+    
+    updatePagination();
+}
+
+// ===== ПАГИНАЦИЯ =====
+function updatePagination() {
+    const total = filteredAthletes.length;
+    const totalPages = Math.ceil(total / perPage);
+    
+    document.getElementById('paginationInfo').textContent = 
+        `Показано ${Math.min(total, currentPage * perPage)} из ${total}`;
+    
+    const controls = document.getElementById('paginationControls');
+    if (totalPages <= 1) {
+        controls.innerHTML = '';
+        return;
+    }
+    
+    let html = '';
+    html += `<li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
+        <a class="page-link" onclick="goToPage(${currentPage - 1})">«</a></li>`;
+    
+    for (let i = 1; i <= totalPages; i++) {
+        if (i === 1 || i === totalPages || Math.abs(i - currentPage) <= 2) {
+            html += `<li class="page-item ${i === currentPage ? 'active' : ''}">
+                <a class="page-link" onclick="goToPage(${i})">${i}</a></li>`;
+        } else if (i === currentPage - 3 || i === currentPage + 3) {
+            html += `<li class="page-item disabled"><a class="page-link">…</a></li>`;
+        }
+    }
+    
+    html += `<li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
+        <a class="page-link" onclick="goToPage(${currentPage + 1})">»</a></li>`;
+    
+    controls.innerHTML = html;
+}
+
+function goToPage(page) {
+    const totalPages = Math.ceil(filteredAthletes.length / perPage);
+    if (page < 1 || page > totalPages) return;
+    currentPage = page;
+    renderTable();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ===== МОДАЛЬНОЕ ОКНО =====
+function openModal(id) {
+    const athlete = allAthletes.find(a => a.id === id);
+    if (!athlete) return;
+    
+    document.getElementById('modalTitle').textContent = athlete.name;
+    const body = document.getElementById('modalBody');
+    
+    body.innerHTML = `
+        <div class="row">
+            <div class="col-md-4 text-center">
+                <img src="images/athletes/${athlete.photo || 'default.jpg'}" 
+                     alt="${athlete.name}" 
+                     class="modal-athlete-photo mb-3"
+                     onerror="this.src='images/athletes/default.jpg'">
+                <div class="mb-2">
+                    <span class="category-badge ${{
+                        'top-men': 'category-top-men',
+                        'top-women': 'category-top-women',
+                        'junior': 'category-junior',
+                        'other': 'category-other'
+                    }[athlete.category] || 'category-other'}">${athlete.category}</span>
+                </div>
+                <div class="text-light-emphasis">
+                    <i class="fas fa-map-marker-alt me-1"></i> ${athlete.region || '—'}
+                    <br>
+                    <i class="fas fa-calendar-alt me-1"></i> ${athlete.age} лет
+                </div>
+                <div class="mt-3">
+                    <div class="rating-badge" style="font-size: 1.5rem; padding: 0.5rem 1.5rem;">
+                        ${athlete.rating}
+                    </div>
+                    <div class="mt-2 text-light-emphasis">Рейтинг BM</div>
+                </div>
+                <div class="mt-2">
+                    <div class="price-tag" style="font-size: 1.8rem;">€${athlete.price.toLocaleString()}</div>
+                    <div class="text-light-emphasis">Рыночная стоимость</div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <h6 class="text-light-emphasis mb-3">Детальные параметры</h6>
+                ${renderParam('Скорость', athlete.speed_sec || 0, 'сек')}
+                ${renderParam('Стрельба лёжа', athlete.shoot_lying || 0, '%')}
+                ${renderParam('Стрельба стоя', athlete.shoot_standing || 0, '%')}
+                ${renderParam('Результаты', athlete.points || 0, 'очков')}
+                ${renderParam('Стабильность', athlete.stability || 0, '')}
+            </div>
+        </div>
+    `;
+    
+    new bootstrap.Modal(document.getElementById('athleteModal')).show();
+}
+
+function renderParam(label, value, unit) {
+    const width = Math.min(value, 100);
+    return `
+        <div class="mb-3">
+            <div class="d-flex justify-content-between">
+                <span class="param-label">${label}</span>
+                <span class="param-value">${value}${unit}</span>
+            </div>
+            <div class="param-bar">
+                <div class="fill" style="width: ${width}%"></div>
+            </div>
+        </div>
+    `;
+}
+
+// ===== СОБЫТИЯ =====
+document.querySelectorAll('[data-filter]').forEach(btn => {
+    btn.addEventListener('click', function() {
+        document.querySelectorAll('[data-filter]').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        currentFilter = this.dataset.filter;
+        applyFilters();
+    });
+});
+
+document.querySelectorAll('[data-age]').forEach(btn => {
+    btn.addEventListener('click', function() {
+        document.querySelectorAll('[data-age]').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        currentAgeFilter = this.dataset.age;
+        applyFilters();
+    });
+});
+
+document.querySelectorAll('[data-sort]').forEach(th => {
+    th.addEventListener('click', function() {
+        const column = this.dataset.sort;
+        if (currentSort.column === column) {
+            currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
+        } else {
+            currentSort.column = column;
+            currentSort.direction = 'desc';
+        }
+        applyFilters();
+    });
+});
+
+let searchTimeout;
+document.getElementById('searchInput').addEventListener('input', function() {
+    clearTimeout(searchTimeout);
+    searchTimeout = setTimeout(applyFilters, 300);
+});
+
+// ===== ЗАПУСК =====
+loadData();
+</script>
+
+</body>
+</html>
