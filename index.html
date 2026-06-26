@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Biathlon Market – главная</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
-    /* ===== ОБЩИЕ ПЕРЕМЕННЫЕ (темы) ===== */
     :root {
       --bg-body: #f8f9fa;
       --text-color: #212529;
@@ -38,7 +37,6 @@
       margin: 0;
       padding: 0;
     }
-    /* ===== НАВБАР ===== */
     .navbar-custom {
       background: var(--dark-blue);
       border-bottom: 3px solid var(--red);
@@ -54,6 +52,12 @@
       gap: 10px;
     }
     .navbar-custom .navbar-brand span { color: var(--red); }
+    .navbar-custom .navbar-brand .logo-text {
+      background: rgba(255,255,255,0.15);
+      padding: 0.1rem 0.8rem;
+      border-radius: 30px;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
     .navbar-custom .nav-link {
       color: rgba(255,255,255,0.8);
       font-weight: 600;
@@ -89,7 +93,6 @@
     }
     .theme-btn i { font-size: 1rem; }
 
-    /* ===== HERO (лого на пол-экрана) ===== */
     .hero {
       min-height: 100vh;
       display: flex;
@@ -154,7 +157,6 @@
       50% { transform: translateX(-50%) translateY(-10px); }
     }
 
-    /* ===== НОВОСТИ ===== */
     .news-section {
       padding: 3rem 0;
       background: var(--bg-body);
@@ -212,8 +214,9 @@
       border-bottom: 1px solid var(--border-color);
     }
     .transfer-item .icon {
-      font-size: 1.5rem;
+      font-size: 1.2rem;
       color: var(--red);
+      min-width: 30px;
     }
     .transfer-item .details {
       flex: 1;
@@ -226,7 +229,6 @@
       color: var(--dark-blue);
     }
 
-    /* ===== АДАПТИВ ===== */
     @media (max-width: 767px) {
       .hero .logo-big { font-size: 5rem; }
       .hero h1 { font-size: 2.5rem; }
@@ -244,7 +246,7 @@
 <nav class="navbar navbar-expand-md navbar-custom">
   <div class="container">
     <a class="navbar-brand" href="index.html">
-      <span class="logo-text" style="background:rgba(255,255,255,0.15);padding:0.1rem 0.8rem;border-radius:30px;border:1px solid rgba(255,255,255,0.2);">BM</span>
+      <span class="logo-text">BM</span>
       Biathlon<span>Market</span>
     </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -292,95 +294,143 @@
       <div class="tab-pane fade show active" id="world">
         <div class="news-card">
           <div class="date">26 июня 2026</div>
-          <div class="title">Йоханнес Бё выиграл «Гонку чемпионов» в Хольменколлене</div>
-          <div class="summary">Норвежец опередил Стурлу Легрейда на 12 секунд. Третьим стал француз Эмильен Жаклен.</div>
+          <div class="title">IBU утвердил изменения в календаре Кубка мира на сезон 2026/27</div>
+          <div class="summary">Сезон стартует в Эстерсунде 29 ноября. В календаре 10 этапов, включая новый этап в Румынии.</div>
         </div>
         <div class="news-card">
           <div class="date">24 июня 2026</div>
-          <div class="title">Сборная Франции объявила состав на летний чемпионат мира</div>
-          <div class="summary">В составе – Фуркад, Жаклен, Фийон-Майе и молодые таланты. Тренировки начнутся в Альпах.</div>
+          <div class="title">Йоханнес Бё объявил о намерении завершить карьеру после Олимпиады-2026</div>
+          <div class="summary">Норвежский биатлонист подтвердил, что сезон 2026/27 станет для него последним.</div>
         </div>
         <div class="news-card">
           <div class="date">22 июня 2026</div>
-          <div class="title">IBU утвердил новые правила экипировки на сезон 2026/27</div>
-          <div class="summary">Изменения касаются толщины лыжного воска и допустимых материалов.</div>
+          <div class="title">Сборная Франции провела контрольные старты в Лилле</div>
+          <div class="summary">Лучшие результаты показали Эмильен Жаклен и Жюлия Симон.</div>
+        </div>
+        <div class="news-card">
+          <div class="date">20 июня 2026</div>
+          <div class="title">Швеция объявила состав на летний чемпионат мира</div>
+          <div class="summary">В составе – Самуэльссон, Эберг, Магнуссон и молодая смена.</div>
+        </div>
+        <div class="news-card">
+          <div class="date">18 июня 2026</div>
+          <div class="title">Германия и Норвегия провели совместный сбор в Оберхофе</div>
+          <div class="summary">Стороны обменялись опытом по подготовке к олимпийскому сезону.</div>
         </div>
       </div>
+
       <!-- ===== РОССИЯ ===== -->
       <div class="tab-pane fade" id="russia">
         <div class="news-card">
           <div class="date">26 июня 2026</div>
-          <div class="title">Карим Халили стал лучшим на контрольных стартах в Увате</div>
-          <div class="summary">Халили показал лучший круг и чистую стрельбу. Его готовность к сезону оценили как высокую.</div>
+          <div class="title">Карим Халили показал лучший результат на сборе в Увате</div>
+          <div class="summary">Халили выиграл контрольную гонку с чистой стрельбой и лучшим кругом. Тренеры довольны его формой.</div>
         </div>
         <div class="news-card">
           <div class="date">25 июня 2026</div>
-          <div class="title">Виктория Сливко пропустит сбор в Сочи из-за болезни</div>
-          <div class="summary">Тренерский штаб решил дать спортсменке время на восстановление.</div>
+          <div class="title">Виктория Сливко вернулась к тренировкам после болезни</div>
+          <div class="summary">Спортсменка приступила к работе в щадящем режиме, готовится к летнему чемпионату России.</div>
+        </div>
+        <div class="news-card">
+          <div class="date">24 июня 2026</div>
+          <div class="title">СБР утвердил состав сборной на летний чемпионат мира</div>
+          <div class="summary">В состав вошли Халили, Бажин, Латыпов, Сливко, Резцова и молодые спортсмены.</div>
         </div>
         <div class="news-card">
           <div class="date">23 июня 2026</div>
-          <div class="title">СБР продлил контракт с главным тренером мужской сборной</div>
-          <div class="summary">Специалист будет готовить команду к Олимпийскому сезону.</div>
+          <div class="title">Юниорская сборная выиграла командный зачёт на Кубке Андерсен</div>
+          <div class="summary">Российские юниоры взяли 4 золота и 3 серебра в личных гонках.</div>
         </div>
         <div class="news-card">
-          <div class="date">20 июня 2026</div>
-          <div class="title">Юниорская сборная выиграла командный зачёт на Кубке Андерсен</div>
-          <div class="summary">Российские юниоры взяли три золота и два серебра.</div>
+          <div class="date">21 июня 2026</div>
+          <div class="title">Антон Шипулин назначен тренером-консультантом мужской сборной</div>
+          <div class="summary">Легендарный биатлонист будет помогать молодым спортсменам и делиться опытом.</div>
+        </div>
+        <div class="news-card">
+          <div class="date">19 июня 2026</div>
+          <div class="title">Сборная России завершила сбор в Сочи</div>
+          <div class="summary">Заключительные контрольные старты показали хорошую готовность команды к сезону.</div>
         </div>
       </div>
+
       <!-- ===== ТРАНСФЕРЫ ===== -->
       <div class="tab-pane fade" id="transfers">
         <div class="news-card">
-          <div class="date">Трансферное окно закрыто</div>
-          <div class="transfer-item">
-            <span class="icon"><i class="fas fa-arrows-alt-h"></i></span>
-            <div class="details">
-              <span class="player">Александр Логинов</span> → <span class="club">Тюменская область</span> (продление на 2 года)
-            </div>
-          </div>
+          <div class="date">Трансферное окно – обновление</div>
+
           <div class="transfer-item">
             <span class="icon"><i class="fas fa-arrow-right"></i></span>
             <div class="details">
-              <span class="player">Анастасия Томшина</span> → <span class="club">Московская область</span> (переход из сборной Санкт-Петербурга)
+              <span class="player">Дюжева</span> Новосибирская область ➡️ <span class="club">Московская область</span>
             </div>
           </div>
+
           <div class="transfer-item">
             <span class="icon"><i class="fas fa-arrow-right"></i></span>
             <div class="details">
-              <span class="player">Иван Колотов</span> → <span class="club">Красноярский край</span> (аренда до конца сезона)
+              <span class="player">Еремин, Гришина, Домичек</span> Новосибирская область ➡️ <span class="club">ХМАО-Югра</span>
             </div>
           </div>
+
           <div class="transfer-item">
             <span class="icon"><i class="fas fa-arrow-right"></i></span>
             <div class="details">
-              <span class="player">Анна Козлова</span> → <span class="club">Свердловская область</span> (подписание контракта с основой)
+              <span class="player">Евменов</span> Мордовия ➡️ <span class="club">Московская область</span>
             </div>
           </div>
+
           <div class="transfer-item">
             <span class="icon"><i class="fas fa-arrow-right"></i></span>
             <div class="details">
-              <span class="player">Уле-Эйнар Бьорндален</span> → <span class="club">Завершил карьеру</span> (официальное объявление)
+              <span class="player">Томшина</span> Красноярский край ➡️ <span class="club">ХМАО-Югра</span>
             </div>
           </div>
+
           <div class="transfer-item">
             <span class="icon"><i class="fas fa-arrow-right"></i></span>
             <div class="details">
-              <span class="player">Дарья Домрачева</span> → <span class="club">Тренер сборной Беларуси</span> (назначение)
+              <span class="player">Томшин</span> Свердловская область ➡️ <span class="club">ХМАО-Югра</span>
             </div>
           </div>
+
+          <div class="transfer-item">
+            <span class="icon"><i class="fas fa-arrow-right"></i></span>
+            <div class="details">
+              <span class="player">Фоминых</span> Кировская область ➡️ <span class="club">ХМАО-Югра</span>
+            </div>
+          </div>
+
+          <div class="transfer-item">
+            <span class="icon"><i class="fas fa-arrow-right"></i></span>
+            <div class="details">
+              <span class="player">Батманова</span> Татарстан ➡️ <span class="club">ХМАО-Югра</span>
+            </div>
+          </div>
+
+          <div class="transfer-item">
+            <span class="icon"><i class="fas fa-arrow-right"></i></span>
+            <div class="details">
+              <span class="player">Бектуганов</span> ХМАО-Югра ➡️ <span class="club">Пермский край</span>
+            </div>
+          </div>
+
+          <div class="transfer-item">
+            <span class="icon"><i class="fas fa-arrow-right"></i></span>
+            <div class="details">
+              <span class="player">Емерхонов</span> Татарстан ➡️ <span class="club">Тюменская область</span>
+            </div>
+          </div>
+
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
 <script>
   // =========================================================================
-  //  ТЕМА И ЯЗЫК (одинаковые для обеих страниц)
+  //  ТЕМА И ЯЗЫК
   // =========================================================================
   let currentTheme = 'light';
   function toggleTheme() {
@@ -428,9 +478,7 @@
       updateLanguage(this.dataset.lang);
     });
   });
-  // Инициализация языка и темы
   updateLanguage('ru');
 </script>
-
 </body>
 </html>
