@@ -21,6 +21,7 @@
       --medal-gold: #ffc107;
       --medal-silver: #9e9e9e;
       --medal-bronze: #cd7f32;
+      --table-row-bg: #ffffff;
     }
     body.dark-theme {
       --bg-body: #0a0e1a;
@@ -36,6 +37,7 @@
       --medal-gold: #ffd54f;
       --medal-silver: #bdbdbd;
       --medal-bronze: #e0a97a;
+      --table-row-bg: #1a1a2e;
     }
     body {
       font-family: 'Segoe UI', Tahoma, sans-serif;
@@ -57,9 +59,14 @@
       color: white;
       text-decoration: none;
       display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+    }
+    .navbar-custom .brand .brand-row {
+      display: flex;
       align-items: center;
       gap: 10px;
-      cursor: pointer;
     }
     .navbar-custom .brand span { color: var(--red); }
     .navbar-custom .brand .logo-text {
@@ -77,9 +84,6 @@
       font-size: 0.8rem;
       opacity: 0;
       transition: opacity 0.3s;
-      text-align: center;
-      display: block;
-      width: 100%;
       color: white;
     }
     .navbar-custom .brand.logo-expanded .logo-caption {
@@ -186,16 +190,15 @@
       white-space: nowrap;
       font-size: 0.9rem;
     }
+    .table-custom tbody,
+    .table-custom tr,
     .table-custom td {
-      padding: 0.6rem 0.5rem;
-      vertical-align: middle;
-      border-bottom: 1px solid var(--border-color);
-      font-size: 0.9rem;
+      background: var(--table-row-bg);
       color: var(--text-color);
+      transition: background 0.3s, color 0.3s;
     }
-    .table-custom tr {
-      background: var(--card-bg);
-      transition: background 0.3s;
+    .table-custom td {
+      border-bottom: 1px solid var(--border-color);
     }
     .table-custom tr:hover {
       background: var(--hover-bg);
@@ -267,6 +270,11 @@
       background: var(--card-bg);
       color: var(--text-color);
       border-radius: 16px;
+      transition: background 0.3s, color 0.3s;
+    }
+    .modal-body {
+      background: var(--card-bg);
+      color: var(--text-color);
       transition: background 0.3s, color 0.3s;
     }
     .modal-header {
@@ -383,7 +391,7 @@
   <div class="container">
     <div class="d-flex justify-content-between align-items-center flex-wrap">
       <div class="brand" id="logoWrapper" onclick="toggleLogo()">
-        <div style="display:flex; align-items:center; gap:10px;">
+        <div class="brand-row">
           <span class="logo-text">BM</span>
           <span>Biathlon<span>Market</span></span>
         </div>
@@ -495,36 +503,92 @@
 
 <script>
 // =========================================================================
-//  ПЕРЕВОДЫ
+//  ПЕРЕВОДЫ (полные)
 // =========================================================================
 const translations = {
   ru: {
-    total: "Всего", avg_rating: "Ср. рейтинг", max_price: "Макс. цена (€)", categories: "Категорий",
-    tab_all: "Все", tab_men: "🏆 Мужчины", tab_women: "🏆 Женщины", tab_junior: "🌟 Юниоры", tab_retired: "⏳ Завершившие",
-    age_label: "Возраст:", age_all: "Все", age_u23: "U-23", age_24_30: "24-30", age_31: "31+",
-    photo: "Фото", name_col: "Имя", age_col: "Возраст", region_col: "Регион", cat_col: "Кат.",
-    rating_col: "Рейтинг", price_col: "Цена (€)", change_col: "Δ",
+    total: "Всего",
+    avg_rating: "Ср. рейтинг",
+    max_price: "Макс. цена (€)",
+    categories: "Категорий",
+    tab_all: "Все",
+    tab_men: "🏆 Мужчины",
+    tab_women: "🏆 Женщины",
+    tab_junior: "🌟 Юниоры",
+    tab_retired: "⏳ Завершившие",
+    age_label: "Возраст:",
+    age_all: "Все",
+    age_u23: "U-23",
+    age_24_30: "24-30",
+    age_31: "31+",
+    photo: "Фото",
+    name_col: "Имя",
+    age_col: "Возраст",
+    region_col: "Регион",
+    cat_col: "Кат.",
+    rating_col: "Рейтинг",
+    price_col: "Цена (€)",
+    change_col: "Δ",
     pagination_info: "Показано {showing} из {total}",
     search_placeholder: "🔍 Поиск по имени или региону...",
     no_data: "Никого не найдено",
-    modal_change: "Изменение:", modal_season: "Сезон 2025/26:", modal_achievements: "Достижения:",
-    modal_details: "Детальные параметры", modal_speed: "Скорость", modal_shoot_lying: "Стрельба лёжа",
-    modal_shoot_standing: "Стрельба стоя", modal_points: "Результаты (очки)", modal_stability: "Стабильность",
+    modal_change: "Изменение:",
+    modal_season: "Сезон 2025/26:",
+    modal_achievements: "Достижения:",
+    modal_details: "Детальные параметры",
+    modal_speed: "Скорость",
+    modal_shoot_lying: "Стрельба лёжа",
+    modal_shoot_standing: "Стрельба стоя",
+    modal_points: "Результаты (очки)",
+    modal_stability: "Стабильность",
     retired_season: "Сезон 2025/26: не бежал",
+    category_retired: "Завершивший",
+    category_top_men: "Мужчины",
+    category_top_women: "Женщины",
+    category_junior: "Юниоры",
+    category_foreign: "Иностранец"
   },
   en: {
-    total: "Total", avg_rating: "Avg rating", max_price: "Max price (€)", categories: "Categories",
-    tab_all: "All", tab_men: "🏆 Men", tab_women: "🏆 Women", tab_junior: "🌟 Juniors", tab_retired: "⏳ Retired",
-    age_label: "Age:", age_all: "All", age_u23: "U-23", age_24_30: "24-30", age_31: "31+",
-    photo: "Photo", name_col: "Name", age_col: "Age", region_col: "Region", cat_col: "Cat.",
-    rating_col: "Rating", price_col: "Price (€)", change_col: "Δ",
+    total: "Total",
+    avg_rating: "Avg rating",
+    max_price: "Max price (€)",
+    categories: "Categories",
+    tab_all: "All",
+    tab_men: "🏆 Men",
+    tab_women: "🏆 Women",
+    tab_junior: "🌟 Juniors",
+    tab_retired: "⏳ Retired",
+    age_label: "Age:",
+    age_all: "All",
+    age_u23: "U-23",
+    age_24_30: "24-30",
+    age_31: "31+",
+    photo: "Photo",
+    name_col: "Name",
+    age_col: "Age",
+    region_col: "Region",
+    cat_col: "Cat.",
+    rating_col: "Rating",
+    price_col: "Price (€)",
+    change_col: "Δ",
     pagination_info: "Showing {showing} of {total}",
     search_placeholder: "🔍 Search by name or region...",
     no_data: "No athletes found",
-    modal_change: "Change:", modal_season: "Season 2025/26:", modal_achievements: "Achievements:",
-    modal_details: "Detailed parameters", modal_speed: "Speed", modal_shoot_lying: "Prone shooting",
-    modal_shoot_standing: "Standing shooting", modal_points: "Results (points)", modal_stability: "Stability",
+    modal_change: "Change:",
+    modal_season: "Season 2025/26:",
+    modal_achievements: "Achievements:",
+    modal_details: "Detailed parameters",
+    modal_speed: "Speed",
+    modal_shoot_lying: "Prone shooting",
+    modal_shoot_standing: "Standing shooting",
+    modal_points: "Results (points)",
+    modal_stability: "Stability",
     retired_season: "Season 2025/26: did not compete",
+    category_retired: "Retired",
+    category_top_men: "Men",
+    category_top_women: "Women",
+    category_junior: "Junior",
+    category_foreign: "Foreign"
   }
 };
 
@@ -548,7 +612,7 @@ function toggleTheme() {
 }
 
 // =========================================================================
-//  УВЕЛИЧЕНИЕ ЛОГОТИПА
+//  ЛОГОТИП
 // =========================================================================
 let logoExpanded = false;
 function toggleLogo() {
@@ -584,7 +648,7 @@ function updateLanguage(lang) {
 }
 
 // =========================================================================
-//  ДАННЫЕ (14 спортсменов)
+//  ДАННЫЕ
 // =========================================================================
 const data = {
   "lastUpdated": "2026-06-26",
@@ -607,7 +671,7 @@ const data = {
 };
 
 // =========================================================================
-//  ОСНОВНАЯ ЛОГИКА
+//  ЛОГИКА
 // =========================================================================
 let allAthletes = [];
 let filteredAthletes = [];
@@ -673,6 +737,8 @@ function renderTable() {
   tbody.innerHTML = pageData.map((a, idx) => {
     const globalIdx = start + idx + 1;
     const catClass = { 'top-men':'category-top-men','top-women':'category-top-women','junior':'category-junior','foreign':'category-foreign','retired':'category-retired' }[a.category] || '';
+    // Переводим название категории для отображения
+    const catLabel = translations[currentLang]['category_'+a.category] || a.category;
     let changeHtml = '';
     if (a.change !== undefined) {
       if (a.change > 0) changeHtml = `<span class="change-positive change-tooltip" title="${a.change_comment||''}"><i class="fas fa-arrow-up change-icon"></i>+${a.change}</span>`;
@@ -686,7 +752,7 @@ function renderTable() {
         <td><div class="athlete-name">${a.name}</div><div class="athlete-region">${a.region}</div></td>
         <td>${a.age}</td>
         <td>${a.region}</td>
-        <td><span class="category-badge ${catClass}">${a.category}</span></td>
+        <td><span class="category-badge ${catClass}">${catLabel}</span></td>
         <td><span class="rating-badge">${a.rating}</span></td>
         <td><span class="price-tag">€${a.price.toLocaleString()}</span></td>
         <td>${changeHtml}</td>
@@ -759,15 +825,19 @@ function openModal(id) {
   let seasonHtml = '';
   if (a.season_info) {
     let seasonText = a.season_info;
-    if (a.category === 'retired') seasonText = t.retired_season;
+    // Если категория retired, используем переведённую фразу
+    if (a.category === 'retired') {
+      seasonText = t.retired_season;
+    }
     seasonHtml = `<div class="info-box"><strong><i class="fas fa-calendar-alt me-2"></i>${t.modal_season}</strong> ${seasonText}</div>`;
   }
 
+  const catLabel = t['category_'+a.category] || a.category;
   body.innerHTML = `
     <div class="row">
       <div class="col-md-4 text-center">
         <img src="images/athletes/${a.photo||'default.jpg'}" alt="${a.name}" class="modal-athlete-photo mb-2" onerror="this.style.display='none'">
-        <div><span class="category-badge ${{'top-men':'category-top-men','top-women':'category-top-women','junior':'category-junior','foreign':'category-foreign','retired':'category-retired'}[a.category]||''}">${a.category}</span></div>
+        <div><span class="category-badge ${{'top-men':'category-top-men','top-women':'category-top-women','junior':'category-junior','foreign':'category-foreign','retired':'category-retired'}[a.category]||''}">${catLabel}</span></div>
         <div class="text-muted small"><i class="fas fa-map-marker-alt me-1"></i>${a.region}<br><i class="fas fa-calendar-alt me-1"></i>${a.age} лет</div>
         <div class="mt-2"><span class="rating-badge" style="font-size:1.4rem;padding:0.3rem 1.2rem;">${a.rating}</span><div class="text-muted small">Рейтинг BM</div></div>
         <div class="mt-1"><span class="price-tag" style="font-size:1.6rem;">€${a.price.toLocaleString()}</span><div class="text-muted small">Рыночная стоимость</div></div>
