@@ -3,56 +3,98 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Biathlon Market – рейтинг</title>
+  <title>Biathlon Market – рейтинг биатлонистов, трансферы, аналитика</title>
+  <meta name="description" content="Рейтинг биатлонистов по уникальной формуле. Рыночная стоимость, трансферы, новости. Обновляется каждые 2 недели.">
+  <meta name="keywords" content="биатлон, рейтинг, биатлонисты, трансферы, цены, аналитика">
+  <meta property="og:title" content="Biathlon Market">
+  <meta property="og:description" content="Рейтинг биатлонистов по уникальной формуле.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://ваш-логин.github.io/biathlon-market/">
+  <link rel="manifest" href="manifest.json">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
-    /* ===== ВСЕ СТИЛИ (те же, что в предыдущем коде) ===== */
+    /* ===== ОБЩИЕ ПЕРЕМЕННЫЕ (темы) ===== */
     :root {
-      --bg-body: #f8f9fa; --text-color: #212529; --card-bg: #ffffff;
-      --card-shadow: 0 2px 8px rgba(0,0,0,0.06); --border-color: #e9ecef;
-      --input-bg: #ffffff; --input-border: #ced4da;
-      --dark-blue: #0d47a1; --red: #c62828; --hover-bg: #f1f3f5;
-      --medal-gold: #ffc107; --medal-silver: #9e9e9e; --medal-bronze: #cd7f32;
+      --bg-body: #f8f9fa;
+      --text-color: #212529;
+      --card-bg: #ffffff;
+      --card-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      --border-color: #e9ecef;
+      --dark-blue: #0d47a1;
+      --red: #c62828;
+      --hero-bg: linear-gradient(135deg, #0a0e27 0%, #1a237e 100%);
+      --hero-text: white;
+      --game-bg: #e9ecef;
+      --target-color: #c62828;
+      --target-hit: #2e7d32;
     }
     body.dark-theme {
-      --bg-body: #0a0e1a; --text-color: #e8eaf6; --card-bg: #1a1a2e;
-      --card-shadow: 0 2px 8px rgba(0,0,0,0.4); --border-color: #2a2a4a;
-      --input-bg: #2a2a4a; --input-border: #4a4a6a;
-      --dark-blue: #42a5f5; --red: #ef5350; --hover-bg: #2a2a4a;
-      --medal-gold: #ffd54f; --medal-silver: #bdbdbd; --medal-bronze: #e0a97a;
+      --bg-body: #0a0e1a;
+      --text-color: #e8eaf6;
+      --card-bg: #1a1a2e;
+      --card-shadow: 0 2px 8px rgba(0,0,0,0.4);
+      --border-color: #2a2a4a;
+      --dark-blue: #42a5f5;
+      --red: #ef5350;
+      --hero-bg: linear-gradient(135deg, #050812 0%, #0d1b3e 100%);
+      --hero-text: #e8eaf6;
+      --game-bg: #1a1a2e;
+      --target-color: #ef5350;
+      --target-hit: #66bb6a;
     }
     body {
       font-family: 'Segoe UI', Tahoma, sans-serif;
       background: var(--bg-body);
       color: var(--text-color);
-      padding-bottom: 2rem;
       transition: background 0.3s, color 0.3s;
+      margin: 0;
+      padding: 0;
     }
+
+    /* ===== НАВБАР ===== */
     .navbar-custom {
       background: var(--dark-blue);
       border-bottom: 3px solid var(--red);
       padding: 0.6rem 0;
       transition: background 0.3s;
+      position: relative;
+      z-index: 1000;
     }
     .navbar-custom .brand {
       font-weight: 800;
       font-size: 1.6rem;
       color: white;
       display: flex;
+      flex-direction: column;
       align-items: center;
-      gap: 10px;
       cursor: pointer;
       text-decoration: none;
-      border: none;
-      background: none;
-      padding: 0;
+    }
+    .navbar-custom .brand .brand-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
     .navbar-custom .brand span { color: var(--red); }
     .navbar-custom .brand img {
       height: 40px;
       width: auto;
       transition: transform 0.3s;
+    }
+    .navbar-custom .brand.logo-expanded img {
+      transform: scale(1.4);
+    }
+    .navbar-custom .brand .logo-caption {
+      font-size: 0.8rem;
+      opacity: 0;
+      transition: opacity 0.3s;
+      text-align: center;
+      color: white;
+      margin-top: 2px;
+    }
+    .navbar-custom .brand.logo-expanded .logo-caption {
+      opacity: 1;
     }
     .navbar-custom .nav-link {
       color: rgba(255,255,255,0.8);
@@ -89,247 +131,328 @@
     }
     .theme-btn i { font-size: 1rem; }
 
-    .stats-bar {
-      background: var(--card-bg);
-      border-radius: 12px;
-      padding: 1.2rem 1.5rem;
-      margin: 1.5rem 0;
-      box-shadow: var(--card-shadow);
-      border-left: 4px solid var(--red);
-      transition: background 0.3s, box-shadow 0.3s;
+    /* ===== HERO ===== */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      background: var(--hero-bg);
+      color: var(--hero-text);
+      padding: 2rem;
+      transition: background 0.3s;
+      position: relative;
     }
-    .stat-item .number { font-size: 1.8rem; font-weight: 800; color: var(--dark-blue); }
-    .stat-item .label { font-size: 0.85rem; color: var(--text-color); opacity: 0.7; }
+    .hero .hero-logo {
+      max-width: 300px;
+      width: 80%;
+      height: auto;
+      display: block;
+      margin: 0 auto 1.5rem;
+      filter: drop-shadow(0 4px 20px rgba(0,0,0,0.3));
+    }
+    .hero h1 {
+      font-size: 3.5rem;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+    }
+    .hero h1 span { color: var(--red); }
+    .hero p {
+      font-size: 1.2rem;
+      opacity: 0.9;
+      max-width: 600px;
+      margin: 0 auto 2rem;
+    }
+    .hero .btn-hero {
+      background: var(--red);
+      color: white;
+      padding: 0.8rem 2.5rem;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 1.1rem;
+      border: none;
+      transition: 0.3s;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .hero .btn-hero:hover {
+      transform: scale(1.05);
+      background: #b71c1c;
+      color: white;
+    }
+    .scroll-indicator {
+      position: absolute;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: rgba(255,255,255,0.6);
+      font-size: 1.5rem;
+      animation: bounce 2s infinite;
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(-10px); }
+    }
 
-    .tab-section {
-      background: var(--card-bg);
-      border-radius: 12px;
-      padding: 1.2rem 1.5rem;
-      box-shadow: var(--card-shadow);
+    /* ===== НОВОСТИ ===== */
+    .news-section {
+      padding: 3rem 0;
+      background: var(--bg-body);
+      transition: background 0.3s;
+    }
+    .news-section .section-title {
+      font-size: 2.5rem;
+      font-weight: 800;
       margin-bottom: 1.5rem;
-      transition: background 0.3s, box-shadow 0.3s;
+      color: var(--dark-blue);
+      text-align: center;
     }
     .nav-tabs .nav-link {
       color: var(--text-color);
       font-weight: 600;
       border: none;
       border-bottom: 3px solid transparent;
-      transition: color 0.3s;
     }
     .nav-tabs .nav-link.active {
       color: var(--dark-blue);
       background: transparent;
       border-bottom: 3px solid var(--red);
     }
-    .nav-tabs .nav-link:hover {
-      border-bottom: 3px solid var(--red);
-      color: var(--dark-blue);
+    .tab-content {
+      padding-top: 1.5rem;
     }
-    .filter-btn {
-      border: 1px solid var(--input-border);
-      color: var(--text-color);
-      background: transparent;
-      padding: 0.3rem 0.9rem;
-      border-radius: 20px;
-      font-size: 0.8rem;
-      transition: 0.3s;
-      margin: 0.1rem;
-    }
-    .filter-btn:hover, .filter-btn.active {
-      background: var(--dark-blue);
-      color: white;
-      border-color: var(--dark-blue);
-    }
-    .filter-btn.gender-btn { background: rgba(13,71,161,0.1); }
-    .filter-btn.gender-btn.active { background: var(--red); border-color: var(--red); }
-    .filter-btn.country-btn { background: rgba(198,40,40,0.1); }
-    .filter-btn.country-btn.active { background: var(--dark-blue); border-color: var(--dark-blue); }
-
-    .table-custom {
-      background: var(--card-bg);
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: var(--card-shadow);
-      transition: background 0.3s, box-shadow 0.3s;
-    }
-    .table-custom thead { background: var(--dark-blue); color: white; }
-    .table-custom th {
-      font-weight: 600;
-      padding: 0.9rem 0.6rem;
-      cursor: pointer;
-      border-bottom: 2px solid var(--red);
-      white-space: nowrap;
-      font-size: 0.9rem;
-    }
-    .table-custom td {
-      padding: 0.6rem 0.5rem;
-      vertical-align: middle;
-      border-bottom: 1px solid var(--border-color);
-      font-size: 0.9rem;
-      color: var(--text-color);
-    }
-    .table-custom tr { background: var(--card-bg); transition: background 0.3s; }
-    .table-custom tr:hover { background: var(--hover-bg); cursor: pointer; }
-
-    .athlete-photo {
-      width: 44px; height: 44px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 2px solid var(--red);
-      background: #ccc;
-    }
-    .athlete-name { font-weight: 600; color: var(--text-color); }
-    .athlete-region { font-size: 0.75rem; color: var(--text-color); opacity: 0.7; }
-    .rating-badge {
-      background: var(--red);
-      color: white;
-      padding: 0.2rem 0.7rem;
-      border-radius: 20px;
-      font-weight: 700;
-      font-size: 0.85rem;
-      display: inline-block;
-    }
-    .price-tag { color: var(--dark-blue); font-weight: 700; }
-    .category-badge {
-      padding: 0.15rem 0.5rem;
-      border-radius: 12px;
-      font-size: 0.65rem;
-      font-weight: 600;
-      text-transform: uppercase;
-    }
-    .category-top-men { background: #0d47a1; color: white; }
-    .category-top-women { background: #880e4f; color: white; }
-    .category-junior { background: #004d40; color: white; }
-    .category-youth { background: #e65100; color: white; }
-    .category-children { background: #2e7d32; color: white; }
-    .category-foreign { background: #4a148c; color: white; }
-    .category-retired { background: #5d4037; color: white; }
-
-    .change-positive { color: #2e7d32; }
-    .change-negative { color: #c62828; }
-    .change-neutral { color: #6c757d; }
-    .change-icon { font-size: 1rem; margin-right: 3px; }
-    .change-tooltip { cursor: help; border-bottom: 1px dashed #6c757d; }
-
-    .medal-icon { font-size: 1.3rem; margin-right: 4px; cursor: help; }
-    .medal-gold { color: var(--medal-gold); }
-    .medal-silver { color: var(--medal-silver); }
-    .medal-bronze { color: var(--medal-bronze); }
-
-    .search-input {
-      border: 1px solid var(--input-border);
-      border-radius: 25px;
-      padding: 0.5rem 1.2rem;
-      width: 100%;
-      font-size: 0.95rem;
-      background: var(--input-bg);
-      color: var(--text-color);
-      transition: background 0.3s, border 0.3s, color 0.3s;
-    }
-    .search-input:focus {
-      border-color: var(--dark-blue);
-      box-shadow: 0 0 0 0.2rem rgba(13, 71, 161, 0.25);
-    }
-    .search-input::placeholder { color: var(--text-color); opacity: 0.5; }
-
-    .modal-content {
-      background: var(--card-bg);
-      color: var(--text-color);
-      border-radius: 16px;
-      transition: background 0.3s, color 0.3s;
-    }
-    .modal-header {
-      border-bottom: 2px solid var(--red);
-      background: var(--dark-blue);
-      color: white;
-      border-radius: 16px 16px 0 0;
-    }
-    .modal-header .btn-close { filter: invert(1); }
-    .modal-athlete-photo {
-      width: 110px; height: 110px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 3px solid var(--red);
-      background: #ccc;
-    }
-    .param-bar {
-      height: 6px;
-      background: var(--border-color);
-      border-radius: 10px;
-      overflow: hidden;
-      margin-top: 4px;
-    }
-    .param-bar .fill { height: 100%; background: var(--red); border-radius: 10px; }
-    .info-box {
-      background: var(--bg-body);
-      padding: 0.7rem 1rem;
-      border-radius: 8px;
-      margin-top: 0.5rem;
-      font-size: 0.9rem;
-    }
-    .comment-box {
-      background: var(--bg-body);
-      border-left: 3px solid var(--red);
-      padding: 0.7rem 1rem;
-      border-radius: 8px;
-      margin-top: 0.7rem;
-      font-size: 0.9rem;
-    }
-    .achievement-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      margin-top: 0.5rem;
-      max-height: 80px;
+    .news-list {
+      max-height: 600px;
       overflow: hidden;
       transition: max-height 0.5s ease;
     }
-    .achievement-list.expanded { max-height: 9999px; }
-    .achievement-item {
-      background: var(--bg-body);
-      padding: 0.2rem 0.7rem;
-      border-radius: 20px;
-      font-size: 0.8rem;
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
+    .news-list.expanded {
+      max-height: 9999px;
     }
-    .btn-show-all-achievements {
+    .news-card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 1.2rem 1.5rem;
+      margin-bottom: 1rem;
+      box-shadow: var(--card-shadow);
+      border-left: 4px solid var(--red);
+      transition: background 0.3s, box-shadow 0.3s;
+    }
+    .news-card .date {
+      font-size: 0.8rem;
+      color: var(--text-color);
+      opacity: 0.6;
+    }
+    .news-card .title {
+      font-weight: 700;
+      font-size: 1.1rem;
+      margin: 0.3rem 0;
+    }
+    .news-card .summary {
+      color: var(--text-color);
+      opacity: 0.8;
+    }
+    .transfer-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .transfer-item .icon {
+      font-size: 1.2rem;
+      color: var(--red);
+      min-width: 30px;
+    }
+    .transfer-item .details {
+      flex: 1;
+    }
+    .transfer-item .player {
+      font-weight: 700;
+    }
+    .transfer-item .club {
+      font-weight: 600;
+      color: var(--dark-blue);
+    }
+    .btn-show-more {
       background: var(--dark-blue);
       color: white;
       border: none;
-      padding: 0.3rem 1.2rem;
+      padding: 0.4rem 1.5rem;
       border-radius: 30px;
       font-weight: 600;
-      font-size: 0.85rem;
       transition: 0.3s;
       cursor: pointer;
-      margin-top: 0.5rem;
+      font-size: 0.9rem;
     }
-    .btn-show-all-achievements:hover { background: var(--red); transform: scale(1.02); }
-
-    .pagination-custom .page-link {
-      color: var(--dark-blue);
-      border: 1px solid var(--border-color);
-      background: var(--card-bg);
-      transition: background 0.3s, color 0.3s, border 0.3s;
+    .btn-show-more:hover {
+      background: var(--red);
+      transform: scale(1.02);
     }
-    .pagination-custom .page-link:hover { background: var(--dark-blue); color: white; }
-    .pagination-custom .page-item.active .page-link {
+    .btn-refresh {
+      background: var(--red);
+      color: white;
+      border: none;
+      padding: 0.4rem 1.2rem;
+      border-radius: 30px;
+      font-weight: 600;
+      transition: 0.3s;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+    .btn-refresh:hover {
       background: var(--dark-blue);
-      border-color: var(--dark-blue);
+      transform: scale(1.02);
+    }
+
+    /* ===== КНОПКА УСТАНОВКИ ===== */
+    .install-section {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 2rem;
+      margin: 2rem 0;
+      box-shadow: var(--card-shadow);
+      text-align: center;
+    }
+    .btn-install {
+      background: var(--red);
+      color: white;
+      padding: 0.6rem 1.5rem;
+      border-radius: 50px;
+      font-weight: 700;
+      border: none;
+      transition: 0.3s;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .btn-install:hover {
+      transform: scale(1.05);
+      background: #b71c1c;
       color: white;
     }
-
-    .extra-filters {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 8px;
-      margin-top: 10px;
+    .btn-install.dark {
+      background: var(--dark-blue);
     }
-    .extra-filters .label { font-size: 0.85rem; color: var(--text-color); opacity: 0.7; margin-right: 5px; }
+    .btn-install.dark:hover {
+      background: #0a2a6a;
+    }
+    .modal-video iframe {
+      width: 100%;
+      aspect-ratio: 16/9;
+      border: none;
+      border-radius: 12px;
+    }
 
+    /* ===== ИГРА ===== */
+    .game-section {
+      padding: 3rem 0;
+      background: var(--bg-body);
+      transition: background 0.3s;
+    }
+    .game-section .section-title {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 1.5rem;
+      color: var(--dark-blue);
+      text-align: center;
+    }
+    .game-container {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 2rem;
+      box-shadow: var(--card-shadow);
+      max-width: 700px;
+      margin: 0 auto;
+      transition: background 0.3s;
+    }
+    .game-field {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      background: var(--game-bg);
+      border-radius: 12px;
+      border: 2px solid var(--border-color);
+      margin: 0 auto;
+      overflow: hidden;
+      cursor: crosshair;
+      transition: background 0.3s;
+    }
+    .game-target {
+      position: absolute;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: radial-gradient(circle, var(--target-color) 40%, #fff 42%, var(--target-color) 44%, #fff 46%, var(--target-color) 48%);
+      box-shadow: 0 0 20px rgba(198, 40, 40, 0.6);
+      cursor: pointer;
+      transition: transform 0.1s;
+      animation: pulse 1s infinite alternate;
+    }
+    .game-target:hover {
+      transform: scale(1.1);
+    }
+    .game-target.hit {
+      background: radial-gradient(circle, var(--target-hit) 40%, #fff 42%, var(--target-hit) 44%, #fff 46%, var(--target-hit) 48%);
+      pointer-events: none;
+      animation: none;
+      transform: scale(0.8);
+      opacity: 0.7;
+    }
+    @keyframes pulse {
+      0% { box-shadow: 0 0 20px rgba(198,40,40,0.4); }
+      100% { box-shadow: 0 0 40px rgba(198,40,40,0.9); }
+    }
+    .game-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 1rem;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .game-controls .info {
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+    .game-controls .btn-game {
+      background: var(--dark-blue);
+      color: white;
+      border: none;
+      padding: 0.5rem 1.5rem;
+      border-radius: 30px;
+      font-weight: 600;
+      transition: 0.3s;
+      cursor: pointer;
+    }
+    .game-controls .btn-game:hover {
+      background: var(--red);
+      transform: scale(1.02);
+    }
+    .game-result {
+      margin-top: 1.5rem;
+      padding: 1.5rem;
+      background: var(--bg-body);
+      border-radius: 12px;
+      text-align: center;
+      font-size: 1.1rem;
+      border-left: 4px solid var(--red);
+      display: none;
+    }
+    .game-result .athlete-name {
+      font-weight: 800;
+      color: var(--dark-blue);
+    }
+    .game-result .fact {
+      font-style: italic;
+      color: var(--text-color);
+      opacity: 0.8;
+      margin-top: 0.5rem;
+    }
+
+    /* ===== FULLSCREEN LOGO ===== */
     .logo-fullscreen-overlay {
       position: fixed;
       top: 0;
@@ -345,7 +468,9 @@
       cursor: pointer;
       animation: fadeIn 0.4s ease;
     }
-    .logo-fullscreen-overlay.active { display: flex; }
+    .logo-fullscreen-overlay.active {
+      display: flex;
+    }
     .logo-fullscreen-overlay img {
       max-width: 80%;
       max-height: 60vh;
@@ -372,39 +497,28 @@
       background: none;
       border: none;
     }
-    .logo-fullscreen-overlay .fullscreen-close:hover { transform: rotate(90deg); color: var(--red); }
-    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    .logo-fullscreen-overlay .fullscreen-close:hover {
+      transform: rotate(90deg);
+      color: var(--red);
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
 
-    @media (max-width: 767.98px) {
+    @media (max-width: 767px) {
+      .hero .hero-logo { max-width: 200px; }
+      .hero h1 { font-size: 2.5rem; }
+      .hero p { font-size: 1rem; }
       .navbar-custom .brand { font-size: 1.3rem; }
       .navbar-custom .brand img { height: 32px; }
-      .navbar-custom .update-info { font-size: 0.7rem; gap: 6px; justify-content: flex-end; }
+      .navbar-custom .update-info { font-size: 0.7rem; gap: 6px; }
       .lang-btn, .theme-btn { font-size: 0.65rem; padding: 0.1rem 0.5rem; }
-      .stats-bar { padding: 1rem; }
-      .stat-item .number { font-size: 1.4rem; }
-      .stat-item .label { font-size: 0.7rem; }
-      .tab-section { padding: 1rem; }
-      .nav-tabs .nav-link { font-size: 0.75rem; padding: 0.3rem 0.5rem; }
-      .filter-btn { font-size: 0.7rem; padding: 0.2rem 0.6rem; }
-      .table-custom th:nth-child(5),
-      .table-custom td:nth-child(5) { display: none; }
-      .table-custom th:nth-child(6),
-      .table-custom td:nth-child(6) { display: none; }
-      .table-custom th:last-child,
-      .table-custom td:last-child { display: none; }
-      .table-custom th, .table-custom td {
-        font-size: 0.75rem;
-        padding: 0.4rem 0.3rem;
-      }
-      .athlete-photo { width: 36px; height: 36px; }
-      .rating-badge { font-size: 0.7rem; padding: 0.1rem 0.5rem; }
-      .price-tag { font-size: 0.8rem; }
-      .medal-icon { font-size: 1rem; }
-      .modal-athlete-photo { width: 80px; height: 80px; }
-    }
-    @media (max-width: 575.98px) {
-      .table-custom th:nth-child(4),
-      .table-custom td:nth-child(4) { display: none; }
+      .news-section .section-title { font-size: 2rem; }
+      .game-container { padding: 1rem; }
+      .game-target { width: 45px; height: 45px; }
+      .logo-fullscreen-overlay .fullscreen-caption { font-size: 1.2rem; }
+      .logo-fullscreen-overlay .fullscreen-close { top: 20px; right: 20px; font-size: 1.8rem; }
     }
   </style>
 </head>
@@ -413,118 +527,143 @@
 <!-- ===== НАВБАР ===== -->
 <nav class="navbar navbar-expand-md navbar-custom">
   <div class="container">
-    <button class="brand" id="logoNavBtn" onclick="openFullscreenLogo()">
-      <img id="navLogoImg" src="images/logo-light.png" alt="Biathlon Market">
-      <span>Biathlon<span>Market</span></span>
-    </button>
+    <div class="brand" id="logoWrapper" onclick="toggleLogo()">
+      <div class="brand-row">
+        <img id="logoImg" src="images/logo-light.png" alt="Biathlon Market">
+        <span>Biathlon<span>Market</span></span>
+      </div>
+      <span class="logo-caption">Biathlon Market</span>
+    </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
       <span class="navbar-toggler-icon" style="filter: invert(1);"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav me-auto">
-        <li class="nav-item"><a class="nav-link" href="index.html"><i class="fas fa-home"></i> Главная</a></li>
-        <li class="nav-item"><a class="nav-link active" href="ratings.html"><i class="fas fa-table"></i> Рейтинг</a></li>
+        <li class="nav-item"><a class="nav-link active" href="index.html"><i class="fas fa-home"></i> Главная</a></li>
+        <li class="nav-item"><a class="nav-link" href="ratings.html"><i class="fas fa-table"></i> Рейтинг</a></li>
       </ul>
       <div class="update-info">
-        <span><i class="far fa-calendar-alt me-1"></i><span id="lastUpdated">2026-06-26</span></span>
-        <button class="theme-btn" id="themeToggle" onclick="toggleTheme()"><i class="fas fa-moon"></i></button>
-        <button class="lang-btn active" data-lang="ru">RU</button>
-        <button class="lang-btn" data-lang="en">EN</button>
+        <span><i class="far fa-calendar-alt me-1"></i><span id="lastUpdated">2026-06-27</span></span>
+        <button class="theme-btn" id="themeToggle" onclick="toggleTheme()">
+          <i class="fas fa-moon"></i>
+        </button>
+        <button class="lang-btn active" data-lang="ru" id="langRu">RU</button>
+        <button class="lang-btn" data-lang="en" id="langEn">EN</button>
       </div>
     </div>
   </div>
 </nav>
 
-<main class="container">
-
-  <!-- ===== СТАТИСТИКА ===== -->
-  <div class="stats-bar">
-    <div class="row">
-      <div class="col-3 col-md-3 stat-item"><div class="number" id="totalAthletes">0</div><div class="label" data-i18n="total">Всего</div></div>
-      <div class="col-3 col-md-3 stat-item"><div class="number" id="avgRating">0</div><div class="label" data-i18n="avg_rating">Ср. рейтинг</div></div>
-      <div class="col-3 col-md-3 stat-item"><div class="number" id="topPrice">0</div><div class="label" data-i18n="max_price">Макс. цена (€)</div></div>
-      <div class="col-3 col-md-3 stat-item"><div class="number" id="totalCategories">0</div><div class="label" data-i18n="categories">Категорий</div></div>
-    </div>
+<!-- ===== HERO ===== -->
+<section class="hero" id="hero">
+  <div class="container">
+    <img id="heroLogoImg" src="images/logo-light.png" alt="Biathlon Market" class="hero-logo">
+    <h1>Biathlon <span>Market</span></h1>
+    <p>Рейтинг биатлонистов по уникальной формуле. Цены, аналитика, трансферы.</p>
+    <a href="ratings.html" class="btn-hero"><i class="fas fa-arrow-right me-2"></i>Перейти к рейтингу</a>
+    <div class="scroll-indicator"><i class="fas fa-chevron-down"></i></div>
   </div>
+</section>
 
-  <!-- ===== ВКЛАДКИ ===== -->
-  <div class="tab-section">
-    <ul class="nav nav-tabs" id="categoryTabs" role="tablist">
-      <li class="nav-item"><button class="nav-link active" data-category="all" data-i18n="tab_all">Все</button></li>
-      <li class="nav-item"><button class="nav-link" data-category="top-men" data-i18n="tab_men">🏆 Мужчины</button></li>
-      <li class="nav-item"><button class="nav-link" data-category="top-women" data-i18n="tab_women">🏆 Женщины</button></li>
-      <li class="nav-item"><button class="nav-link" data-category="junior" data-i18n="tab_junior">🌟 Юниоры</button></li>
-      <li class="nav-item"><button class="nav-link" data-category="youth" data-i18n="tab_youth">🌱 Юноши</button></li>
-      <li class="nav-item"><button class="nav-link" data-category="children" data-i18n="tab_children">🧒 Дети</button></li>
-      <li class="nav-item"><button class="nav-link" data-category="retired" data-i18n="tab_retired">⏳ Завершившие</button></li>
+<!-- ===== НОВОСТИ ===== -->
+<section class="news-section" id="news">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center flex-wrap mb-3">
+      <h2 class="section-title mb-0" data-i18n="news_title">Новости биатлона</h2>
+      <button class="btn-refresh" onclick="refreshAllNews()" title="Обновить новости (имитация)">
+        <i class="fas fa-sync-alt"></i> Обновить
+      </button>
+    </div>
+
+    <ul class="nav nav-tabs justify-content-center" id="newsTabs" role="tablist">
+      <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#tab-world" data-i18n="tab_world">Мир</button></li>
+      <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-russia" data-i18n="tab_russia">Россия</button></li>
+      <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-transfers" data-i18n="tab_transfers">Трансферы</button></li>
     </ul>
 
-    <div class="extra-filters" id="extraFilters">
-      <span class="label" data-i18n="country_label">Страна:</span>
-      <button class="filter-btn country-btn active" data-country="all" data-i18n="country_all">Все</button>
-      <button class="filter-btn country-btn" data-country="russia" data-i18n="country_russia">🇷🇺 Россия</button>
-      <button class="filter-btn country-btn" data-country="world" data-i18n="country_world">🌍 Мир</button>
-
-      <span class="label ms-2" data-i18n="age_label">Возраст:</span>
-      <button class="filter-btn active" data-age="all" data-i18n="age_all">Все</button>
-      <button class="filter-btn" data-age="u23" data-i18n="age_u23">U-23</button>
-      <button class="filter-btn" data-age="24-30" data-i18n="age_24_30">24-30</button>
-      <button class="filter-btn" data-age="31+" data-i18n="age_31">31+</button>
-
-      <span class="label ms-2 gender-label" id="genderLabel" style="display:none;" data-i18n="gender_label">Пол:</span>
-      <button class="filter-btn gender-btn" id="genderMen" style="display:none;" data-gender="male" data-i18n="gender_men">Муж.</button>
-      <button class="filter-btn gender-btn" id="genderWomen" style="display:none;" data-gender="female" data-i18n="gender_women">Жен.</button>
-      <button class="filter-btn gender-btn active" id="genderAll" style="display:none;" data-gender="all" data-i18n="gender_all">Все</button>
-    </div>
-
-    <div class="row mt-3 g-2">
-      <div class="col-md-6">
-        <input type="text" class="search-input" id="searchInput" placeholder="🔍 Поиск по имени или региону...">
+    <div class="tab-content" id="newsTabContent">
+      <div class="tab-pane fade show active" id="tab-world">
+        <div class="news-list" id="worldNewsList"></div>
+        <div class="text-center mt-2">
+          <button class="btn-show-more" onclick="toggleNews('world')">
+            <i class="fas fa-chevron-down"></i> Смотреть ещё
+          </button>
+        </div>
+      </div>
+      <div class="tab-pane fade" id="tab-russia">
+        <div class="news-list" id="russiaNewsList"></div>
+        <div class="text-center mt-2">
+          <button class="btn-show-more" onclick="toggleNews('russia')">
+            <i class="fas fa-chevron-down"></i> Смотреть ещё
+          </button>
+        </div>
+      </div>
+      <div class="tab-pane fade" id="tab-transfers">
+        <div class="news-list" id="transfersNewsList"></div>
+        <div class="text-center mt-2">
+          <button class="btn-show-more" onclick="toggleNews('transfers')">
+            <i class="fas fa-chevron-down"></i> Смотреть ещё
+          </button>
+        </div>
       </div>
     </div>
   </div>
+</section>
 
-  <!-- ===== ТАБЛИЦА ===== -->
-  <div class="table-custom">
-    <div class="table-responsive">
-      <table class="table table-custom table-hover mb-0" id="athletesTable">
-        <thead>
-          <tr>
-            <th style="width:45px;">#</th>
-            <th style="width:55px;" data-i18n="photo">Фото</th>
-            <th data-sort="name" data-i18n="name_col">Имя <i class="fas fa-sort"></i></th>
-            <th data-sort="age" data-i18n="age_col">Возраст <i class="fas fa-sort"></i></th>
-            <th data-sort="date_of_birth" data-i18n="birthdate">Дата рождения <i class="fas fa-sort"></i></th>
-            <th data-sort="region" data-i18n="region_col">Регион <i class="fas fa-sort"></i></th>
-            <th data-sort="category" data-i18n="cat_col">Кат.</th>
-            <th data-sort="rating" data-i18n="rating_col">Рейтинг <i class="fas fa-sort"></i></th>
-            <th data-sort="price" data-i18n="price_col">Цена (€) <i class="fas fa-sort"></i></th>
-            <th data-sort="change" data-i18n="change_col">Δ <i class="fas fa-sort"></i></th>
-            <th style="width:30px;"></th>
-          </tr>
-        </thead>
-        <tbody id="athletesBody"></tbody>
-      </table>
-    </div>
-    <div class="d-flex justify-content-between align-items-center p-2">
-      <div class="text-muted small" id="paginationInfo" data-i18n="pagination_info">Показано 0 из 0</div>
-      <nav><ul class="pagination pagination-custom mb-0" id="paginationControls"></ul></nav>
-    </div>
-  </div>
-</main>
+<!-- ===== КНОПКА УСТАНОВКИ ПРИЛОЖЕНИЯ ===== -->
+<section class="install-section">
+  <h3>📲 Скачайте приложение Biathlon Market</h3>
+  <p>Установите наше приложение на телефон и получайте свежие новости и рейтинги в один клик.</p>
+  <button class="btn-install" data-bs-toggle="modal" data-bs-target="#installModal">
+    <i class="fas fa-download"></i> Установить приложение
+  </button>
+  <button class="btn-install dark" onclick="alert('Ссылка на APK появится позже. Следите за обновлениями!')">
+    <i class="fas fa-android"></i> Скачать APK
+  </button>
+</section>
 
-<!-- ===== МОДАЛКА ===== -->
-<div class="modal fade" id="athleteModal" tabindex="-1">
+<!-- ===== МОДАЛЬНОЕ ОКНО С ВИДЕО-ГАЙДОМ ===== -->
+<div class="modal fade" id="installModal" tabindex="-1">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="modalTitle">Карточка спортсмена</h5>
+        <h5 class="modal-title">Как установить приложение</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
-      <div class="modal-body" id="modalBody"></div>
+      <div class="modal-body">
+        <div class="modal-video">
+          <!-- Замените src на ссылку вашего видео-гайда -->
+          <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe>
+        </div>
+        <ol class="mt-3">
+          <li><strong>На Android (Chrome):</strong> откройте сайт в Chrome → нажмите на три точки → «Установить приложение».</li>
+          <li><strong>На iPhone (Safari):</strong> откройте сайт в Safari → нажмите «Поделиться» → «На экран «Домой»».</li>
+          <li><strong>Или скачайте APK-файл</strong> и установите его вручную (разрешите установку из неизвестных источников).</li>
+        </ol>
+      </div>
     </div>
   </div>
 </div>
+
+<!-- ===== ИГРА ===== -->
+<section class="game-section" id="game">
+  <div class="container">
+    <h2 class="section-title">🎯 Проверь свою точность!</h2>
+    <div class="game-container">
+      <div class="game-field" id="gameField">
+        <!-- Мишени появляются здесь -->
+      </div>
+      <div class="game-controls">
+        <div class="info" id="gameInfo">Выстрелов: 0 / 5</div>
+        <div class="info" id="gameTimer">⏱️ 0.0 с</div>
+        <button class="btn-game" id="startGameBtn" onclick="startGame()">Начать стрельбу</button>
+      </div>
+      <div class="game-result" id="gameResult">
+        <div id="resultText"></div>
+      </div>
+    </div>
+  </div>
+</section>
 
 <!-- ===== FULLSCREEN LOGO OVERLAY ===== -->
 <div class="logo-fullscreen-overlay" id="fullscreenOverlay" onclick="closeFullscreenLogo()">
@@ -534,74 +673,159 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 <script>
-// ========================================================================
-//  ПЕРЕВОДЫ
-// ========================================================================
-const translations = {
-  ru: {
-    total: "Всего", avg_rating: "Ср. рейтинг", max_price: "Макс. цена (€)", categories: "Категорий",
-    tab_all: "Все", tab_men: "🏆 Мужчины", tab_women: "🏆 Женщины", tab_junior: "🌟 Юниоры", tab_youth: "🌱 Юноши", tab_children: "🧒 Дети", tab_retired: "⏳ Завершившие",
-    country_label: "Страна:", country_all: "Все", country_russia: "🇷🇺 Россия", country_world: "🌍 Мир",
-    age_label: "Возраст:", age_all: "Все", age_u23: "U-23", age_24_30: "24-30", age_31: "31+",
-    gender_label: "Пол:", gender_men: "Муж.", gender_women: "Жен.", gender_all: "Все",
-    photo: "Фото", name_col: "Имя", age_col: "Возраст", birthdate: "Дата рождения", region_col: "Регион", cat_col: "Кат.",
-    rating_col: "Рейтинг", price_col: "Цена (€)", change_col: "Δ",
-    pagination_info: "Показано {showing} из {total}",
-    search_placeholder: "🔍 Поиск по имени или региону...",
-    no_data: "Никого не найдено",
-    modal_change: "Изменение:", modal_season: "Сезон 2025/26:", modal_achievements: "Достижения:",
-    modal_details: "Детальные параметры", modal_speed: "Скорость", modal_shoot_lying: "Стрельба лёжа",
-    modal_shoot_standing: "Стрельба стоя", modal_points: "Результаты (очки)", modal_stability: "Стабильность",
-    retired_season: "Сезон 2025/26: не бежал",
-    show_all: "Показать все достижения", hide_all: "Скрыть достижения",
-  },
-  en: {
-    total: "Total", avg_rating: "Avg rating", max_price: "Max price (€)", categories: "Categories",
-    tab_all: "All", tab_men: "🏆 Men", tab_women: "🏆 Women", tab_junior: "🌟 Juniors", tab_youth: "🌱 Youth", tab_children: "🧒 Children", tab_retired: "⏳ Retired",
-    country_label: "Country:", country_all: "All", country_russia: "🇷🇺 Russia", country_world: "🌍 World",
-    age_label: "Age:", age_all: "All", age_u23: "U-23", age_24_30: "24-30", age_31: "31+",
-    gender_label: "Gender:", gender_men: "Male", gender_women: "Female", gender_all: "All",
-    photo: "Photo", name_col: "Name", age_col: "Age", birthdate: "Date of birth", region_col: "Region", cat_col: "Cat.",
-    rating_col: "Rating", price_col: "Price (€)", change_col: "Δ",
-    pagination_info: "Showing {showing} of {total}",
-    search_placeholder: "🔍 Search by name or region...",
-    no_data: "No athletes found",
-    modal_change: "Change:", modal_season: "Season 2025/26:", modal_achievements: "Achievements:",
-    modal_details: "Detailed parameters", modal_speed: "Speed", modal_shoot_lying: "Prone shooting",
-    modal_shoot_standing: "Standing shooting", modal_points: "Results (points)", modal_stability: "Stability",
-    retired_season: "Season 2025/26: did not compete",
-    show_all: "Show all achievements", hide_all: "Hide achievements",
+// =========================================================================
+//  ДАННЫЕ НОВОСТЕЙ (три категории)
+// =========================================================================
+const worldNews = [
+  { date: '2026-06-27', title: 'Йоханнес Бё выиграл этап Кубка мира в Антхольце', summary: 'Норвежец опередил Стюрлу Легрейда на 15 секунд. Третьим стал француз Эмильен Жаклен.' },
+  { date: '2026-06-26', title: 'IBU утвердил новые правила на сезон 2026/27', summary: 'Изменения касаются экипировки и штрафных кругов.' },
+  { date: '2026-06-25', title: 'Сборная Франции провела открытую тренировку в Лилле', summary: 'Фуркад и Жаклен показали отличную форму.' },
+  { date: '2026-06-24', title: 'Швеция объявила состав на летний чемпионат мира', summary: 'В составе – Ханна Эберг, Самуэльссон и молодёжь.' },
+  { date: '2026-06-23', title: 'Германия и Норвегия провели совместный сбор', summary: 'Стороны обменялись опытом подготовки к Олимпиаде.' },
+  { date: '2026-06-22', title: 'Ветераны биатлона провели гонку в Хольменколлене', summary: 'Бьорндален, Фуркад и Свендсен встретились вновь.' }
+];
+const russiaNews = [
+  { date: '2026-06-27', title: 'Карим Халили выиграл контрольную гонку в Увате', summary: 'Халили показал чистую стрельбу и лучшее время круга.' },
+  { date: '2026-06-26', title: 'Виктория Сливко вернулась к тренировкам после болезни', summary: 'Спортсменка приступила к работе в щадящем режиме.' },
+  { date: '2026-06-25', title: 'СБР утвердил состав на летний чемпионат мира', summary: 'В состав вошли Халили, Бажин, Латыпов, Сливко, Резцова.' },
+  { date: '2026-06-24', title: 'Антон Шипулин назначен тренером-консультантом', summary: 'Легендарный биатлонист будет помогать молодым.' },
+  { date: '2026-06-23', title: 'Юниорская сборная выиграла Кубок Андерсен', summary: 'Россияне взяли 4 золота и 3 серебра.' },
+  { date: '2026-06-22', title: 'Сборная России завершила сбор в Сочи', summary: 'Итоги сбора признаны удовлетворительными.' }
+];
+const transfersNews = [
+  { from: 'Новосибирская область', to: 'Московская область', players: ['Дюжева'] },
+  { from: 'Новосибирская область', to: 'ХМАО-Югра', players: ['Еремин', 'Гришина', 'Домичек'] },
+  { from: 'Мордовия', to: 'Московская область', players: ['Евменов'] },
+  { from: 'Красноярский край', to: 'ХМАО-Югра', players: ['Томшина'] },
+  { from: 'Свердловская область', to: 'ХМАО-Югра', players: ['Томшин'] },
+  { from: 'Кировская область', to: 'ХМАО-Югра', players: ['Фоминых'] },
+  { from: 'Татарстан', to: 'ХМАО-Югра', players: ['Батманова'] },
+  { from: 'ХМАО-Югра', to: 'Пермский край', players: ['Бектуганов'] },
+  { from: 'Татарстан', to: 'Тюменская область', players: ['Емерхонов'] }
+];
+
+// =========================================================================
+//  СОСТОЯНИЯ НОВОСТЕЙ
+// =========================================================================
+const newsState = { world: false, russia: false, transfers: false };
+
+// =========================================================================
+//  РЕНДЕРИНГ НОВОСТЕЙ
+// =========================================================================
+function renderNews(category) {
+  const container = document.getElementById(category + 'NewsList');
+  if (!container) return;
+  let items = [];
+  if (category === 'world') items = worldNews;
+  else if (category === 'russia') items = russiaNews;
+  else if (category === 'transfers') items = transfersNews;
+
+  const expanded = newsState[category];
+  const visible = expanded ? items.length : 5;
+  const sliced = items.slice(0, visible);
+  let html = '';
+  if (category === 'transfers') {
+    html = sliced.map(t => `
+      <div class="transfer-item">
+        <span class="icon"><i class="fas fa-arrow-right"></i></span>
+        <div class="details">
+          <span class="player">${t.players.join(', ')}</span>
+          ${t.from} ➡️ <span class="club">${t.to}</span>
+        </div>
+      </div>
+    `).join('');
+    html = `<div class="news-card"><div class="date">Трансферное окно – обновление</div>${html}</div>`;
+  } else {
+    html = sliced.map(item => {
+      const d = new Date(item.date);
+      const dateStr = d.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' });
+      return `
+        <div class="news-card">
+          <div class="date">${dateStr}</div>
+          <div class="title">${item.title}</div>
+          <div class="summary">${item.summary}</div>
+        </div>
+      `;
+    }).join('');
   }
-};
+  container.innerHTML = html;
 
-// ========================================================================
-//  ТЕМА, ЛОГОТИП, FULLSCREEN, ЯЗЫК
-// ========================================================================
+  const btn = container.parentElement.querySelector('.btn-show-more');
+  if (btn) {
+    btn.innerHTML = expanded ?
+      '<i class="fas fa-chevron-up"></i> Скрыть' :
+      '<i class="fas fa-chevron-down"></i> Смотреть ещё';
+  }
+}
+
+function toggleNews(category) {
+  newsState[category] = !newsState[category];
+  renderNews(category);
+}
+
+// =========================================================================
+//  ОБНОВЛЕНИЕ НОВОСТЕЙ (имитация)
+// =========================================================================
+function refreshAllNews() {
+  const now = new Date();
+  const dateStr = now.toISOString().slice(0,10);
+  const timeStr = now.toLocaleTimeString();
+  worldNews.unshift({ date: dateStr, title: `🌍 Обновление новостей (${timeStr})`, summary: 'Имитация обновления.' });
+  russiaNews.unshift({ date: dateStr, title: `🇷🇺 Обновление новостей (${timeStr})`, summary: 'Имитация обновления.' });
+  transfersNews.unshift({ from: 'Новое', to: 'Обновление', players: ['📢 Сегодня'] });
+  if (worldNews.length > 20) worldNews.pop();
+  if (russiaNews.length > 20) russiaNews.pop();
+  if (transfersNews.length > 20) transfersNews.pop();
+  renderNews('world');
+  renderNews('russia');
+  renderNews('transfers');
+  const btn = document.querySelector('.btn-refresh');
+  btn.innerHTML = '<i class="fas fa-check"></i> Обновлено!';
+  setTimeout(() => { btn.innerHTML = '<i class="fas fa-sync-alt"></i> Обновить'; }, 2000);
+}
+
+// =========================================================================
+//  ТЕМА, ЛОГОТИП, ПОЛНОЭКРАННЫЙ РЕЖИМ
+// =========================================================================
 let currentTheme = 'light';
-
 function toggleTheme() {
   const body = document.body;
   const btn = document.getElementById('themeToggle');
-  const navLogo = document.getElementById('navLogoImg');
-  const fullLogo = document.getElementById('fullscreenLogoImg');
+  const navLogo = document.getElementById('logoImg');
+  const heroLogo = document.getElementById('heroLogoImg');
+  const fullscreenLogo = document.getElementById('fullscreenLogoImg');
   if (currentTheme === 'light') {
     body.classList.add('dark-theme');
     btn.innerHTML = '<i class="fas fa-sun"></i>';
     navLogo.src = 'images/logo-dark.png';
-    fullLogo.src = 'images/logo-dark.png';
+    heroLogo.src = 'images/logo-dark.png';
+    fullscreenLogo.src = 'images/logo-dark.png';
     currentTheme = 'dark';
   } else {
     body.classList.remove('dark-theme');
     btn.innerHTML = '<i class="fas fa-moon"></i>';
     navLogo.src = 'images/logo-light.png';
-    fullLogo.src = 'images/logo-light.png';
+    heroLogo.src = 'images/logo-light.png';
+    fullscreenLogo.src = 'images/logo-light.png';
     currentTheme = 'light';
   }
 }
 
+let logoExpanded = false;
+function toggleLogo() {
+  const wrapper = document.getElementById('logoWrapper');
+  logoExpanded = !logoExpanded;
+  wrapper.classList.toggle('logo-expanded', logoExpanded);
+}
+
 function openFullscreenLogo() {
-  document.getElementById('fullscreenOverlay').classList.add('active');
+  const overlay = document.getElementById('fullscreenOverlay');
+  const logoImg = document.getElementById('fullscreenLogoImg');
+  const navLogo = document.getElementById('logoImg');
+  logoImg.src = navLogo.src;
+  overlay.classList.add('active');
   document.body.style.overflow = 'hidden';
 }
 function closeFullscreenLogo() {
@@ -610,22 +834,19 @@ function closeFullscreenLogo() {
 }
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeFullscreenLogo(); });
 
+// =========================================================================
+//  ЯЗЫК (заголовки вкладок)
+// =========================================================================
+const translations = {
+  ru: { news_title: "Новости биатлона", tab_world: "Мир", tab_russia: "Россия", tab_transfers: "Трансферы" },
+  en: { news_title: "Biathlon News", tab_world: "World", tab_russia: "Russia", tab_transfers: "Transfers" }
+};
 let currentLang = 'ru';
 function updateLanguage(lang) {
   currentLang = lang;
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const key = el.dataset.i18n;
-    let text = translations[lang][key] || key;
-    if (key === 'pagination_info') {
-      const showing = document.getElementById('paginationInfo').dataset.showing || 0;
-      const total = document.getElementById('paginationInfo').dataset.total || 0;
-      text = text.replace('{showing}', showing).replace('{total}', total);
-    }
-    if (el.tagName === 'INPUT' && el.placeholder) {
-      if (key === 'search_placeholder') el.placeholder = text;
-    } else {
-      el.textContent = text;
-    }
+    el.textContent = translations[lang][key] || key;
   });
   document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
 }
@@ -636,482 +857,136 @@ document.querySelectorAll('.lang-btn').forEach(b => {
   });
 });
 
-// ========================================================================
-//  ПОЛНЫЙ МАССИВ СПОРТСМЕНОВ (90+ записей)
-// ========================================================================
-const data = {
-  "lastUpdated": "2026-06-26",
-  "athletes": [
-    // ===== МУЖЧИНЫ (ОСНОВНОЙ СОСТАВ) =====
-    { "id":1, "name":"Карим Халили", "region":"Московская область", "date_of_birth":"2001-05-15", "category":"top-men", "gender":"male", "speed_sec":22.8, "shoot_lying":92, "shoot_standing":88, "points":1427, "stability":95, "rating":94, "photo":"halili.jpg", "change":2, "change_comment":"Лидер рейтинга СБР 2025/26", "season_info":"Сезон 2025/26: 6 побед на этапах Кубка России, лучший круг 22.8 сек.", "achievements":["Чемпион России 2025 (спринт)","Призёр этапов Кубка IBU"], "rank":"МС" },
-    { "id":2, "name":"Кирилл Бажин", "region":"Свердловская область", "date_of_birth":"1998-11-10", "category":"top-men", "gender":"male", "speed_sec":23.5, "shoot_lying":90, "shoot_standing":87, "points":1360, "stability":92, "rating":91, "photo":"bazhin.jpg", "change":1, "change_comment":"Второй в рейтинге СБР", "season_info":"Сезон 2025/26: 4 победы, стабильно в топ-3.", "achievements":["Бронзовый призёр чемпионата России 2024 (эстафета)","Участник Кубка мира 2025"], "rank":"МС" },
-    { "id":3, "name":"Эдуард Латыпов", "region":"Республика Башкортостан", "date_of_birth":"1994-03-21", "category":"top-men", "gender":"male", "speed_sec":23.8, "shoot_lying":88, "shoot_standing":85, "points":1151, "stability":88, "rating":88, "photo":"latypov.jpg", "change":0, "change_comment":"Третий в рейтинге СБР", "season_info":"Сезон 2025/26: 3 победы, стабильный стрелок.", "achievements":["Бронзовый призёр Олимпийских игр 2022 (эстафета)","Бронзовый призёр чемпионата мира 2021 (эстафета)","Многократный чемпион России"], "rank":"МСМК" },
-    { "id":4, "name":"Александр Поварницын", "region":"Тюменская область", "date_of_birth":"1996-02-14", "category":"top-men", "gender":"male", "speed_sec":24.0, "shoot_lying":86, "shoot_standing":84, "points":1106, "stability":85, "rating":86, "photo":"povarnitsyn.jpg", "change":-1, "change_comment":"Четвёртое место в рейтинге СБР", "season_info":"Сезон 2025/26: 2 победы, 3 подиума.", "achievements":["Участник Кубка мира, чемпион Европы"], "rank":"МС" },
-    { "id":5, "name":"Александр Корнев", "region":"Удмуртская Республика", "date_of_birth":"2001-07-22", "category":"top-men", "gender":"male", "speed_sec":23.7, "shoot_lying":88, "shoot_standing":85, "points":1020, "stability":85, "rating":86, "photo":"kornev.jpg", "change":2, "change_comment":"Прогрессирует", "season_info":"Сезон 2025/26: 2 победы, 3 подиума.", "achievements":[], "rank":"КМС" },
-    { "id":6, "name":"Евгений Сидоров", "region":"Красноярский край", "date_of_birth":"2002-03-12", "category":"top-men", "gender":"male", "speed_sec":24.0, "shoot_lying":85, "shoot_standing":82, "points":950, "stability":83, "rating":83, "photo":"sidorov.jpg", "change":1, "change_comment":"Молодой талант", "season_info":"Сезон 2025/26: 1 победа, 2 подиума.", "achievements":[], "rank":"КМС" },
-    { "id":7, "name":"Алексей Вагин", "region":"ХМАО-Югра", "date_of_birth":"2003-09-05", "category":"top-men", "gender":"male", "speed_sec":24.1, "shoot_lying":84, "shoot_standing":81, "points":880, "stability":80, "rating":80, "photo":"vagin_alexey.jpg", "change":0, "change_comment":"Стабильный середняк", "season_info":"Сезон 2025/26: без побед, но стабильно в топ-25.", "achievements":[], "rank":"КМС" },
-    { "id":8, "name":"Роман Ерёмин", "region":"Новосибирская область", "date_of_birth":"2001-04-18", "category":"top-men", "gender":"male", "speed_sec":23.7, "shoot_lying":86, "shoot_standing":83, "points":1020, "stability":83, "rating":83, "photo":"eremin.jpg", "change":1, "change_comment":"Хорошая скорость", "season_info":"Сезон 2025/26: 1 победа, 2 подиума.", "achievements":["Призёр Кубка IBU"], "rank":"КМС" },
-    { "id":9, "name":"Савелий Коновалов", "region":"Свердловская область", "date_of_birth":"2002-06-25", "category":"top-men", "gender":"male", "speed_sec":23.6, "shoot_lying":88, "shoot_standing":85, "points":1200, "stability":87, "rating":87, "photo":"konovalov.jpg", "change":3, "change_comment":"Прогрессирует", "season_info":"Сезон 2025/26: 3 победы, стабильный результат.", "achievements":["Бронзовый призёр чемпионата России (спринт)"], "rank":"МС" },
-    { "id":10, "name":"Александр Логинов", "region":"Тюменская область", "date_of_birth":"1992-01-31", "category":"top-men", "gender":"male", "speed_sec":23.2, "shoot_lying":85, "shoot_standing":82, "points":830, "stability":82, "rating":84, "photo":"loginov.jpg", "change":-2, "change_comment":"Спад формы", "season_info":"Сезон 2025/26: 1 победа, возвращение после травмы.", "achievements":["Чемпион мира 2020 (спринт)","Бронзовый призёр чемпионата мира 2019 (эстафета)","Победитель этапов Кубка мира"], "rank":"МСМК" },
-    { "id":11, "name":"Даниил Серохвостов", "region":"Новосибирская область", "date_of_birth":"1999-08-10", "category":"top-men", "gender":"male", "speed_sec":23.6, "shoot_lying":87, "shoot_standing":84, "points":1050, "stability":86, "rating":86, "photo":"serokhvostov.jpg", "change":1, "change_comment":"Стабильный середняк", "season_info":"Сезон 2025/26: 2 победы, 3 подиума.", "achievements":[], "rank":"КМС" },
-    { "id":12, "name":"Антон Бабиков", "region":"Тюменская область", "date_of_birth":"1991-09-21", "category":"top-men", "gender":"male", "speed_sec":23.9, "shoot_lying":86, "shoot_standing":83, "points":980, "stability":84, "rating":84, "photo":"babikov.jpg", "change":-1, "change_comment":"Опытный ветеран", "season_info":"Сезон 2025/26: 1 победа, 2 подиума.", "achievements":["Чемпион России (эстафета)","Участник Кубка мира"], "rank":"МС" },
-    { "id":13, "name":"Иван Колотов", "region":"Пермский край", "date_of_birth":"2000-12-07", "category":"top-men", "gender":"male", "speed_sec":24.2, "shoot_lying":84, "shoot_standing":81, "points":900, "stability":80, "rating":80, "photo":"kolotov.jpg", "change":0, "change_comment":"Средний уровень", "season_info":"Сезон 2025/26: без побед, но стабильно в топ-20.", "achievements":[], "rank":"КМС" },
-    { "id":14, "name":"Никита Поршнев", "region":"ХМАО-Югра", "date_of_birth":"2000-05-14", "category":"top-men", "gender":"male", "speed_sec":24.3, "shoot_lying":85, "shoot_standing":82, "points":920, "stability":82, "rating":82, "photo":"porshnev.jpg", "change":1, "change_comment":"Прогрессирует", "season_info":"Сезон 2025/26: 1 победа, 2 подиума.", "achievements":[], "rank":"КМС" },
-    { "id":15, "name":"Рустам Каюмов", "region":"ЯНАО", "date_of_birth":"1995-08-19", "category":"top-men", "gender":"male", "speed_sec":24.1, "shoot_lying":86, "shoot_standing":83, "points":970, "stability":84, "rating":84, "photo":"kayumov.jpg", "change":0, "change_comment":"Стабильный", "season_info":"Сезон 2025/26: 1 победа, 2 подиума.", "achievements":[], "rank":"МС" },
-    { "id":16, "name":"Михаил Бурундуков", "region":"Тюменская область", "date_of_birth":"1999-11-02", "category":"top-men", "gender":"male", "speed_sec":24.0, "shoot_lying":84, "shoot_standing":81, "points":890, "stability":80, "rating":79, "photo":"burundukov.jpg", "change":0, "change_comment":"Стабильный", "season_info":"Сезон 2025/26: без побед.", "achievements":[], "rank":"КМС" },
-    { "id":17, "name":"Ильназ Мухамедзянов", "region":"Удмуртская Республика", "date_of_birth":"2004-03-07", "category":"top-men", "gender":"male", "speed_sec":24.3, "shoot_lying":83, "shoot_standing":80, "points":760, "stability":77, "rating":77, "photo":"mukhamedzyanov.jpg", "change":1, "change_comment":"Перспективный", "season_info":"Сезон 2025/26: резерв.", "achievements":[], "rank":"1 разряд" },
-    { "id":18, "name":"Вячеслав Малеев", "region":"Тюменская область", "date_of_birth":"2000-09-15", "category":"top-men", "gender":"male", "speed_sec":24.4, "shoot_lying":83, "shoot_standing":79, "points":720, "stability":75, "rating":75, "photo":"maleev.jpg", "change":0, "change_comment":"Стабильный резерв", "season_info":"Сезон 2025/26: без ярких результатов.", "achievements":[], "rank":"КМС" },
-    { "id":19, "name":"Кирилл Стрельцов", "region":"Московская область", "date_of_birth":"2002-12-20", "category":"top-men", "gender":"male", "speed_sec":24.2, "shoot_lying":84, "shoot_standing":80, "points":780, "stability":78, "rating":77, "photo":"streltsov.jpg", "change":2, "change_comment":"Перспективный", "season_info":"Сезон 2025/26: дебютант сборной.", "achievements":[], "rank":"КМС" },
-    { "id":20, "name":"Дмитрий Евменов", "region":"Республика Мордовия", "date_of_birth":"2002-05-11", "category":"top-men", "gender":"male", "speed_sec":24.3, "shoot_lying":83, "shoot_standing":80, "points":800, "stability":78, "rating":78, "photo":"evmenov.jpg", "change":1, "change_comment":"Перспективный", "season_info":"Сезон 2025/26: резерв сборной.", "achievements":[], "rank":"КМС" },
-    { "id":21, "name":"Олег Домичек", "region":"Новосибирская область", "date_of_birth":"2003-07-19", "category":"top-men", "gender":"male", "speed_sec":24.2, "shoot_lying":84, "shoot_standing":81, "points":850, "stability":79, "rating":79, "photo":"domichek.jpg", "change":1, "change_comment":"Перспективный", "season_info":"Сезон 2025/26: дебютант сборной.", "achievements":[], "rank":"1 разряд" },
-    { "id":22, "name":"Денис Иродов", "region":"Московская область", "date_of_birth":"2005-09-30", "category":"top-men", "gender":"male", "speed_sec":24.6, "shoot_lying":81, "shoot_standing":77, "points":620, "stability":72, "rating":72, "photo":"irodov.jpg", "change":2, "change_comment":"Молодой талант", "season_info":"Сезон 2025/26: дебютант резерва.", "achievements":[], "rank":"1 разряд" },
-    { "id":23, "name":"Даниил Усов", "region":"Пермский край", "date_of_birth":"2003-02-14", "category":"top-men", "gender":"male", "speed_sec":23.9, "shoot_lying":85, "shoot_standing":82, "points":980, "stability":81, "rating":82, "photo":"usov_danil.jpg", "change":2, "change_comment":"Молодой талант", "season_info":"Сезон 2025/26: 1 победа, 2 подиума.", "achievements":["Чемпион России среди юниоров 2024"], "rank":"КМС" },
-    { "id":24, "name":"Роман Канаровский", "region":"Санкт-Петербург", "date_of_birth":"2003-06-22", "category":"top-men", "gender":"male", "speed_sec":24.4, "shoot_lying":83, "shoot_standing":79, "points":700, "stability":76, "rating":75, "photo":"kanarovsky.jpg", "change":1, "change_comment":"Молодой, есть прогресс", "season_info":"Сезон 2025/26: первый сезон в резерве.", "achievements":[], "rank":"1 разряд" },
-    { "id":25, "name":"Егор Прокудин", "region":"Свердловская область", "date_of_birth":"2002-08-03", "category":"top-men", "gender":"male", "speed_sec":24.2, "shoot_lying":84, "shoot_standing":80, "points":780, "stability":78, "rating":77, "photo":"prokudin.jpg", "change":2, "change_comment":"Перспективный", "season_info":"Сезон 2025/26: дебютант сборной.", "achievements":[], "rank":"КМС" },
-    { "id":26, "name":"Ярослав Конкин", "region":"Республика Мордовия", "date_of_birth":"2004-01-12", "category":"top-men", "gender":"male", "speed_sec":24.4, "shoot_lying":83, "shoot_standing":79, "points":750, "stability":76, "rating":76, "photo":"konkin.jpg", "change":2, "change_comment":"Молодой, есть прогресс", "season_info":"Сезон 2025/26: первый сезон в резерве.", "achievements":[], "rank":"1 разряд" },
-    { "id":27, "name":"Андрей Вьюхин", "region":"Челябинская область", "date_of_birth":"2001-11-07", "category":"top-men", "gender":"male", "speed_sec":24.0, "shoot_lying":84, "shoot_standing":81, "points":850, "stability":78, "rating":78, "photo":"vyukhin.jpg", "change":1, "change_comment":"Перспективный", "season_info":"Сезон 2025/26: резерв.", "achievements":[], "rank":"КМС" },
-    { "id":28, "name":"Антон Усов", "region":"Пермский край", "date_of_birth":"2003-12-01", "category":"top-men", "gender":"male", "speed_sec":24.1, "shoot_lying":83, "shoot_standing":80, "points":780, "stability":76, "rating":76, "photo":"usov_anton.jpg", "change":0, "change_comment":"Средний уровень", "season_info":"Сезон 2025/26: резерв.", "achievements":[], "rank":"1 разряд" },
-    { "id":29, "name":"Роман Сурнев", "region":"Московская область", "date_of_birth":"2002-09-19", "category":"top-men", "gender":"male", "speed_sec":24.2, "shoot_lying":84, "shoot_standing":80, "points":800, "stability":78, "rating":78, "photo":"surnev.jpg", "change":1, "change_comment":"Перспективный", "season_info":"Сезон 2025/26: резерв.", "achievements":[], "rank":"КМС" },
-    { "id":30, "name":"Кирилл Киливнюк", "region":"Красноярский край", "date_of_birth":"2001-05-28", "category":"top-men", "gender":"male", "speed_sec":24.3, "shoot_lying":83, "shoot_standing":79, "points":760, "stability":76, "rating":76, "photo":"kilivnyuk.jpg", "change":0, "change_comment":"Стабильный", "season_info":"Сезон 2025/26: резерв.", "achievements":[], "rank":"КМС" },
-    { "id":31, "name":"Роман Бойчевский", "region":"Красноярский край", "date_of_birth":"2000-06-14", "category":"top-men", "gender":"male", "speed_sec":24.0, "shoot_lying":84, "shoot_standing":81, "points":820, "stability":78, "rating":78, "photo":"boychevsky.jpg", "change":1, "change_comment":"Перспективный", "season_info":"Сезон 2025/26: резерв.", "achievements":[], "rank":"КМС" },
-    { "id":32, "name":"Михаил Морилов", "region":"ХМАО-Югра", "date_of_birth":"2000-10-25", "category":"top-men", "gender":"male", "speed_sec":24.1, "shoot_lying":83, "shoot_standing":79, "points":780, "stability":76, "rating":76, "photo":"morilov.jpg", "change":0, "change_comment":"Стабильный", "season_info":"Сезон 2025/26: резерв.", "achievements":[], "rank":"КМС" },
-    { "id":33, "name":"Евгений Емерхонов", "region":"Московская область", "date_of_birth":"2002-07-03", "category":"top-men", "gender":"male", "speed_sec":24.2, "shoot_lying":84, "shoot_standing":80, "points":790, "stability":77, "rating":77, "photo":"emerhonov.jpg", "change":1, "change_comment":"Перспективный", "season_info":"Сезон 2025/26: резерв.", "achievements":[], "rank":"КМС" },
-    { "id":34, "name":"Данила Матерков", "region":"Республика Башкортостан", "date_of_birth":"2003-04-11", "category":"top-men", "gender":"male", "speed_sec":24.3, "shoot_lying":83, "shoot_standing":79, "points":740, "stability":75, "rating":75, "photo":"materkov.jpg", "change":1, "change_comment":"Перспективный", "season_info":"Сезон 2025/26: резерв.", "achievements":[], "rank":"1 разряд" },
-    { "id":35, "name":"Тимур Грехов", "region":"ХМАО-Югра", "date_of_birth":"2004-12-20", "category":"top-men", "gender":"male", "speed_sec":24.5, "shoot_lying":82, "shoot_standing":78, "points":680, "stability":74, "rating":73, "photo":"grehov.jpg", "change":2, "change_comment":"Молодой талант", "season_info":"Сезон 2025/26: резерв.", "achievements":[], "rank":"1 разряд" },
-    { "id":36, "name":"Леонид Кульгускин", "region":"Новосибирская область", "date_of_birth":"2002-02-28", "category":"top-men", "gender":"male", "speed_sec":24.1, "shoot_lying":83, "shoot_standing":80, "points":800, "stability":77, "rating":77, "photo":"kulguskin.jpg", "change":0, "change_comment":"Стабильный", "season_info":"Сезон 2025/26: резерв.", "achievements":[], "rank":"КМС" },
-    { "id":37, "name":"Ярослав Шульгин", "region":"Новосибирская область", "date_of_birth":"2003-08-15", "category":"top-men", "gender":"male", "speed_sec":24.2, "shoot_lying":83, "shoot_standing":79, "points":750, "stability":75, "rating":75, "photo":"shulgin.jpg", "change":1, "change_comment":"Перспективный", "season_info":"Сезон 2025/26: резерв.", "achievements":[], "rank":"1 разряд" },
-    { "id":38, "name":"Дмитрий Сгибнев", "region":"Республика Башкортостан", "date_of_birth":"2004-05-09", "category":"top-men", "gender":"male", "speed_sec":24.4, "shoot_lying":82, "shoot_standing":78, "points":700, "stability":74, "rating":74, "photo":"sgibnev_dmitry.jpg", "change":1, "change_comment":"Перспективный", "season_info":"Сезон 2025/26: резерв.", "achievements":[], "rank":"1 разряд" },
-    { "id":39, "name":"Егор Гавшин", "region":"Республика Татарстан", "date_of_birth":"2003-11-02", "category":"top-men", "gender":"male", "speed_sec":24.2, "shoot_lying":83, "shoot_standing":79, "points":720, "stability":75, "rating":75, "photo":"gavshin.jpg", "change":0, "change_comment":"Стабильный", "season_info":"Сезон 2025/26: резерв.", "achievements":[], "rank":"1 разряд" },
-    { "id":40, "name":"Евгений Вагин", "region":"ХМАО-Югра", "date_of_birth":"2002-09-05", "category":"top-men", "gender":"male", "speed_sec":24.3, "shoot_lying":83, "shoot_standing":80, "points":760, "stability":76, "rating":76, "photo":"vagin_evgeny.jpg", "change":0, "change_comment":"Стабильный", "season_info":"Сезон 2025/26: резерв.", "achievements":[], "rank":"КМС" },
-    { "id":41, "name":"Алексей Баландин", "region":"ХМАО-Югра", "date_of_birth":"2000-12-12", "category":"top-men", "gender":"male", "speed_sec":24.0, "shoot_lying":84, "shoot_standing":81, "points":810, "stability":78, "rating":78, "photo":"balandin.jpg", "change":1, "change_comment":"Перспективный", "season_info":"Сезон 2025/26: резерв.", "achievements":[], "rank":"КМС" },
-    { "id":42, "name":"Роман Моренков", "region":"ХМАО-Югра", "date_of_birth":"2001-04-17", "category":"top-men", "gender":"male", "speed_sec":24.0, "shoot_lying":84, "shoot_standing":80, "points":790, "stability":77, "rating":77, "photo":"morenkov.jpg", "change":1, "change_comment":"Перспективный", "season_info":"Сезон 2025/26: резерв.", "achievements":[], "rank":"КМС" },
-    { "id":43, "name":"Илья Бурлаков", "region":"Республика Башкортостан", "date_of_birth":"2001-10-08", "category":"top-men", "gender":"male", "speed_sec":24.1, "shoot_lying":83, "shoot_standing":80, "points":770, "stability":76, "rating":76, "photo":"burlakov.jpg", "change":0, "change_comment":"Стабильный", "season_info":"Сезон 2025/26: резерв.", "achievements":[], "rank":"КМС" },
-    { "id":44, "name":"Евгений Жданов", "region":"Челябинская область", "date_of_birth":"2002-06-18", "category":"top-men", "gender":"male", "speed_sec":24.2, "shoot_lying":83, "shoot_standing":79, "points":730, "stability":75, "rating":75, "photo":"zhdanov.jpg", "change":1, "change_comment":"Перспективный", "season_info":"Сезон 2025/26: резерв.", "achievements":[], "rank":"КМС" },
+// =========================================================================
+//  ИГРА
+// =========================================================================
+let gameActive = false, gameShots = 0, gameStartTime = 0, gameTimerInterval = null, gameTargets = [];
 
-    // ===== ЖЕНЩИНЫ (ОСНОВНОЙ СОСТАВ) =====
-    { "id":45, "name":"Наталия Шевченко", "region":"Свердловская область", "date_of_birth":"2000-04-22", "category":"top-women", "gender":"female", "speed_sec":24.5, "shoot_lying":93, "shoot_standing":90, "points":1405, "stability":93, "rating":93, "photo":"shevchenko.jpg", "change":3, "change_comment":"Лидер женского рейтинга", "season_info":"Сезон 2025/26: 7 побед на Кубке России.", "achievements":["Серебряный призёр чемпионата Европы 2025","Победительница этапов Кубка IBU"], "rank":"МС" },
-    { "id":46, "name":"Кристина Резцова", "region":"Московская область", "date_of_birth":"1997-01-12", "category":"top-women", "gender":"female", "speed_sec":24.8, "shoot_lying":90, "shoot_standing":88, "points":1338, "stability":90, "rating":90, "photo":"reztsova.jpg", "change":2, "change_comment":"Вторая в женском рейтинге", "season_info":"Сезон 2025/26: 5 побед, стабильность.", "achievements":["Бронзовый призёр Олимпийских игр 2022 (эстафета)","Призёр этапов Кубка мира"], "rank":"МСМК" },
-    { "id":47, "name":"Анастасия Халили", "region":"Московская область", "date_of_birth":"1999-07-30", "category":"top-women", "gender":"female", "speed_sec":25.0, "shoot_lying":89, "shoot_standing":86, "points":927, "stability":87, "rating":87, "photo":"ahalili.jpg", "change":4, "change_comment":"Прогресс", "season_info":"Сезон 2025/26: 3 победы, улучшает стрельбу.", "achievements":["Чемпионка России 2025 (масс-старт)","Участница Кубка мира"], "rank":"МС" },
-    { "id":48, "name":"Виктория Сливко", "region":"Тюменская область", "date_of_birth":"1994-11-28", "category":"top-women", "gender":"female", "speed_sec":24.8, "shoot_lying":91, "shoot_standing":88, "points":1300, "stability":91, "rating":91, "photo":"slivko.jpg", "change":1, "change_comment":"Лидер женской сборной", "season_info":"Сезон 2025/26: 5 побед, стабильность.", "achievements":["Призёр чемпионата Европы","Участница Кубка мира"], "rank":"МС" },
-    { "id":49, "name":"Анастасия Томшина", "region":"Московская область", "date_of_birth":"1997-03-18", "category":"top-women", "gender":"female", "speed_sec":25.0, "shoot_lying":90, "shoot_standing":87, "points":1250, "stability":89, "rating":89, "photo":"tomshina.jpg", "change":0, "change_comment":"Стабильная", "season_info":"Сезон 2025/26: 4 победы, 3 подиума.", "achievements":["Бронзовый призёр чемпионата России"], "rank":"МС" },
-    { "id":50, "name":"Ирина Казакевич", "region":"Санкт-Петербург", "date_of_birth":"1997-03-08", "category":"top-women", "gender":"female", "speed_sec":25.2, "shoot_lying":89, "shoot_standing":86, "points":1200, "stability":88, "rating":88, "photo":"kazakevich.jpg", "change":2, "change_comment":"Улучшает скорость", "season_info":"Сезон 2025/26: 3 победы, 4 подиума.", "achievements":["Чемпионка России (эстафета)","Участница Кубка мира"], "rank":"МС" },
-    { "id":51, "name":"Тамара Дербушева", "region":"Свердловская область", "date_of_birth":"1996-01-16", "category":"top-women", "gender":"female", "speed_sec":25.3, "shoot_lying":88, "shoot_standing":85, "points":1150, "stability":86, "rating":86, "photo":"derbusheva.jpg", "change":1, "change_comment":"Стабильный стрелок", "season_info":"Сезон 2025/26: 2 победы, 3 подиума.", "achievements":["Призёр чемпионата Европы"], "rank":"МС" },
-    { "id":52, "name":"Инна Терещенко", "region":"Тюменская область", "date_of_birth":"1999-08-05", "category":"top-women", "gender":"female", "speed_sec":25.6, "shoot_lying":86, "shoot_standing":83, "points":1050, "stability":83, "rating":82, "photo":"tereshchenko.jpg", "change":0, "change_comment":"Средний уровень", "season_info":"Сезон 2025/26: 1 победа, 2 подиума.", "achievements":[], "rank":"КМС" },
-    { "id":53, "name":"Юлия Коваленко", "region":"Красноярский край", "date_of_birth":"2001-05-09", "category":"top-women", "gender":"female", "speed_sec":25.8, "shoot_lying":85, "shoot_standing":82, "points":980, "stability":81, "rating":80, "photo":"kovalenko.jpg", "change":2, "change_comment":"Молодая, есть прогресс", "season_info":"Сезон 2025/26: дебютант сборной.", "achievements":[], "rank":"КМС" },
-    { "id":54, "name":"Анастасия Шевченко", "region":"Московская область", "date_of_birth":"2000-11-11", "category":"top-women", "gender":"female", "speed_sec":25.5, "shoot_lying":87, "shoot_standing":84, "points":1100, "stability":85, "rating":84, "photo":"ashevchenko.jpg", "change":3, "change_comment":"Прогресс", "season_info":"Сезон 2025/26: 2 победы, 2 подиума.", "achievements":[], "rank":"КМС" },
-    { "id":55, "name":"Елизавета Каплина", "region":"Тюменская область", "date_of_birth":"2000-09-20", "category":"top-women", "gender":"female", "speed_sec":25.4, "shoot_lying":88, "shoot_standing":85, "points":1120, "stability":86, "rating":85, "photo":"kaplina.jpg", "change":1, "change_comment":"Стабильная", "season_info":"Сезон 2025/26: 2 победы, 3 подиума.", "achievements":[], "rank":"КМС" },
+function startGame() {
+  const field = document.getElementById('gameField');
+  const info = document.getElementById('gameInfo');
+  const timer = document.getElementById('gameTimer');
+  const resultDiv = document.getElementById('gameResult');
+  const startBtn = document.getElementById('startGameBtn');
 
-    // ===== ЮНИОРЫ =====
-    { "id":56, "name":"Александр Денежкин", "region":"Москва", "date_of_birth":"2006-01-15", "category":"junior", "gender":"male", "speed_sec":24.6, "shoot_lying":85, "shoot_standing":82, "points":560, "stability":78, "rating":79, "photo":"denezhkin.jpg", "change":3, "change_comment":"КМС, представляет Москву", "season_info":"Сезон 2025/26: в резерве юниорской сборной.", "achievements":["Кандидат в мастера спорта (КМС)"], "rank":"КМС" },
-    { "id":57, "name":"Иван Соколов", "region":"Красноярский край", "date_of_birth":"2007-04-10", "category":"junior", "gender":"male", "speed_sec":24.2, "shoot_lying":87, "shoot_standing":83, "points":600, "stability":80, "rating":82, "photo":"sokolov.jpg", "change":5, "change_comment":"Лидер юниоров", "season_info":"Сезон 2025/26: 2 победы на юниорских Кубках.", "achievements":["Чемпион мира среди юниоров 2026 (спринт)","Серебряный призёр юниорского ЧМ 2025"], "rank":"МС" },
-    { "id":58, "name":"Анна Козлова", "region":"Свердловская область", "date_of_birth":"2009-05-20", "category":"junior", "gender":"female", "speed_sec":25.1, "shoot_lying":88, "shoot_standing":85, "points":520, "stability":82, "rating":81, "photo":"kozlova.jpg", "change":7, "change_comment":"Лидер юниорок", "season_info":"Сезон 2025/26: 3 победы на юниорских стартах.", "achievements":["Чемпионка России среди юниоров 2026","Бронзовый призёр юниорского ЧЕ 2025"], "rank":"КМС" },
-    { "id":59, "name":"Даниил Сгибнев", "region":"Республика Башкортостан", "date_of_birth":"2008-03-15", "category":"junior", "gender":"male", "speed_sec":25.0, "shoot_lying":84, "shoot_standing":81, "points":550, "stability":78, "rating":78, "photo":"sgibnev.jpg", "change":4, "change_comment":"Лидер юниорской сборной", "season_info":"Сезон 2025/26: победитель юниорских этапов.", "achievements":["Чемпион России среди юниоров"], "rank":"КМС" },
-    { "id":60, "name":"Александр Тюбаев", "region":"Красноярский край", "date_of_birth":"2007-09-02", "category":"junior", "gender":"male", "speed_sec":25.2, "shoot_lying":83, "shoot_standing":80, "points":530, "stability":76, "rating":76, "photo":"tyubaev.jpg", "change":3, "change_comment":"Стабильный юниор", "season_info":"Сезон 2025/26: призёр юниорских Кубков.", "achievements":["Серебряный призёр юниорского ЧР"], "rank":"КМС" },
-    { "id":61, "name":"Виктор Вальтер", "region":"Красноярский край", "date_of_birth":"2008-06-25", "category":"junior", "gender":"male", "speed_sec":25.3, "shoot_lying":82, "shoot_standing":79, "points":510, "stability":75, "rating":75, "photo":"valter.jpg", "change":3, "change_comment":"Перспективный", "season_info":"Сезон 2025/26: дебют на юниорском уровне.", "achievements":[], "rank":"1 разряд" },
-    { "id":62, "name":"Екатерина Лянгина", "region":"Республика Карелия", "date_of_birth":"2009-01-18", "category":"junior", "gender":"female", "speed_sec":25.5, "shoot_lying":85, "shoot_standing":82, "points":520, "stability":77, "rating":77, "photo":"lyangina.jpg", "change":5, "change_comment":"Юная звезда", "season_info":"Сезон 2025/26: 2 победы на юниорских стартах.", "achievements":["Чемпионка России среди юниоров"], "rank":"КМС" },
-    { "id":63, "name":"Милена Чумакова", "region":"Пермский край", "date_of_birth":"2008-11-30", "category":"junior", "gender":"female", "speed_sec":25.6, "shoot_lying":84, "shoot_standing":81, "points":500, "stability":75, "rating":75, "photo":"chumakova.jpg", "change":4, "change_comment":"Прогрессирует", "season_info":"Сезон 2025/26: призёр юниорских соревнований.", "achievements":["Бронзовый призёр юниорского ЧР"], "rank":"1 разряд" },
-    { "id":64, "name":"Юлия Собянина", "region":"ХМАО-Югра", "date_of_birth":"2008-07-07", "category":"junior", "gender":"female", "speed_sec":25.7, "shoot_lying":83, "shoot_standing":80, "points":490, "stability":74, "rating":74, "photo":"sobyanina.jpg", "change":3, "change_comment":"Перспективная", "season_info":"Сезон 2025/26: первый сезон в юниорской сборной.", "achievements":[], "rank":"1 разряд" },
-    { "id":83, "name":"Татьяна Шмелева", "region":"Москва", "date_of_birth":"2008-12-28", "category":"junior", "gender":"female", "speed_sec":25.2, "shoot_lying":86, "shoot_standing":83, "points":540, "stability":78, "rating":79, "photo":"shmeleva.jpg", "change":4, "change_comment":"Серебряный призёр Первенства России (эстафета)", "season_info":"Сезон 2025/26: серебро в эстафете на Первенстве России 15-16 лет.", "achievements":["Серебряный призёр Первенства России 2024 (эстафета, 15-16 лет)","5 место на Кубке Москвы 13-14 лет"], "rank":"1 разряд" },
-    { "id":85, "name":"Сабина Касупович", "region":"Москва", "date_of_birth":"2006-01-01", "category":"junior", "gender":"female", "speed_sec":25.5, "shoot_lying":85, "shoot_standing":82, "points":490, "stability":75, "rating":76, "photo":"kasupovich.jpg", "change":4, "change_comment":"КМС, победительница Кубка Москвы", "season_info":"Сезон 2025/26: победительница этапов Кубка Москвы.", "achievements":["Кандидат в мастера спорта (КМС)","Победительница Кубка Москвы 2021 (2006-2007 г.р.)","Бронзовый призёр Первенства России 2025 (эстафета, 17-18 лет)"], "rank":"КМС" },
+  gameActive = false; gameShots = 0; gameStartTime = 0;
+  if (gameTimerInterval) clearInterval(gameTimerInterval);
+  resultDiv.style.display = 'none';
+  field.innerHTML = '';
+  info.textContent = 'Выстрелов: 0 / 5';
+  timer.textContent = '⏱️ 0.0 с';
+  startBtn.textContent = 'Начать стрельбу';
+  startBtn.disabled = false;
 
-    // ===== ЮНОШИ (youth) – рейтинг понижен на 10 =====
-    { "id":65, "name":"Максим Саидов", "region":"Москва", "date_of_birth":"2010-02-14", "category":"youth", "gender":"male", "speed_sec":24.9, "shoot_lying":87, "shoot_standing":84, "points":590, "stability":80, "rating":71, "photo":"saidov.jpg", "change":-4, "change_comment":"Рейтинг скорректирован для юношей", "season_info":"Сезон 2025/26: серебро в кросс-спринте на Первенстве России.", "achievements":["Серебряный призёр Первенства России 2025 (эстафета)"], "rank":"1 разряд" },
-    { "id":66, "name":"Егор Тивиков", "region":"Москва", "date_of_birth":"2010-05-15", "category":"youth", "gender":"male", "speed_sec":24.7, "shoot_lying":86, "shoot_standing":83, "points":570, "stability":79, "rating":70, "photo":"tivikov.jpg", "change":-5, "change_comment":"Рейтинг скорректирован для юношей", "season_info":"Сезон 2025/26: серебро в кросс-спринте на Первенстве России.", "achievements":["Серебряный призёр Первенства России 2025 (эстафета)","КМС"], "rank":"КМС" },
-    { "id":67, "name":"Георгий Каринский", "region":"Москва", "date_of_birth":"2008-09-10", "category":"youth", "gender":"male", "speed_sec":24.8, "shoot_lying":86, "shoot_standing":83, "points":580, "stability":79, "rating":70, "photo":"karinsky.jpg", "change":-6, "change_comment":"Рейтинг скорректирован для юношей", "season_info":"Сезон 2025/26: бронза в индивидуальной гонке и смешанной эстафете.", "achievements":["Дважды бронзовый призёр Первенства России 15-16 лет"], "rank":"1 разряд" },
-    { "id":84, "name":"Даниил Бреннер", "region":"Москва", "date_of_birth":"2010-09-14", "category":"youth", "gender":"male", "speed_sec":24.7, "shoot_lying":85, "shoot_standing":82, "points":560, "stability":78, "rating":69, "photo":"brenner.jpg", "change":-4, "change_comment":"Рейтинг скорректирован для юношей", "season_info":"Сезон 2025/26: в составе юношеской сборной Москвы.", "achievements":["Призёр Первенства Москвы"], "rank":"1 разряд" },
-    { "id":87, "name":"Тамара Рафикова", "region":"Москва", "date_of_birth":"2009-12-11", "category":"youth", "gender":"female", "speed_sec":25.3, "shoot_lying":85, "shoot_standing":82, "points":500, "stability":76, "rating":67, "photo":"rafikova.jpg", "change":-5, "change_comment":"Рейтинг скорректирован для юношей", "season_info":"Сезон 2025/26: победительница Кубка Москвы среди 15-16 лет.", "achievements":["Кандидат в мастера спорта (КМС)","Победительница Кубка Москвы 2025 (15-16 лет)","Серебряный призёр Первенства России 2024 (эстафета, 15-16 лет)"], "rank":"КМС" },
-    { "id":70, "name":"Герман Благовский", "region":"Москва", "date_of_birth":"2011-03-20", "category":"youth", "gender":"male", "speed_sec":24.8, "shoot_lying":85, "shoot_standing":82, "points":540, "stability":77, "rating":68, "photo":"blagovsky.jpg", "change":-4, "change_comment":"Рейтинг скорректирован для юношей", "season_info":"Сезон 2025/26: в составе юношеской сборной Москвы.", "achievements":["Призёр Первенства Москвы 2025"], "rank":"1 разряд" },
-    { "id":82, "name":"Софья Голубева", "region":"Москва", "date_of_birth":"2011-01-01", "category":"youth", "gender":"female", "speed_sec":25.4, "shoot_lying":85, "shoot_standing":82, "points":510, "stability":76, "rating":66, "photo":"golubeva.jpg", "change":-5, "change_comment":"Рейтинг скорректирован для юношей", "season_info":"Сезон 2025/26: 1 место на Кубке Москвы среди 15-16 лет.", "achievements":["Победительница Кубка Москвы 2025 (15-16 лет)"], "rank":"2 разряд" },
-
-    // ===== ДЕТИ (children) – рейтинг понижен на 15 =====
-    { "id":71, "name":"Сергей Булгаков", "region":"Москва", "date_of_birth":"2012-06-22", "category":"children", "gender":"male", "speed_sec":25.8, "shoot_lying":82, "shoot_standing":0, "points":400, "stability":70, "rating":60, "photo":"bulgakov.jpg", "change":-8, "change_comment":"Рейтинг скорректирован для детей", "season_info":"Сезон 2025/26: призёр соревнований академии Москвы.", "achievements":["Призёр академии Москвы (13-14 лет)"], "rank":"2 разряд" },
-    { "id":81, "name":"Екатерина Верещагина", "region":"Москва", "date_of_birth":"2012-11-07", "category":"children", "gender":"female", "speed_sec":25.3, "shoot_lying":86, "shoot_standing":0, "points":530, "stability":77, "rating":63, "photo":"vereshchagina.jpg", "change":-7, "change_comment":"Рейтинг скорректирован для детей", "season_info":"Сезон 2025/26: серебро Кубка Москвы среди 11-12 лет.", "achievements":["Серебряный призёр Кубка Москвы 2025 (11-12 лет)"], "rank":"2 разряд" },
-    { "id":88, "name":"Аркадий Фарафонов", "region":"Москва", "date_of_birth":"2013-01-01", "category":"children", "gender":"male", "speed_sec":24.5, "shoot_lying":84, "shoot_standing":0, "points":520, "stability":76, "rating":57, "photo":"farafonov.jpg", "change":-6, "change_comment":"Рейтинг скорректирован для детей", "season_info":"Сезон 2025/26: участник соревнований Москвы.", "achievements":["Участник Первенства Москвы"], "rank":"3 разряд" },
-
-    // ===== ЗАВЕРШИВШИЕ =====
-    { "id":75, "name":"Уле-Эйнар Бьорндален", "region":"Норвегия", "date_of_birth":"1974-01-27", "category":"retired", "gender":"male", "speed_sec":21.5, "shoot_lying":92, "shoot_standing":89, "points":2500, "stability":99, "rating":99, "photo":"bjorndalen.jpg", "change":0, "change_comment":"Легенда, завершил карьеру", "season_info":"Сезон 2025/26: не бежал", "achievements":["8-кратный олимпийский чемпион","20-кратный чемпион мира","6-кратный обладатель Кубка мира"], "rank":"ЗМС" },
-    { "id":76, "name":"Мартен Фуркад", "region":"Франция", "date_of_birth":"1988-09-14", "category":"retired", "gender":"male", "speed_sec":22.0, "shoot_lying":95, "shoot_standing":93, "points":2300, "stability":98, "rating":98, "photo":"fourcade.jpg", "change":0, "change_comment":"Завершил карьеру в 2020", "season_info":"Сезон 2025/26: не бежал", "achievements":["7-кратный олимпийский чемпион","11-кратный чемпион мира","7-кратный обладатель Кубка мира"], "rank":"ЗМС" },
-    { "id":77, "name":"Дарья Домрачева", "region":"Беларусь", "date_of_birth":"1986-08-03", "category":"retired", "gender":"female", "speed_sec":23.0, "shoot_lying":94, "shoot_standing":91, "points":2100, "stability":96, "rating":96, "photo":"domracheva.jpg", "change":0, "change_comment":"Завершила карьеру", "season_info":"Сезон 2025/26: не бежала", "achievements":["4-кратная олимпийская чемпионка","6-кратная чемпионка мира","2-кратная обладательница Кубка мира"], "rank":"ЗМС" },
-    { "id":78, "name":"Эмиль Хегле Свендсен", "region":"Норвегия", "date_of_birth":"1985-07-12", "category":"retired", "gender":"male", "speed_sec":22.5, "shoot_lying":89, "shoot_standing":86, "points":1900, "stability":94, "rating":93, "photo":"svendsen.jpg", "change":0, "change_comment":"Завершил карьеру", "season_info":"Сезон 2025/26: не бежал", "achievements":["4-кратный олимпийский чемпион","12-кратный чемпион мира","2-кратный обладатель Кубка мира"], "rank":"ЗМС" },
-    { "id":79, "name":"Антон Шипулин", "region":"Свердловская область", "date_of_birth":"1987-08-21", "category":"retired", "gender":"male", "speed_sec":22.2, "shoot_lying":93, "shoot_standing":90, "points":2100, "stability":97, "rating":97, "photo":"shiplulin.jpg", "change":0, "change_comment":"Легенда, завершил карьеру в 2020", "season_info":"Сезон 2025/26: не бежал", "achievements":["Олимпийский чемпион 2014 (эстафета)","Бронзовый призёр Олимпийских игр 2010 (эстафета)","Чемпион мира 2017 (эстафета)","Многократный чемпион России"], "rank":"ЗМС" },
-
-    // ===== ИНОСТРАНЦЫ =====
-    { "id":80, "name":"Йоханнес Бё", "region":"Норвегия", "date_of_birth":"1993-05-16", "category":"foreign", "gender":"male", "speed_sec":21.8, "shoot_lying":91, "shoot_standing":88, "points":2000, "stability":97, "rating":97, "photo":"boe.jpg", "change":1, "change_comment":"Действующий лидер", "season_info":"Сезон 2025/26: доминирует в Кубке мира.", "achievements":["5-кратный олимпийский чемпион","13-кратный чемпион мира","3-кратный обладатель Кубка мира"], "rank":"ЗМС" },
-    { "id":89, "name":"Дмитрий Лазовский", "region":"Беларусь", "date_of_birth":"1998-09-09", "category":"foreign", "gender":"male", "speed_sec":23.0, "shoot_lying":87, "shoot_standing":84, "points":1100, "stability":85, "rating":86, "photo":"lazovsky.jpg", "change":1, "change_comment":"Сильный белорусский биатлонист", "season_info":"Сезон 2025/26: призёр Кубка сильнейших.", "achievements":["Призёр Кубка сильнейших 2025","Участник Кубка мира"], "rank":"МС" },
-    { "id":90, "name":"Стюрла Легрейд", "region":"Норвегия", "date_of_birth":"1997-02-24", "category":"foreign", "gender":"male", "speed_sec":22.3, "shoot_lying":89, "shoot_standing":86, "points":1600, "stability":92, "rating":92, "photo":"legreid.jpg", "change":2, "change_comment":"Один из лидеров сборной Норвегии", "season_info":"Сезон 2025/26: победитель этапов Кубка мира.", "achievements":["Серебряный призёр Олимпийских игр 2022 (эстафета)","Призёр чемпионатов мира"], "rank":"ЗМС" },
-    { "id":91, "name":"Ветле Шёстад Кристиансен", "region":"Норвегия", "date_of_birth":"1992-05-16", "category":"foreign", "gender":"male", "speed_sec":22.5, "shoot_lying":88, "shoot_standing":85, "points":1500, "stability":90, "rating":90, "photo":"kristiansen.jpg", "change":1, "change_comment":"Стабильный норвежец", "season_info":"Сезон 2025/26: призёр этапов Кубка мира.", "achievements":["Чемпион мира 2023 (эстафета)","Призёр Олимпийских игр"], "rank":"ЗМС" },
-    { "id":92, "name":"Эмильен Жаклен", "region":"Франция", "date_of_birth":"1995-07-03", "category":"foreign", "gender":"male", "speed_sec":22.7, "shoot_lying":90, "shoot_standing":87, "points":1450, "stability":91, "rating":91, "photo":"jacquelin.jpg", "change":2, "change_comment":"Лидер сборной Франции", "season_info":"Сезон 2025/26: победитель этапов Кубка мира.", "achievements":["Чемпион мира 2020 (преследование)","Призёр Олимпийских игр"], "rank":"ЗМС" },
-    { "id":93, "name":"Кентен Фийон-Майе", "region":"Франция", "date_of_birth":"1992-08-16", "category":"foreign", "gender":"male", "speed_sec":22.8, "shoot_lying":89, "shoot_standing":86, "points":1400, "stability":89, "rating":89, "photo":"fillon-maillet.jpg", "change":0, "change_comment":"Опытный француз", "season_info":"Сезон 2025/26: стабильно в топ-10.", "achievements":["Олимпийский чемпион 2022 (эстафета)","Чемпион мира"], "rank":"ЗМС" },
-    { "id":94, "name":"Лиза Тереза Хаузер", "region":"Австрия", "date_of_birth":"1993-09-01", "category":"foreign", "gender":"female", "speed_sec":23.5, "shoot_lying":92, "shoot_standing":89, "points":1350, "stability":92, "rating":92, "photo":"hauser.jpg", "change":2, "change_comment":"Лидер женской сборной Австрии", "season_info":"Сезон 2025/26: победительница этапов Кубка мира.", "achievements":["Бронзовый призёр Олимпийских игр 2022","Чемпионка мира"], "rank":"ЗМС" },
-    { "id":95, "name":"Ханна Эберг", "region":"Швеция", "date_of_birth":"1995-11-28", "category":"foreign", "gender":"female", "speed_sec":23.8, "shoot_lying":91, "shoot_standing":88, "points":1300, "stability":90, "rating":90, "photo":"oberg.jpg", "change":3, "change_comment":"Лидер сборной Швеции", "season_info":"Сезон 2025/26: многократная победительница этапов Кубка мира.", "achievements":["Чемпионка мира 2023 (масс-старт)","Призёр Олимпийских игр"], "rank":"ЗМС" },
-    { "id":96, "name":"Жюлия Симон", "region":"Франция", "date_of_birth":"1996-05-18", "category":"foreign", "gender":"female", "speed_sec":24.0, "shoot_lying":90, "shoot_standing":87, "points":1250, "stability":89, "rating":89, "photo":"simon.jpg", "change":1, "change_comment":"Сильная французская биатлонистка", "season_info":"Сезон 2025/26: призёр этапов Кубка мира.", "achievements":["Олимпийская чемпионка 2022 (эстафета)","Чемпионка мира"], "rank":"ЗМС" },
-    { "id":97, "name":"Дениз Херрманн-Вик", "region":"Германия", "date_of_birth":"1994-04-21", "category":"foreign", "gender":"female", "speed_sec":24.2, "shoot_lying":89, "shoot_standing":86, "points":1200, "stability":88, "rating":88, "photo":"herrmann-wick.jpg", "change":1, "change_comment":"Опытная немецкая биатлонистка", "season_info":"Сезон 2025/26: стабильно в топ-10.", "achievements":["Олимпийская чемпионка 2022 (эстафета)","Чемпионка мира"], "rank":"ЗМС" }
-  ]
-};
-
-// ========================================================================
-//  ОСНОВНАЯ ЛОГИКА (фильтры, сортировка, пагинация, модалка) – без изменений
-// ========================================================================
-let allAthletes = [];
-let filteredAthletes = [];
-let currentPage = 1;
-const perPage = 20;
-
-let currentCategory = 'all';
-let currentCountry = 'all';
-let currentAge = 'all';
-let currentGender = 'all';
-let currentSort = { column: 'rating', direction: 'desc' };
-
-function loadData() {
-  allAthletes = data.athletes.map(a => {
-    const age = calculateAge(a.date_of_birth);
-    const price = calculatePrice(a);
-    return { ...a, age, price };
-  });
-  document.getElementById('lastUpdated').textContent = data.lastUpdated || 'неизвестно';
-  applyFilters();
-  updateStats();
-}
-
-function calculateAge(birthDate) {
-  if (!birthDate) return 0;
-  const today = new Date();
-  const birth = new Date(birthDate);
-  let age = today.getFullYear() - birth.getFullYear();
-  const m = today.getMonth() - birth.getMonth();
-  if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) age--;
-  return age;
-}
-
-function calculatePrice(athlete) {
-  const rating = athlete.rating || 0;
-  const cat = athlete.category;
-  if (cat === 'retired') return rating * 5000 * 2;
-  if (cat === 'top-men' || cat === 'foreign') return rating * 5000;
-  if (cat === 'top-women') return rating * 3500;
-  if (cat === 'junior') return rating * 1000;
-  if (cat === 'youth') return rating * 500;
-  if (cat === 'children') return rating * 300;
-  return rating * 5000;
-}
-
-function updateStats() {
-  const total = allAthletes.length;
-  document.getElementById('totalAthletes').textContent = total;
-  if (!total) return;
-  const avg = allAthletes.reduce((s,a) => s + a.rating, 0) / total;
-  document.getElementById('avgRating').textContent = avg.toFixed(1);
-  const top = Math.max(...allAthletes.map(a => a.price));
-  document.getElementById('topPrice').textContent = (top / 1000).toFixed(0) + 'k';
-  const cats = new Set(allAthletes.map(a => a.category));
-  document.getElementById('totalCategories').textContent = cats.size;
-}
-
-function applyFilters() {
-  let result = [...allAthletes];
-
-  if (currentCategory !== 'all') {
-    result = result.filter(a => a.category === currentCategory);
+  const targets = [];
+  for (let i = 0; i < 5; i++) {
+    targets.push(createTarget(i));
   }
-
-  if (currentGender !== 'all' && (currentCategory === 'junior' || currentCategory === 'youth' || currentCategory === 'children')) {
-    result = result.filter(a => a.gender === currentGender);
-  }
-
-  if (currentCountry === 'russia') {
-    const russianRegions = ['область','край','Республика','Москва','Санкт-Петербург','Удмуртия','Мордовия','Пермский','ХМАО','Югра','ЯНАО','Челябинская','Татарстан','Карелия'];
-    result = result.filter(a => russianRegions.some(reg => a.region.includes(reg)));
-  } else if (currentCountry === 'world') {
-    const russianRegions = ['область','край','Республика','Москва','Санкт-Петербург','Удмуртия','Мордовия','Пермский','ХМАО','Югра','ЯНАО','Челябинская','Татарстан','Карелия'];
-    result = result.filter(a => !russianRegions.some(reg => a.region.includes(reg)));
-  }
-
-  if (currentAge === 'u23') result = result.filter(a => a.age < 23);
-  else if (currentAge === '24-30') result = result.filter(a => a.age >= 24 && a.age <= 30);
-  else if (currentAge === '31+') result = result.filter(a => a.age >= 31);
-
-  const term = document.getElementById('searchInput').value.toLowerCase().trim();
-  if (term) result = result.filter(a => a.name.toLowerCase().includes(term) || a.region.toLowerCase().includes(term));
-
-  result.sort((a,b) => {
-    let va = a[currentSort.column] ?? '', vb = b[currentSort.column] ?? '';
-    if (typeof va === 'string') { va = va.toLowerCase(); vb = vb.toLowerCase(); }
-    if (va < vb) return currentSort.direction === 'asc' ? -1 : 1;
-    if (va > vb) return currentSort.direction === 'asc' ? 1 : -1;
-    return 0;
-  });
-
-  filteredAthletes = result;
-  currentPage = 1;
-  renderTable();
+  gameTargets = targets;
+  showTarget(0);
+  gameActive = true;
+  startBtn.textContent = 'Идёт стрельба...';
+  startBtn.disabled = true;
 }
 
-function renderTable() {
-  const tbody = document.getElementById('athletesBody');
-  const start = (currentPage - 1) * perPage;
-  const pageData = filteredAthletes.slice(start, start + perPage);
-  if (!pageData.length) {
-    tbody.innerHTML = `<tr><td colspan="11" class="text-center py-3 text-muted">${translations[currentLang].no_data}</td></tr>`;
-    updatePagination();
-    return;
-  }
-  tbody.innerHTML = pageData.map((a, idx) => {
-    const globalIdx = start + idx + 1;
-    let catClass = '';
-    if (a.category === 'top-men') catClass = 'category-top-men';
-    else if (a.category === 'top-women') catClass = 'category-top-women';
-    else if (a.category === 'junior') catClass = 'category-junior';
-    else if (a.category === 'youth') catClass = 'category-youth';
-    else if (a.category === 'children') catClass = 'category-children';
-    else if (a.category === 'foreign') catClass = 'category-foreign';
-    else if (a.category === 'retired') catClass = 'category-retired';
-
-    let changeHtml = '';
-    if (a.change !== undefined) {
-      if (a.change > 0) changeHtml = `<span class="change-positive change-tooltip" title="${a.change_comment||''}"><i class="fas fa-arrow-up change-icon"></i>+${a.change}</span>`;
-      else if (a.change < 0) changeHtml = `<span class="change-negative change-tooltip" title="${a.change_comment||''}"><i class="fas fa-arrow-down change-icon"></i>${a.change}</span>`;
-      else changeHtml = `<span class="change-neutral" title="${a.change_comment||'Без изменений'}"><i class="fas fa-minus change-icon"></i>0</span>`;
-    } else changeHtml = `<span class="change-neutral">—</span>`;
-
-    const birthStr = a.date_of_birth ? new Date(a.date_of_birth).toLocaleDateString('ru-RU') : '—';
-
-    return `
-      <tr onclick="openModal(${a.id})">
-        <td class="text-muted">${globalIdx}</td>
-        <td><img src="images/athletes/${a.photo||'default.jpg'}" alt="${a.name}" class="athlete-photo" onerror="this.style.display='none'"></td>
-        <td><div class="athlete-name">${a.name}</div><div class="athlete-region">${a.region}</div></td>
-        <td>${a.age}</td>
-        <td>${birthStr}</td>
-        <td>${a.region}</td>
-        <td><span class="category-badge ${catClass}">${a.category}</span></td>
-        <td><span class="rating-badge">${a.rating}</span></td>
-        <td><span class="price-tag">€${a.price.toLocaleString()}</span></td>
-        <td>${changeHtml}</td>
-        <td><i class="fas fa-chevron-right text-muted"></i></td>
-      </tr>`;
-  }).join('');
-  updatePagination();
+function createTarget(index) {
+  const field = document.getElementById('gameField');
+  const rect = field.getBoundingClientRect();
+  const size = Math.min(rect.width, rect.height) * 0.12;
+  const maxX = rect.width - size;
+  const maxY = rect.height - size;
+  return { index, x: Math.random() * maxX, y: Math.random() * maxY, size, hit: false };
 }
 
-function updatePagination() {
-  const total = filteredAthletes.length, totalPages = Math.ceil(total/perPage), showing = Math.min(total, currentPage*perPage);
-  const pagInfo = document.getElementById('paginationInfo');
-  pagInfo.dataset.showing = showing; pagInfo.dataset.total = total;
-  pagInfo.textContent = translations[currentLang].pagination_info.replace('{showing}', showing).replace('{total}', total);
-  const controls = document.getElementById('paginationControls');
-  if (totalPages <= 1) { controls.innerHTML = ''; return; }
-  let html = `<li class="page-item ${currentPage===1?'disabled':''}"><a class="page-link" onclick="goToPage(${currentPage-1})">«</a></li>`;
-  for (let i=1; i<=totalPages; i++) {
-    if (i===1 || i===totalPages || Math.abs(i-currentPage)<=2) {
-      html += `<li class="page-item ${i===currentPage?'active':''}"><a class="page-link" onclick="goToPage(${i})">${i}</a></li>`;
-    } else if (i===currentPage-3 || i===currentPage+3) {
-      html += `<li class="page-item disabled"><a class="page-link">…</a></li>`;
+function showTarget(index) {
+  const field = document.getElementById('gameField');
+  const target = gameTargets[index];
+  if (!target) return;
+  field.querySelectorAll('.game-target').forEach(el => el.remove());
+  const div = document.createElement('div');
+  div.className = 'game-target';
+  div.style.width = target.size + 'px';
+  div.style.height = target.size + 'px';
+  div.style.left = target.x + 'px';
+  div.style.top = target.y + 'px';
+  div.dataset.index = target.index;
+  div.addEventListener('click', function(e) {
+    e.stopPropagation();
+    if (!gameActive) return;
+    if (this.classList.contains('hit')) return;
+    if (gameShots === 0) {
+      gameStartTime = Date.now();
+      gameTimerInterval = setInterval(updateTimer, 100);
     }
-  }
-  html += `<li class="page-item ${currentPage===totalPages?'disabled':''}"><a class="page-link" onclick="goToPage(${currentPage+1})">»</a></li>`;
-  controls.innerHTML = html;
-}
-
-function goToPage(p) {
-  const total = Math.ceil(filteredAthletes.length/perPage);
-  if (p<1 || p>total) return;
-  currentPage = p;
-  renderTable();
-  window.scrollTo(0,0);
-}
-
-// ========================================================================
-//  МОДАЛКА С ДОСТИЖЕНИЯМИ
-// ========================================================================
-function renderMedals(achievements) {
-  if (!achievements || !achievements.length) return '';
-  return achievements.map(text => {
-    let cls = 'medal-gold';
-    const low = text.toLowerCase();
-    if (low.includes('бронз') || low.includes('bronze')) cls = 'medal-bronze';
-    else if (low.includes('серебр') || low.includes('silver')) cls = 'medal-silver';
-    else if (low.includes('золот') || low.includes('gold') || low.includes('чемпион') || low.includes('победитель')) cls = 'medal-gold';
-    else cls = low.includes('призёр') ? 'medal-silver' : 'medal-gold';
-    return `<span class="medal-icon ${cls}" title="${text}"><i class="fas fa-medal"></i></span>`;
-  }).join(' ');
-}
-
-let achievementsExpanded = false;
-
-function openModal(id) {
-  const a = allAthletes.find(x => x.id === id);
-  if (!a) return;
-  document.getElementById('modalTitle').textContent = a.name;
-  const body = document.getElementById('modalBody');
-  const t = translations[currentLang];
-
-  let changeBlock = '';
-  if (a.change !== undefined && a.change_comment) {
-    const sign = a.change>0?'+':'';
-    const color = a.change>0?'#2e7d32':(a.change<0?'#c62828':'#6c757d');
-    changeBlock = `<div class="comment-box"><strong>${t.modal_change}</strong> <span style="color:${color};font-weight:700;">${sign}${a.change}</span><br>${a.change_comment}</div>`;
-  }
-
-  let achievementsHtml = '';
-  if (a.achievements && a.achievements.length) {
-    let rankHtml = '';
-    if (a.rank) {
-      rankHtml = `<div class="achievement-item" style="background:var(--dark-blue);color:white;font-weight:700;">🏅 ${a.rank}</div>`;
-    }
-    const allAchievements = a.achievements.map(text => 
-      `<span class="achievement-item" title="${text}">${renderMedals([text])} ${text}</span>`
-    ).join('');
-    achievementsHtml = `
-      <div class="mt-2">
-        <strong>${t.modal_achievements}</strong>
-        <div class="achievement-list" id="achievementList">
-          ${rankHtml}
-          ${allAchievements}
-        </div>
-        ${(a.achievements.length > 3 || a.rank) ? `
-          <button class="btn-show-all-achievements" id="showAllAchievementsBtn" onclick="toggleAllAchievements()">
-            ${t.show_all}
-          </button>
-        ` : ''}
-      </div>
-    `;
-  }
-
-  let seasonHtml = '';
-  if (a.season_info) {
-    let seasonText = a.season_info;
-    if (a.category === 'retired') seasonText = t.retired_season;
-    seasonHtml = `<div class="info-box"><strong><i class="fas fa-calendar-alt me-2"></i>${t.modal_season}</strong> ${seasonText}</div>`;
-  }
-
-  body.innerHTML = `
-    <div class="row">
-      <div class="col-md-4 text-center">
-        <img src="images/athletes/${a.photo||'default.jpg'}" alt="${a.name}" class="modal-athlete-photo mb-2" onerror="this.style.display='none'">
-        <div><span class="category-badge ${{'top-men':'category-top-men','top-women':'category-top-women','junior':'category-junior','youth':'category-youth','children':'category-children','foreign':'category-foreign','retired':'category-retired'}[a.category]||''}">${a.category}</span></div>
-        <div class="text-muted small"><i class="fas fa-map-marker-alt me-1"></i>${a.region}<br><i class="fas fa-calendar-alt me-1"></i>${a.age} лет</div>
-        <div class="mt-2"><span class="rating-badge" style="font-size:1.4rem;padding:0.3rem 1.2rem;">${a.rating}</span><div class="text-muted small">Рейтинг BM</div></div>
-        <div class="mt-1"><span class="price-tag" style="font-size:1.6rem;">€${a.price.toLocaleString()}</span><div class="text-muted small">Рыночная стоимость</div></div>
-        ${changeBlock}
-        ${achievementsHtml}
-      </div>
-      <div class="col-md-8">
-        <h6 class="mb-2">${t.modal_details}</h6>
-        ${renderParam(t.modal_speed, a.speed_sec||0, 'сек')}
-        ${renderParam(t.modal_shoot_lying, a.shoot_lying||0, '%')}
-        ${renderParam(t.modal_shoot_standing, a.shoot_standing||0, '%')}
-        ${renderParam(t.modal_points, a.points||0, '')}
-        ${renderParam(t.modal_stability, a.stability||0, '')}
-        ${seasonHtml}
-      </div>
-    </div>
-  `;
-  new bootstrap.Modal(document.getElementById('athleteModal')).show();
-
-  achievementsExpanded = false;
-  const list = document.getElementById('achievementList');
-  if (list) list.classList.remove('expanded');
-  const btn = document.getElementById('showAllAchievementsBtn');
-  if (btn) btn.textContent = translations[currentLang].show_all;
-}
-
-function toggleAllAchievements() {
-  const list = document.getElementById('achievementList');
-  const btn = document.getElementById('showAllAchievementsBtn');
-  const t = translations[currentLang];
-  if (!list || !btn) return;
-  achievementsExpanded = !achievementsExpanded;
-  list.classList.toggle('expanded', achievementsExpanded);
-  btn.textContent = achievementsExpanded ? t.hide_all : t.show_all;
-}
-
-function renderParam(label, value, unit) {
-  const width = Math.min(value, 100);
-  return `<div class="mb-2"><div class="d-flex justify-content-between small"><span>${label}</span><span>${value}${unit}</span></div><div class="param-bar"><div class="fill" style="width:${width}%"></div></div></div>`;
-}
-
-// ========================================================================
-//  ОБРАБОТЧИКИ СОБЫТИЙ
-// ========================================================================
-document.querySelectorAll('#categoryTabs .nav-link').forEach(tab => {
-  tab.addEventListener('click', function(e) {
-    e.preventDefault();
-    document.querySelectorAll('#categoryTabs .nav-link').forEach(t => t.classList.remove('active'));
-    this.classList.add('active');
-    currentCategory = this.dataset.category;
-
-    const genderLabel = document.getElementById('genderLabel');
-    const genderMen = document.getElementById('genderMen');
-    const genderWomen = document.getElementById('genderWomen');
-    const genderAll = document.getElementById('genderAll');
-    if (currentCategory === 'junior' || currentCategory === 'youth' || currentCategory === 'children') {
-      genderLabel.style.display = 'inline-block';
-      genderMen.style.display = 'inline-block';
-      genderWomen.style.display = 'inline-block';
-      genderAll.style.display = 'inline-block';
+    this.classList.add('hit');
+    target.hit = true;
+    gameShots++;
+    document.getElementById('gameInfo').textContent = `Выстрелов: ${gameShots} / 5`;
+    if (gameShots === 5) {
+      gameActive = false;
+      clearInterval(gameTimerInterval);
+      const elapsed = (Date.now() - gameStartTime) / 1000;
+      document.getElementById('gameTimer').textContent = `⏱️ ${elapsed.toFixed(1)} с`;
+      showResult(elapsed);
+      document.getElementById('startGameBtn').textContent = 'Играть снова';
+      document.getElementById('startGameBtn').disabled = false;
     } else {
-      genderLabel.style.display = 'none';
-      genderMen.style.display = 'none';
-      genderWomen.style.display = 'none';
-      genderAll.style.display = 'none';
-      currentGender = 'all';
-      document.querySelectorAll('.gender-btn').forEach(b => b.classList.remove('active'));
-      genderAll.classList.add('active');
+      setTimeout(() => showTarget(gameShots), 300);
     }
-    applyFilters();
   });
+  field.appendChild(div);
+}
+
+function updateTimer() {
+  if (!gameStartTime) return;
+  const elapsed = (Date.now() - gameStartTime) / 1000;
+  document.getElementById('gameTimer').textContent = `⏱️ ${elapsed.toFixed(1)} с`;
+}
+
+function showResult(time) {
+  const resultDiv = document.getElementById('gameResult');
+  const textDiv = document.getElementById('resultText');
+  let athlete, fact;
+  if (time < 3.0) {
+    athlete = 'Йоханнес Бё';
+    fact = 'Йоханнес Бё – пятикратный олимпийский чемпион и 13-кратный чемпион мира. Он славится своей невероятной скоростью на лыжне.';
+  } else if (time < 5.0) {
+    athlete = 'Мартен Фуркад';
+    fact = 'Мартен Фуркад – 7-кратный олимпийский чемпион и 11-кратный чемпион мира. Его стрельба стоя – одна из лучших в истории.';
+  } else if (time < 8.0) {
+    athlete = 'Антон Шипулин';
+    fact = 'Антон Шипулин – олимпийский чемпион 2014 года в эстафете. Он известен своей феноменальной выносливостью.';
+  } else if (time < 12.0) {
+    athlete = 'Карим Халили';
+    fact = 'Карим Халили – лидер рейтинга СБР 2025/26, он выиграл 6 этапов Кубка России в этом сезоне.';
+  } else {
+    athlete = 'Виктория Сливко';
+    fact = 'Виктория Сливко – одна из сильнейших российских биатлонисток, призёр чемпионата Европы 2025 года.';
+  }
+  resultDiv.style.display = 'block';
+  textDiv.innerHTML = `
+    <div style="font-size:1.4rem; font-weight:700; color:var(--dark-blue);">
+      🎯 Ваше время: <span style="color:var(--red);">${time.toFixed(1)} с</span>
+    </div>
+    <div style="margin-top:0.5rem;">
+      Вы стреляете как <span class="athlete-name">${athlete}</span>!
+    </div>
+    <div class="fact">💡 Интересный факт: ${fact}</div>
+  `;
+}
+
+document.getElementById('startGameBtn').addEventListener('click', function() {
+  if (this.textContent === 'Играть снова') startGame();
 });
 
-document.querySelectorAll('.country-btn').forEach(btn => {
-  btn.addEventListener('click', function() {
-    document.querySelectorAll('.country-btn').forEach(b => b.classList.remove('active'));
-    this.classList.add('active');
-    currentCountry = this.dataset.country;
-    applyFilters();
-  });
-});
-
-document.querySelectorAll('[data-age]').forEach(btn => {
-  btn.addEventListener('click', function() {
-    document.querySelectorAll('[data-age]').forEach(b => b.classList.remove('active'));
-    this.classList.add('active');
-    currentAge = this.dataset.age;
-    applyFilters();
-  });
-});
-
-document.querySelectorAll('.gender-btn').forEach(btn => {
-  btn.addEventListener('click', function() {
-    document.querySelectorAll('.gender-btn').forEach(b => b.classList.remove('active'));
-    this.classList.add('active');
-    currentGender = this.dataset.gender;
-    applyFilters();
-  });
-});
-
-document.querySelectorAll('[data-sort]').forEach(th => {
-  th.addEventListener('click', function() {
-    const col = this.dataset.sort;
-    if (currentSort.column === col) currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
-    else { currentSort.column = col; currentSort.direction = 'desc'; }
-    applyFilters();
-  });
-});
-
-let searchTimeout;
-document.getElementById('searchInput').addEventListener('input', function() {
-  clearTimeout(searchTimeout);
-  searchTimeout = setTimeout(applyFilters, 300);
-});
-
-// ========================================================================
-//  СТАРТ
-// ========================================================================
-loadData();
+// =========================================================================
+//  ИНИЦИАЛИЗАЦИЯ
+// =========================================================================
+renderNews('world');
+renderNews('russia');
+renderNews('transfers');
 updateLanguage('ru');
-document.getElementById('searchInput').placeholder = translations.ru.search_placeholder;
-setTimeout(() => updatePagination(), 100);
+document.getElementById('lastUpdated').textContent = '2026-06-27';
 </script>
 </body>
 </html>
