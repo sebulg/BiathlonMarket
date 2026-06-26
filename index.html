@@ -34,7 +34,7 @@
         .navbar-custom {
             background: linear-gradient(135deg, #0a0e27 0%, #1a237e 100%);
             border-bottom: 2px solid var(--accent);
-            padding: 1rem 0;
+            padding: 0.8rem 0;
         }
 
         .navbar-custom .brand {
@@ -42,10 +42,18 @@
             font-size: 1.8rem;
             color: white;
             text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
 
         .navbar-custom .brand span {
             color: var(--accent);
+        }
+
+        .navbar-custom .brand img {
+            height: 45px;
+            width: auto;
         }
 
         .stats-bar {
@@ -84,6 +92,7 @@
             padding: 1rem 0.75rem;
             cursor: pointer;
             border-bottom: 2px solid var(--accent);
+            white-space: nowrap;
         }
 
         .table-custom td {
@@ -143,6 +152,20 @@
         .category-top-women { background: #880e4f; color: white; }
         .category-junior { background: #004d40; color: white; }
         .category-other { background: #4a148c; color: white; }
+
+        .change-positive { color: #69f0ae; }
+        .change-negative { color: #ff5252; }
+        .change-neutral { color: #9e9e9e; }
+
+        .change-icon {
+            font-size: 1.2rem;
+            margin-right: 4px;
+        }
+
+        .change-tooltip {
+            cursor: help;
+            border-bottom: 1px dashed #9fa8da;
+        }
 
         .filter-section {
             background: rgba(26, 35, 126, 0.2);
@@ -225,6 +248,15 @@
             border-radius: 10px;
         }
 
+        .comment-box {
+            background: rgba(255, 111, 0, 0.1);
+            border-left: 3px solid var(--accent);
+            padding: 0.8rem 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            font-size: 0.95rem;
+        }
+
         .loader {
             border: 3px solid rgba(255, 111, 0, 0.1);
             border-top: 3px solid var(--accent);
@@ -268,10 +300,15 @@
 </head>
 <body>
 
-<!-- Навбар -->
+<!-- Навбар с логотипом -->
 <nav class="navbar-custom">
     <div class="container">
-        <div>
+        <div class="d-flex justify-content-between align-items-center flex-wrap">
+            <a href="#" class="brand">
+                <!-- Сюда вставьте ваш логотип -->
+                <img src="images/logo.png" alt="Biathlon Market" onerror="this.style.display='none'">
+                Biathlon<span>Market</span>
+            </a>
             <span class="text-light-emphasis small">
                 <i class="far fa-calendar-alt me-1"></i>
                 Обновлено: <span id="lastUpdated">загрузка...</span>
@@ -342,6 +379,7 @@
                         <th data-sort="category">Категория <i class="fas fa-sort"></i></th>
                         <th data-sort="rating">Рейтинг <i class="fas fa-sort"></i></th>
                         <th data-sort="price">Цена (€) <i class="fas fa-sort"></i></th>
+                        <th data-sort="change">Изменение <i class="fas fa-sort"></i></th>
                         <th style="width: 40px;"></th>
                     </tr>
                 </thead>
@@ -386,74 +424,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-// ===== ДАННЫЕ (ВРЕМЕННО, ПОТОМ БУДЕШЬ ЗАГРУЖАТЬ ИЗ JSON) =====
-const sampleData = {
-    "lastUpdated": "2026-06-26",
-    "athletes": [
-        {
-            "id": 1,
-            "name": "Карим Халили",
-            "region": "Московская область",
-            "age": 25,
-            "category": "top-men",
-            "speed_sec": 22.8,
-            "shoot_lying": 92,
-            "shoot_standing": 88,
-            "points": 1427,
-            "stability": 95,
-            "rating": 94,
-            "price": 470000,
-            "photo": "halili.jpg"
-        },
-        {
-            "id": 2,
-            "name": "Антон Смирнов",
-            "region": "Тюменская область",
-            "age": 28,
-            "category": "top-men",
-            "speed_sec": 23.1,
-            "shoot_lying": 89,
-            "shoot_standing": 85,
-            "points": 1200,
-            "stability": 88,
-            "rating": 89,
-            "price": 445000,
-            "photo": "smirnov.jpg"
-        },
-        {
-            "id": 3,
-            "name": "Екатерина Иванова",
-            "region": "Санкт-Петербург",
-            "age": 22,
-            "category": "top-women",
-            "speed_sec": 24.2,
-            "shoot_lying": 95,
-            "shoot_standing": 91,
-            "points": 1100,
-            "stability": 92,
-            "rating": 91,
-            "price": 455000,
-            "photo": "ivanova.jpg"
-        },
-        {
-            "id": 4,
-            "name": "Дмитрий Петров",
-            "region": "Красноярский край",
-            "age": 19,
-            "category": "junior",
-            "speed_sec": 23.8,
-            "shoot_lying": 86,
-            "shoot_standing": 82,
-            "points": 800,
-            "stability": 80,
-            "rating": 84,
-            "price": 420000,
-            "photo": "petrov.jpg"
-        }
-    ]
-};
-
-// ===== ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ =====
+// ===== ЗАГРУЗКА ДАННЫХ =====
 let allAthletes = [];
 let filteredAthletes = [];
 let currentPage = 1;
@@ -462,19 +433,17 @@ let currentFilter = 'all';
 let currentAgeFilter = 'all';
 let currentSort = { column: 'rating', direction: 'desc' };
 
-// ===== ЗАГРУЗКА ДАННЫХ =====
 async function loadData() {
     try {
-        // Сначала пробуем загрузить из файла
         const response = await fetch('data/data.json');
         const data = await response.json();
         allAthletes = data.athletes || [];
         document.getElementById('lastUpdated').textContent = data.lastUpdated || 'неизвестно';
     } catch (error) {
-        // Если файла нет - используем пример
-        console.log('Загружаем пример данных');
-        allAthletes = sampleData.athletes;
-        document.getElementById('lastUpdated').textContent = sampleData.lastUpdated;
+        // Если файла нет - показываем сообщение
+        console.error('Ошибка загрузки data.json:', error);
+        document.getElementById('lastUpdated').textContent = 'ошибка загрузки';
+        allAthletes = [];
     }
     
     applyFilters();
@@ -485,6 +454,12 @@ async function loadData() {
 // ===== СТАТИСТИКА =====
 function updateStats() {
     document.getElementById('totalAthletes').textContent = allAthletes.length;
+    if (allAthletes.length === 0) {
+        document.getElementById('avgRating').textContent = '0';
+        document.getElementById('topPrice').textContent = '0';
+        document.getElementById('totalCategories').textContent = '0';
+        return;
+    }
     const avgRating = allAthletes.reduce((sum, a) => sum + a.rating, 0) / allAthletes.length;
     document.getElementById('avgRating').textContent = avgRating.toFixed(1);
     const topPrice = Math.max(...allAthletes.map(a => a.price));
@@ -518,6 +493,7 @@ function applyFilters() {
         );
     }
     
+    // Сортировка
     result.sort((a, b) => {
         let valA = a[currentSort.column];
         let valB = b[currentSort.column];
@@ -543,7 +519,7 @@ function renderTable() {
     const pageData = filteredAthletes.slice(start, end);
     
     if (pageData.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="9" class="text-center py-4 text-light-emphasis">Спортсмены не найдены</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="10" class="text-center py-4 text-light-emphasis">Спортсмены не найдены</td></tr>`;
         return;
     }
     
@@ -555,6 +531,26 @@ function renderTable() {
             'junior': 'category-junior',
             'other': 'category-other'
         }[athlete.category] || 'category-other';
+        
+        // Отображение изменения
+        let changeHtml = '';
+        if (athlete.change !== undefined) {
+            if (athlete.change > 0) {
+                changeHtml = `<span class="change-positive change-tooltip" title="${athlete.change_comment || ''}">
+                    <i class="fas fa-arrow-up change-icon"></i>+${athlete.change}
+                </span>`;
+            } else if (athlete.change < 0) {
+                changeHtml = `<span class="change-negative change-tooltip" title="${athlete.change_comment || ''}">
+                    <i class="fas fa-arrow-down change-icon"></i>${athlete.change}
+                </span>`;
+            } else {
+                changeHtml = `<span class="change-neutral change-tooltip" title="${athlete.change_comment || 'Без изменений'}">
+                    <i class="fas fa-minus change-icon"></i>0
+                </span>`;
+            }
+        } else {
+            changeHtml = `<span class="change-neutral">—</span>`;
+        }
         
         return `
             <tr onclick="openModal(${athlete.id})">
@@ -574,6 +570,7 @@ function renderTable() {
                 <td><span class="category-badge ${categoryClass}">${athlete.category}</span></td>
                 <td><span class="rating-badge">${athlete.rating}</span></td>
                 <td><span class="price-tag">€${athlete.price.toLocaleString()}</span></td>
+                <td>${changeHtml}</td>
                 <td><i class="fas fa-chevron-right text-light-emphasis"></i></td>
             </tr>
         `;
@@ -631,6 +628,21 @@ function openModal(id) {
     document.getElementById('modalTitle').textContent = athlete.name;
     const body = document.getElementById('modalBody');
     
+    // Блок изменения
+    let changeBlock = '';
+    if (athlete.change !== undefined && athlete.change_comment) {
+        const sign = athlete.change > 0 ? '+' : '';
+        const color = athlete.change > 0 ? 'var(--accent)' : (athlete.change < 0 ? '#ff5252' : '#9e9e9e');
+        changeBlock = `
+            <div class="comment-box">
+                <strong><i class="fas fa-exchange-alt me-2"></i>Изменение рейтинга:</strong>
+                <span style="color:${color}; font-weight:700;">${sign}${athlete.change}</span>
+                <br>
+                <span style="color:#c5cae9;">${athlete.change_comment}</span>
+            </div>
+        `;
+    }
+    
     body.innerHTML = `
         <div class="row">
             <div class="col-md-4 text-center">
@@ -661,6 +673,7 @@ function openModal(id) {
                     <div class="price-tag" style="font-size: 1.8rem;">€${athlete.price.toLocaleString()}</div>
                     <div class="text-light-emphasis">Рыночная стоимость</div>
                 </div>
+                ${changeBlock}
             </div>
             <div class="col-md-8">
                 <h6 class="text-light-emphasis mb-3">Детальные параметры</h6>
