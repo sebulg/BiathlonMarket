@@ -7,7 +7,6 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
-    /* ===== Все стили без изменений (оставлены как в предыдущем коде) ===== */
     :root {
       --bg-body: #f8f9fa;
       --text-color: #212529;
@@ -581,7 +580,7 @@
 
 <script>
 // =========================================================================
-//  ПЕРЕВОДЫ (без изменений)
+//  ПЕРЕВОДЫ
 // =========================================================================
 const translations = {
   ru: {
@@ -623,7 +622,7 @@ const translations = {
 };
 
 // =========================================================================
-//  ТЕМА, ЛОГОТИП, ЯЗЫК (без изменений)
+//  ТЕМА, ЛОГОТИП, ЯЗЫК
 // =========================================================================
 let currentTheme = 'light';
 
@@ -710,7 +709,7 @@ function calculatePrice(athlete) {
 }
 
 // =========================================================================
-//  ПОЛНЫЙ МАССИВ СПОРТСМЕНОВ (С ИСПРАВЛЕНИЯМИ)
+//  ПОЛНЫЙ МАССИВ СПОРТСМЕНОВ
 // =========================================================================
 const data = {
   "lastUpdated": "2026-06-26",
@@ -794,13 +793,13 @@ const data = {
     { "id":84, "name":"Даниил Бреннер", "region":"Москва", "date_of_birth":"2010-09-14", "category":"youth", "gender":"male", "speed_sec":24.7, "shoot_lying":85, "shoot_standing":82, "points":560, "stability":78, "rating":79, "photo":"brenner.jpg", "change":4, "change_comment":"Перспективный юноша", "season_info":"Сезон 2025/26: в составе юношеской сборной Москвы.", "achievements":["Призёр Первенства Москвы"], "rank":"1 разряд" },
     { "id":87, "name":"Тамара Рафикова", "region":"Москва", "date_of_birth":"2009-12-11", "category":"youth", "gender":"female", "speed_sec":25.3, "shoot_lying":85, "shoot_standing":82, "points":500, "stability":76, "rating":77, "photo":"rafikova.jpg", "change":4, "change_comment":"КМС, победительница Кубка Москвы", "season_info":"Сезон 2025/26: победительница Кубка Москвы среди 15-16 лет.", "achievements":["Кандидат в мастера спорта (КМС)","Победительница Кубка Москвы 2025 (15-16 лет)","Серебряный призёр Первенства России 2024 (эстафета, 15-16 лет)"], "rank":"КМС" },
     { "id":70, "name":"Герман Благовский", "region":"Москва", "date_of_birth":"2011-03-20", "category":"youth", "gender":"male", "speed_sec":24.8, "shoot_lying":85, "shoot_standing":82, "points":540, "stability":77, "rating":78, "photo":"blagovsky.jpg", "change":4, "change_comment":"Перспективный юноша из Москвы", "season_info":"Сезон 2025/26: в составе юношеской сборной Москвы.", "achievements":["Призёр Первенства Москвы 2025"], "rank":"1 разряд" },
-    // ===== ИСПРАВЛЕННАЯ СОФЬЯ ГОЛУБЕВА – ЮНОШИ =====
     { "id":82, "name":"Софья Голубева", "region":"Москва", "date_of_birth":"2011-01-01", "category":"youth", "gender":"female", "speed_sec":25.4, "shoot_lying":85, "shoot_standing":82, "points":510, "stability":76, "rating":76, "photo":"golubeva.jpg", "change":3, "change_comment":"Победительница Кубка Москвы 15-16 лет", "season_info":"Сезон 2025/26: 1 место на Кубке Москвы среди 15-16 лет.", "achievements":["Победительница Кубка Москвы 2025 (15-16 лет)"], "rank":"2 разряд" },
 
     // ===== ДЕТИ (11-14 лет) – УБРАНА СТРЕЛЬБА СТОЯ =====
-    { "id":71, "name":"Сергей Булгаков", "region":"Москва", "date_of_birth":"2012-10-15", "category":"children", "gender":"male", "speed_sec":25.8, "shoot_lying":82, "shoot_standing":0, "points":400, "stability":70, "rating":68, "photo":"bulgakov.jpg", "change":4, "change_comment":"Призёр академии Москвы", "season_info":"Сезон 2025/26: призёр соревнований академии Москвы.", "achievements":["Призёр академии Москвы (13-14 лет)"], "rank":"2 разряд" },
+    { "id":71, "name":"Сергей Булгаков", "region":"Москва", "date_of_birth":"2012-06-22", "category":"children", "gender":"male", "speed_sec":25.8, "shoot_lying":82, "shoot_standing":0, "points":400, "stability":70, "rating":75, "photo":"bulgakov.jpg", "change":4, "change_comment":"Призёр академии Москвы", "season_info":"Сезон 2025/26: призёр соревнований академии Москвы.", "achievements":["Призёр академии Москвы (13-14 лет)"], "rank":"2 разряд" },
     { "id":81, "name":"Екатерина Верещагина", "region":"Москва", "date_of_birth":"2012-11-07", "category":"children", "gender":"female", "speed_sec":25.3, "shoot_lying":86, "shoot_standing":0, "points":530, "stability":77, "rating":78, "photo":"vereshchagina.jpg", "change":4, "change_comment":"Серебряный призёр Кубка Москвы 11-12 лет", "season_info":"Сезон 2025/26: серебро Кубка Москвы среди 11-12 лет.", "achievements":["Серебряный призёр Кубка Москвы 2025 (11-12 лет)"], "rank":"2 разряд" },
-    { "id":88, "name":"Аркадий Фарафонов", "region":"Москва", "date_of_birth":"2013-01-01", "category":"children", "gender":"male", "speed_sec":24.5, "shoot_lying":84, "shoot_standing":0, "points":520, "stability":76, "rating":70, "photo":"farafonov.jpg", "change":3, "change_comment":"Перспективный юный спортсмен", "season_info":"Сезон 2025/26: участник соревнований Москвы.", "achievements":["Участник Первенства Москвы"], "rank":"3 разряд" },
+    { "id":88, "name":"Аркадий Фарафонов", "region":"Москва", "date_of_birth":"2013-01-01", "category":"children", "gender":"male", "speed_sec":24.5, "shoot_lying":84, "shoot_standing":0, "points":520, "stability":76, "rating":72, "photo":"farafonov.jpg", "change":3, "change_comment":"Перспективный юный спортсмен", "season_info":"Сезон 2025/26: участник соревнований Москвы.", "achievements":["Участник Первенства Москвы"], "rank":"3 разряд" },
+    { "id":98, "name":"Варвара Павлова", "region":"Москва", "date_of_birth":"2011-01-01", "category":"children", "gender":"female", "speed_sec":25.6, "shoot_lying":84, "shoot_standing":0, "points":480, "stability":74, "rating":74, "photo":"pavlova_varvara.jpg", "change":3, "change_comment":"Перспективная юная спортсменка", "season_info":"Сезон 2025/26: участница соревнований Москвы.", "achievements":[], "rank":"3 разряд" },
 
     // ===== ЗАВЕРШИВШИЕ =====
     { "id":75, "name":"Уле-Эйнар Бьорндален", "region":"Норвегия", "date_of_birth":"1974-01-27", "category":"retired", "gender":"male", "speed_sec":21.5, "shoot_lying":92, "shoot_standing":89, "points":2500, "stability":99, "rating":99, "photo":"bjorndalen.jpg", "change":0, "change_comment":"Легенда, завершил карьеру", "season_info":"Сезон 2025/26: не бежал", "achievements":["8-кратный олимпийский чемпион","20-кратный чемпион мира","6-кратный обладатель Кубка мира"], "rank":"ЗМС" },
@@ -824,7 +823,7 @@ const data = {
 };
 
 // =========================================================================
-//  ОСНОВНАЯ ЛОГИКА (без изменений)
+//  ОСНОВНАЯ ЛОГИКА
 // =========================================================================
 let allAthletes = [];
 let filteredAthletes = [];
@@ -1087,7 +1086,7 @@ function renderParam(label, value, unit) {
 }
 
 // =========================================================================
-//  ОБРАБОТЧИКИ СОБЫТИЙ (без изменений)
+//  ОБРАБОТЧИКИ СОБЫТИЙ
 // =========================================================================
 
 document.querySelectorAll('#categoryTabs .nav-link').forEach(tab => {
