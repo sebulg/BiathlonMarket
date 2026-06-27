@@ -1,21 +1,77 @@
 {
+  "id": "/",
   "name": "Biathlon Market",
   "short_name": "Biathlon Market",
   "description": "Рейтинг биатлонистов по уникальной формуле. Цены, аналитика, трансферы.",
+  "lang": "ru",
+  "dir": "ltr",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
-  "background_color": "#0a0e27",
+  "display_override": ["window-controls-overlay"],
+  "orientation": "portrait-primary",
   "theme_color": "#0d47a1",
+  "background_color": "#0a0e27",
+  "categories": ["sports", "news", "entertainment"],
+  "iarc_rating_id": "0",
+  "related_applications": [],
+  "prefer_related_applications": false,
   "icons": [
     {
       "src": "images/logo-192.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
     },
     {
       "src": "images/logo-512.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "images/screenshot-1.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "label": "Главная страница Biathlon Market"
+    },
+    {
+      "src": "images/screenshot-2.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "label": "Рейтинг биатлонистов"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Рейтинг",
+      "short_name": "Рейтинг",
+      "description": "Перейти к рейтингу биатлонистов",
+      "url": "/ratings.html",
+      "icons": [
+        {
+          "src": "images/logo-192.png",
+          "sizes": "192x192",
+          "type": "image/png",
+          "purpose": "any"
+        }
+      ]
+    },
+    {
+      "name": "Новости",
+      "short_name": "Новости",
+      "description": "Последние новости биатлона",
+      "url": "/index.html",
+      "icons": [
+        {
+          "src": "images/logo-192.png",
+          "sizes": "192x192",
+          "type": "image/png",
+          "purpose": "any"
+        }
+      ]
     }
   ]
 }
