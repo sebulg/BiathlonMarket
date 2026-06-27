@@ -1,20 +1,15 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Biathlon Market – рейтинг биатлонистов, трансферы, аналитика</title>
-  <meta name="description" content="Рейтинг биатлонистов по уникальной формуле. Рыночная стоимость, трансферы, новости. Обновляется каждые 2 недели.">
-  <meta name="keywords" content="биатлон, рейтинг, биатлонисты, трансферы, цены, аналитика">
-  <meta property="og:title" content="Biathlon Market">
-  <meta property="og:description" content="Рейтинг биатлонистов по уникальной формуле.">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://ваш-логин.github.io/biathlon-market/">
-  <link rel="manifest" href="manifest.json">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Biathlon Market – рейтинг биатлонистов</title>
+  <meta name="description" content="Рейтинг биатлонистов по уникальной формуле. Рыночная стоимость, трансферы, новости. Обновляется каждые 2 недели." />
+  <meta name="keywords" content="биатлон, рейтинг, биатлонисты, трансферы, цены, аналитика" />
+  <link rel="manifest" href="manifest.json" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
-    /* ===== ОБЩИЕ ПЕРЕМЕННЫЕ (темы) ===== */
     :root {
       --bg-body: #f8f9fa;
       --text-color: #212529;
@@ -25,6 +20,7 @@
       --red: #c62828;
       --hero-bg: linear-gradient(135deg, #0a0e27 0%, #1a237e 100%);
       --hero-text: white;
+      --disclaimer-color: rgba(255,255,255,0.7);
       --game-bg: #e9ecef;
       --target-color: #c62828;
       --target-hit: #2e7d32;
@@ -39,6 +35,7 @@
       --red: #ef5350;
       --hero-bg: linear-gradient(135deg, #050812 0%, #0d1b3e 100%);
       --hero-text: #e8eaf6;
+      --disclaimer-color: rgba(255,255,255,0.5);
       --game-bg: #1a1a2e;
       --target-color: #ef5350;
       --target-hit: #66bb6a;
@@ -51,50 +48,30 @@
       margin: 0;
       padding: 0;
     }
-
-    /* ===== НАВБАР ===== */
     .navbar-custom {
       background: var(--dark-blue);
       border-bottom: 3px solid var(--red);
       padding: 0.6rem 0;
       transition: background 0.3s;
-      position: relative;
-      z-index: 1000;
     }
     .navbar-custom .brand {
       font-weight: 800;
       font-size: 1.6rem;
       color: white;
       display: flex;
-      flex-direction: column;
-      align-items: center;
-      cursor: pointer;
-      text-decoration: none;
-    }
-    .navbar-custom .brand .brand-row {
-      display: flex;
       align-items: center;
       gap: 10px;
+      cursor: pointer;
+      text-decoration: none;
+      border: none;
+      background: none;
+      padding: 0;
     }
     .navbar-custom .brand span { color: var(--red); }
     .navbar-custom .brand img {
       height: 40px;
       width: auto;
       transition: transform 0.3s;
-    }
-    .navbar-custom .brand.logo-expanded img {
-      transform: scale(1.4);
-    }
-    .navbar-custom .brand .logo-caption {
-      font-size: 0.8rem;
-      opacity: 0;
-      transition: opacity 0.3s;
-      text-align: center;
-      color: white;
-      margin-top: 2px;
-    }
-    .navbar-custom .brand.logo-expanded .logo-caption {
-      opacity: 1;
     }
     .navbar-custom .nav-link {
       color: rgba(255,255,255,0.8);
@@ -131,7 +108,6 @@
     }
     .theme-btn i { font-size: 1rem; }
 
-    /* ===== HERO ===== */
     .hero {
       min-height: 100vh;
       display: flex;
@@ -143,27 +119,31 @@
       padding: 2rem;
       transition: background 0.3s;
       position: relative;
+      flex-direction: column;
     }
     .hero .hero-logo {
       max-width: 300px;
       width: 80%;
       height: auto;
       display: block;
-      margin: 0 auto 1.5rem;
+      margin: 0 auto 1rem;
       filter: drop-shadow(0 4px 20px rgba(0,0,0,0.3));
     }
-    .hero h1 {
-      font-size: 3.5rem;
-      font-weight: 800;
-      margin-bottom: 0.5rem;
-    }
-    .hero h1 span { color: var(--red); }
-    .hero p {
-      font-size: 1.2rem;
-      opacity: 0.9;
+    .hero .disclaimer {
+      font-size: 0.8rem;
+      color: var(--disclaimer-color);
       max-width: 600px;
-      margin: 0 auto 2rem;
+      margin: 0 auto 1rem;
+      font-style: italic;
+      transition: color 0.3s;
+      padding: 0.5rem 1rem;
+      background: rgba(0,0,0,0.2);
+      border-radius: 8px;
+      backdrop-filter: blur(4px);
     }
+    .hero h1 { font-size: 3.5rem; font-weight: 800; margin-bottom: 0.5rem; }
+    .hero h1 span { color: var(--red); }
+    .hero p { font-size: 1.2rem; opacity: 0.9; max-width: 600px; margin: 0 auto 2rem; }
     .hero .btn-hero {
       background: var(--red);
       color: white;
@@ -176,11 +156,7 @@
       text-decoration: none;
       display: inline-block;
     }
-    .hero .btn-hero:hover {
-      transform: scale(1.05);
-      background: #b71c1c;
-      color: white;
-    }
+    .hero .btn-hero:hover { transform: scale(1.05); background: #b71c1c; color: white; }
     .scroll-indicator {
       position: absolute;
       bottom: 30px;
@@ -190,12 +166,8 @@
       font-size: 1.5rem;
       animation: bounce 2s infinite;
     }
-    @keyframes bounce {
-      0%, 100% { transform: translateX(-50%) translateY(0); }
-      50% { transform: translateX(-50%) translateY(-10px); }
-    }
+    @keyframes bounce { 0%,100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(-10px); } }
 
-    /* ===== НОВОСТИ ===== */
     .news-section {
       padding: 3rem 0;
       background: var(--bg-body);
@@ -219,17 +191,7 @@
       background: transparent;
       border-bottom: 3px solid var(--red);
     }
-    .tab-content {
-      padding-top: 1.5rem;
-    }
-    .news-list {
-      max-height: 600px;
-      overflow: hidden;
-      transition: max-height 0.5s ease;
-    }
-    .news-list.expanded {
-      max-height: 9999px;
-    }
+    .tab-content { padding-top: 1.5rem; }
     .news-card {
       background: var(--card-bg);
       border-radius: 12px;
@@ -239,42 +201,15 @@
       border-left: 4px solid var(--red);
       transition: background 0.3s, box-shadow 0.3s;
     }
-    .news-card .date {
-      font-size: 0.8rem;
-      color: var(--text-color);
-      opacity: 0.6;
+    .news-card .date { font-size: 0.8rem; color: var(--text-color); opacity: 0.6; }
+    .news-card .title { font-weight: 700; font-size: 1.1rem; margin: 0.3rem 0; }
+    .news-card .summary { color: var(--text-color); opacity: 0.8; }
+    .news-list {
+      max-height: 600px;
+      overflow: hidden;
+      transition: max-height 0.5s ease;
     }
-    .news-card .title {
-      font-weight: 700;
-      font-size: 1.1rem;
-      margin: 0.3rem 0;
-    }
-    .news-card .summary {
-      color: var(--text-color);
-      opacity: 0.8;
-    }
-    .transfer-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 0.5rem 0;
-      border-bottom: 1px solid var(--border-color);
-    }
-    .transfer-item .icon {
-      font-size: 1.2rem;
-      color: var(--red);
-      min-width: 30px;
-    }
-    .transfer-item .details {
-      flex: 1;
-    }
-    .transfer-item .player {
-      font-weight: 700;
-    }
-    .transfer-item .club {
-      font-weight: 600;
-      color: var(--dark-blue);
-    }
+    .news-list.expanded { max-height: 9999px; }
     .btn-show-more {
       background: var(--dark-blue);
       color: white;
@@ -286,10 +221,7 @@
       cursor: pointer;
       font-size: 0.9rem;
     }
-    .btn-show-more:hover {
-      background: var(--red);
-      transform: scale(1.02);
-    }
+    .btn-show-more:hover { background: var(--red); transform: scale(1.02); }
     .btn-refresh {
       background: var(--red);
       color: white;
@@ -301,52 +233,8 @@
       cursor: pointer;
       font-size: 0.9rem;
     }
-    .btn-refresh:hover {
-      background: var(--dark-blue);
-      transform: scale(1.02);
-    }
+    .btn-refresh:hover { background: var(--dark-blue); transform: scale(1.02); }
 
-    /* ===== КНОПКА УСТАНОВКИ ===== */
-    .install-section {
-      background: var(--card-bg);
-      border-radius: 16px;
-      padding: 2rem;
-      margin: 2rem 0;
-      box-shadow: var(--card-shadow);
-      text-align: center;
-    }
-    .btn-install {
-      background: var(--red);
-      color: white;
-      padding: 0.6rem 1.5rem;
-      border-radius: 50px;
-      font-weight: 700;
-      border: none;
-      transition: 0.3s;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .btn-install:hover {
-      transform: scale(1.05);
-      background: #b71c1c;
-      color: white;
-    }
-    .btn-install.dark {
-      background: var(--dark-blue);
-    }
-    .btn-install.dark:hover {
-      background: #0a2a6a;
-    }
-    .modal-video iframe {
-      width: 100%;
-      aspect-ratio: 16/9;
-      border: none;
-      border-radius: 12px;
-    }
-
-    /* ===== ИГРА ===== */
     .game-section {
       padding: 3rem 0;
       background: var(--bg-body);
@@ -391,9 +279,7 @@
       transition: transform 0.1s;
       animation: pulse 1s infinite alternate;
     }
-    .game-target:hover {
-      transform: scale(1.1);
-    }
+    .game-target:hover { transform: scale(1.1); }
     .game-target.hit {
       background: radial-gradient(circle, var(--target-hit) 40%, #fff 42%, var(--target-hit) 44%, #fff 46%, var(--target-hit) 48%);
       pointer-events: none;
@@ -413,10 +299,7 @@
       flex-wrap: wrap;
       gap: 0.5rem;
     }
-    .game-controls .info {
-      font-size: 1.1rem;
-      font-weight: 600;
-    }
+    .game-controls .info { font-size: 1.1rem; font-weight: 600; }
     .game-controls .btn-game {
       background: var(--dark-blue);
       color: white;
@@ -427,10 +310,7 @@
       transition: 0.3s;
       cursor: pointer;
     }
-    .game-controls .btn-game:hover {
-      background: var(--red);
-      transform: scale(1.02);
-    }
+    .game-controls .btn-game:hover { background: var(--red); transform: scale(1.02); }
     .game-result {
       margin-top: 1.5rem;
       padding: 1.5rem;
@@ -441,18 +321,52 @@
       border-left: 4px solid var(--red);
       display: none;
     }
-    .game-result .athlete-name {
-      font-weight: 800;
-      color: var(--dark-blue);
+    .game-result .athlete-name { font-weight: 800; color: var(--dark-blue); }
+    .game-result .fact { font-style: italic; color: var(--text-color); opacity: 0.8; margin-top: 0.5rem; }
+
+    .install-section {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 2rem;
+      margin: 2rem 0;
+      box-shadow: var(--card-shadow);
+      text-align: center;
     }
-    .game-result .fact {
-      font-style: italic;
-      color: var(--text-color);
-      opacity: 0.8;
-      margin-top: 0.5rem;
+    .btn-install {
+      background: var(--red);
+      color: white;
+      padding: 0.6rem 1.5rem;
+      border-radius: 50px;
+      font-weight: 700;
+      border: none;
+      transition: 0.3s;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .btn-install:hover { transform: scale(1.05); background: #b71c1c; }
+    .btn-install.blue { background: var(--dark-blue); }
+    .btn-install.blue:hover { background: #0a2a6a; }
+    .modal-video iframe {
+      width: 100%;
+      aspect-ratio: 16/9;
+      border: none;
+      border-radius: 12px;
     }
 
-    /* ===== FULLSCREEN LOGO ===== */
+    .transfer-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .transfer-item .icon { font-size: 1.2rem; color: var(--red); min-width: 30px; }
+    .transfer-item .details { flex: 1; }
+    .transfer-item .player { font-weight: 700; }
+    .transfer-item .club { font-weight: 600; color: var(--dark-blue); }
+
     .logo-fullscreen-overlay {
       position: fixed;
       top: 0;
@@ -468,9 +382,7 @@
       cursor: pointer;
       animation: fadeIn 0.4s ease;
     }
-    .logo-fullscreen-overlay.active {
-      display: flex;
-    }
+    .logo-fullscreen-overlay.active { display: flex; }
     .logo-fullscreen-overlay img {
       max-width: 80%;
       max-height: 60vh;
@@ -497,43 +409,31 @@
       background: none;
       border: none;
     }
-    .logo-fullscreen-overlay .fullscreen-close:hover {
-      transform: rotate(90deg);
-      color: var(--red);
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
+    .logo-fullscreen-overlay .fullscreen-close:hover { transform: rotate(90deg); color: var(--red); }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
     @media (max-width: 767px) {
       .hero .hero-logo { max-width: 200px; }
       .hero h1 { font-size: 2.5rem; }
       .hero p { font-size: 1rem; }
+      .hero .disclaimer { font-size: 0.7rem; padding: 0.3rem 0.8rem; }
       .navbar-custom .brand { font-size: 1.3rem; }
       .navbar-custom .brand img { height: 32px; }
       .navbar-custom .update-info { font-size: 0.7rem; gap: 6px; }
       .lang-btn, .theme-btn { font-size: 0.65rem; padding: 0.1rem 0.5rem; }
       .news-section .section-title { font-size: 2rem; }
-      .game-container { padding: 1rem; }
       .game-target { width: 45px; height: 45px; }
-      .logo-fullscreen-overlay .fullscreen-caption { font-size: 1.2rem; }
-      .logo-fullscreen-overlay .fullscreen-close { top: 20px; right: 20px; font-size: 1.8rem; }
     }
   </style>
 </head>
 <body>
 
-<!-- ===== НАВБАР ===== -->
 <nav class="navbar navbar-expand-md navbar-custom">
   <div class="container">
-    <div class="brand" id="logoWrapper" onclick="toggleLogo()">
-      <div class="brand-row">
-        <img id="logoImg" src="images/logo-light.png" alt="Biathlon Market">
-        <span>Biathlon<span>Market</span></span>
-      </div>
-      <span class="logo-caption">Biathlon Market</span>
-    </div>
+    <button class="brand" id="logoNavBtn" onclick="openFullscreenLogo()">
+      <img id="navLogoImg" src="images/logo-light.png" alt="Biathlon Market">
+      <span>Biathlon<span>Market</span></span>
+    </button>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
       <span class="navbar-toggler-icon" style="filter: invert(1);"></span>
     </button>
@@ -544,20 +444,20 @@
       </ul>
       <div class="update-info">
         <span><i class="far fa-calendar-alt me-1"></i><span id="lastUpdated">2026-06-27</span></span>
-        <button class="theme-btn" id="themeToggle" onclick="toggleTheme()">
-          <i class="fas fa-moon"></i>
-        </button>
-        <button class="lang-btn active" data-lang="ru" id="langRu">RU</button>
-        <button class="lang-btn" data-lang="en" id="langEn">EN</button>
+        <button class="theme-btn" id="themeToggle" onclick="toggleTheme()"><i class="fas fa-moon"></i></button>
+        <button class="lang-btn active" data-lang="ru">RU</button>
+        <button class="lang-btn" data-lang="en">EN</button>
       </div>
     </div>
   </div>
 </nav>
 
-<!-- ===== HERO ===== -->
-<section class="hero" id="hero">
+<section class="hero">
   <div class="container">
     <img id="heroLogoImg" src="images/logo-light.png" alt="Biathlon Market" class="hero-logo">
+    <div class="disclaimer" id="disclaimerText">
+      ⚠️ ДИСКЛЕЙМЕР: Рейтинги были сделаны на неточных основаниях, просим относиться к этому без критики.
+    </div>
     <h1>Biathlon <span>Market</span></h1>
     <p>Рейтинг биатлонистов по уникальной формуле. Цены, аналитика, трансферы.</p>
     <a href="ratings.html" class="btn-hero"><i class="fas fa-arrow-right me-2"></i>Перейти к рейтингу</a>
@@ -565,94 +465,39 @@
   </div>
 </section>
 
-<!-- ===== НОВОСТИ ===== -->
 <section class="news-section" id="news">
   <div class="container">
     <div class="d-flex justify-content-between align-items-center flex-wrap mb-3">
       <h2 class="section-title mb-0" data-i18n="news_title">Новости биатлона</h2>
-      <button class="btn-refresh" onclick="refreshAllNews()" title="Обновить новости (имитация)">
-        <i class="fas fa-sync-alt"></i> Обновить
-      </button>
+      <button class="btn-refresh" onclick="refreshAllNews()" title="Обновить новости (имитация)"><i class="fas fa-sync-alt"></i> Обновить</button>
     </div>
-
     <ul class="nav nav-tabs justify-content-center" id="newsTabs" role="tablist">
       <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#tab-world" data-i18n="tab_world">Мир</button></li>
       <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-russia" data-i18n="tab_russia">Россия</button></li>
       <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-transfers" data-i18n="tab_transfers">Трансферы</button></li>
     </ul>
-
     <div class="tab-content" id="newsTabContent">
       <div class="tab-pane fade show active" id="tab-world">
         <div class="news-list" id="worldNewsList"></div>
-        <div class="text-center mt-2">
-          <button class="btn-show-more" onclick="toggleNews('world')">
-            <i class="fas fa-chevron-down"></i> Смотреть ещё
-          </button>
-        </div>
+        <div class="text-center mt-2"><button class="btn-show-more" onclick="toggleNews('world')"><i class="fas fa-chevron-down"></i> Смотреть ещё</button></div>
       </div>
       <div class="tab-pane fade" id="tab-russia">
         <div class="news-list" id="russiaNewsList"></div>
-        <div class="text-center mt-2">
-          <button class="btn-show-more" onclick="toggleNews('russia')">
-            <i class="fas fa-chevron-down"></i> Смотреть ещё
-          </button>
-        </div>
+        <div class="text-center mt-2"><button class="btn-show-more" onclick="toggleNews('russia')"><i class="fas fa-chevron-down"></i> Смотреть ещё</button></div>
       </div>
       <div class="tab-pane fade" id="tab-transfers">
         <div class="news-list" id="transfersNewsList"></div>
-        <div class="text-center mt-2">
-          <button class="btn-show-more" onclick="toggleNews('transfers')">
-            <i class="fas fa-chevron-down"></i> Смотреть ещё
-          </button>
-        </div>
+        <div class="text-center mt-2"><button class="btn-show-more" onclick="toggleNews('transfers')"><i class="fas fa-chevron-down"></i> Смотреть ещё</button></div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ===== КНОПКА УСТАНОВКИ ПРИЛОЖЕНИЯ ===== -->
-<section class="install-section">
-  <h3>📲 Скачайте приложение Biathlon Market</h3>
-  <p>Установите наше приложение на телефон и получайте свежие новости и рейтинги в один клик.</p>
-  <button class="btn-install" data-bs-toggle="modal" data-bs-target="#installModal">
-    <i class="fas fa-download"></i> Установить приложение
-  </button>
-  <button class="btn-install dark" onclick="alert('Ссылка на APK появится позже. Следите за обновлениями!')">
-    <i class="fas fa-android"></i> Скачать APK
-  </button>
-</section>
-
-<!-- ===== МОДАЛЬНОЕ ОКНО С ВИДЕО-ГАЙДОМ ===== -->
-<div class="modal fade" id="installModal" tabindex="-1">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Как установить приложение</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-      <div class="modal-body">
-        <div class="modal-video">
-          <!-- Замените src на ссылку вашего видео-гайда -->
-          <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe>
-        </div>
-        <ol class="mt-3">
-          <li><strong>На Android (Chrome):</strong> откройте сайт в Chrome → нажмите на три точки → «Установить приложение».</li>
-          <li><strong>На iPhone (Safari):</strong> откройте сайт в Safari → нажмите «Поделиться» → «На экран «Домой»».</li>
-          <li><strong>Или скачайте APK-файл</strong> и установите его вручную (разрешите установку из неизвестных источников).</li>
-        </ol>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ===== ИГРА ===== -->
 <section class="game-section" id="game">
   <div class="container">
     <h2 class="section-title">🎯 Проверь свою точность!</h2>
     <div class="game-container">
-      <div class="game-field" id="gameField">
-        <!-- Мишени появляются здесь -->
-      </div>
+      <div class="game-field" id="gameField"></div>
       <div class="game-controls">
         <div class="info" id="gameInfo">Выстрелов: 0 / 5</div>
         <div class="info" id="gameTimer">⏱️ 0.0 с</div>
@@ -665,7 +510,38 @@
   </div>
 </section>
 
-<!-- ===== FULLSCREEN LOGO OVERLAY ===== -->
+<section class="install-section">
+  <h3>📲 Скачайте приложение Biathlon Market</h3>
+  <p>Установите наше приложение на телефон и получайте свежие новости и рейтинги в один клик.</p>
+  <button class="btn-install" data-bs-toggle="modal" data-bs-target="#installModal">
+    <i class="fas fa-download"></i> Установить приложение
+  </button>
+  <button class="btn-install blue" onclick="alert('APK-файл будет доступен после сборки через конструктор.')">
+    <i class="fas fa-android"></i> Скачать APK
+  </button>
+</section>
+
+<div class="modal fade" id="installModal" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Как установить приложение</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-video">
+          <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe>
+        </div>
+        <ol class="mt-3">
+          <li><strong>Android (Chrome):</strong> откройте сайт → нажмите на три точки → «Установить приложение».</li>
+          <li><strong>iPhone (Safari):</strong> откройте сайт → нажмите «Поделиться» → «На экран «Домой»».</li>
+          <li>Либо скачайте APK-файл и установите его вручную.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="logo-fullscreen-overlay" id="fullscreenOverlay" onclick="closeFullscreenLogo()">
   <button class="fullscreen-close" onclick="closeFullscreenLogo()"><i class="fas fa-times"></i></button>
   <img id="fullscreenLogoImg" src="images/logo-light.png" alt="Biathlon Market">
@@ -673,27 +549,28 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
 <script>
-// =========================================================================
-//  ДАННЫЕ НОВОСТЕЙ (три категории)
-// =========================================================================
+// ========================================================================
+//  НОВОСТИ И ТРАНСФЕРЫ (МАССИВЫ)
+// ========================================================================
 const worldNews = [
-  { date: '2026-06-27', title: 'Йоханнес Бё выиграл этап Кубка мира в Антхольце', summary: 'Норвежец опередил Стюрлу Легрейда на 15 секунд. Третьим стал француз Эмильен Жаклен.' },
-  { date: '2026-06-26', title: 'IBU утвердил новые правила на сезон 2026/27', summary: 'Изменения касаются экипировки и штрафных кругов.' },
-  { date: '2026-06-25', title: 'Сборная Франции провела открытую тренировку в Лилле', summary: 'Фуркад и Жаклен показали отличную форму.' },
-  { date: '2026-06-24', title: 'Швеция объявила состав на летний чемпионат мира', summary: 'В составе – Ханна Эберг, Самуэльссон и молодёжь.' },
-  { date: '2026-06-23', title: 'Германия и Норвегия провели совместный сбор', summary: 'Стороны обменялись опытом подготовки к Олимпиаде.' },
-  { date: '2026-06-22', title: 'Ветераны биатлона провели гонку в Хольменколлене', summary: 'Бьорндален, Фуркад и Свендсен встретились вновь.' }
+  { date: '2026-06-27', title: 'IBU утвердил календарь Кубка мира на сезон 2026/27', summary: 'Сезон стартует в Эстерсунде 29 ноября. Добавлен новый этап в Румынии.' },
+  { date: '2026-06-25', title: 'Йоханнес Бё объявил, что сезон 2026/27 станет последним', summary: 'Норвежец завершит карьеру после Олимпийских игр.' },
+  { date: '2026-06-22', title: 'Сборная Франции провела контрольные старты', summary: 'Лучшие результаты показали Жаклен и Симон.' },
+  { date: '2026-06-20', title: 'Швеция объявила состав на летний ЧМ', summary: 'В составе Самуэльссон, Эберг и молодые таланты.' },
+  { date: '2026-06-18', title: 'Германия и Норвегия провели совместный сбор', summary: 'Команды обменялись опытом подготовки к сезону.' },
+  { date: '2026-06-16', title: 'Ветераны биатлона провели благотворительную гонку', summary: 'Бьорндален, Фуркад и Свендсен приняли участие.' }
 ];
+
 const russiaNews = [
-  { date: '2026-06-27', title: 'Карим Халили выиграл контрольную гонку в Увате', summary: 'Халили показал чистую стрельбу и лучшее время круга.' },
-  { date: '2026-06-26', title: 'Виктория Сливко вернулась к тренировкам после болезни', summary: 'Спортсменка приступила к работе в щадящем режиме.' },
-  { date: '2026-06-25', title: 'СБР утвердил состав на летний чемпионат мира', summary: 'В состав вошли Халили, Бажин, Латыпов, Сливко, Резцова.' },
-  { date: '2026-06-24', title: 'Антон Шипулин назначен тренером-консультантом', summary: 'Легендарный биатлонист будет помогать молодым.' },
-  { date: '2026-06-23', title: 'Юниорская сборная выиграла Кубок Андерсен', summary: 'Россияне взяли 4 золота и 3 серебра.' },
-  { date: '2026-06-22', title: 'Сборная России завершила сбор в Сочи', summary: 'Итоги сбора признаны удовлетворительными.' }
+  { date: '2026-06-27', title: 'Карим Халили выиграл контрольную гонку в Увате', summary: 'Чистая стрельба и лучший круг – тренеры довольны.' },
+  { date: '2026-06-26', title: 'Виктория Сливко вернулась к тренировкам', summary: 'После болезни приступила к работе в щадящем режиме.' },
+  { date: '2026-06-24', title: 'СБР утвердил состав на летний чемпионат мира', summary: 'В состав вошли все лидеры сборной.' },
+  { date: '2026-06-23', title: 'Антон Шипулин назначен тренером-консультантом', summary: 'Легенда будет помогать молодым спортсменам.' },
+  { date: '2026-06-21', title: 'Юниорская сборная выиграла Кубок Андерсен', summary: 'Россияне взяли 4 золота и 3 серебра.' },
+  { date: '2026-06-19', title: 'Сборная России завершила сбор в Сочи', summary: 'Контрольные старты показали хорошую готовность.' }
 ];
+
 const transfersNews = [
   { from: 'Новосибирская область', to: 'Московская область', players: ['Дюжева'] },
   { from: 'Новосибирская область', to: 'ХМАО-Югра', players: ['Еремин', 'Гришина', 'Домичек'] },
@@ -706,58 +583,30 @@ const transfersNews = [
   { from: 'Татарстан', to: 'Тюменская область', players: ['Емерхонов'] }
 ];
 
-// =========================================================================
-//  СОСТОЯНИЯ НОВОСТЕЙ
-// =========================================================================
 const newsState = { world: false, russia: false, transfers: false };
 
-// =========================================================================
-//  РЕНДЕРИНГ НОВОСТЕЙ
-// =========================================================================
 function renderNews(category) {
-  const container = document.getElementById(category + 'NewsList');
+  const containerId = category + 'NewsList';
+  const container = document.getElementById(containerId);
   if (!container) return;
-  let items = [];
-  if (category === 'world') items = worldNews;
-  else if (category === 'russia') items = russiaNews;
-  else if (category === 'transfers') items = transfersNews;
-
+  let items = category === 'world' ? worldNews : category === 'russia' ? russiaNews : transfersNews;
   const expanded = newsState[category];
-  const visible = expanded ? items.length : 5;
-  const sliced = items.slice(0, visible);
+  const visible = expanded ? items : items.slice(0, 5);
   let html = '';
   if (category === 'transfers') {
-    html = sliced.map(t => `
-      <div class="transfer-item">
-        <span class="icon"><i class="fas fa-arrow-right"></i></span>
-        <div class="details">
-          <span class="player">${t.players.join(', ')}</span>
-          ${t.from} ➡️ <span class="club">${t.to}</span>
-        </div>
-      </div>
-    `).join('');
-    html = `<div class="news-card"><div class="date">Трансферное окно – обновление</div>${html}</div>`;
+    html = `<div class="news-card"><div class="date">Трансферное окно – обновление</div>
+      ${visible.map(t => `<div class="transfer-item"><span class="icon"><i class="fas fa-arrow-right"></i></span>
+        <div class="details"><span class="player">${t.players.join(', ')}</span> ${t.from} ➡️ <span class="club">${t.to}</span></div></div>`).join('')}</div>`;
   } else {
-    html = sliced.map(item => {
+    html = visible.map(item => {
       const d = new Date(item.date);
-      const dateStr = d.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' });
-      return `
-        <div class="news-card">
-          <div class="date">${dateStr}</div>
-          <div class="title">${item.title}</div>
-          <div class="summary">${item.summary}</div>
-        </div>
-      `;
+      const dateStr = d.toLocaleDateString('ru-RU', { day:'numeric', month:'long', year:'numeric' });
+      return `<div class="news-card"><div class="date">${dateStr}</div><div class="title">${item.title}</div><div class="summary">${item.summary}</div></div>`;
     }).join('');
   }
   container.innerHTML = html;
-
   const btn = container.parentElement.querySelector('.btn-show-more');
-  if (btn) {
-    btn.innerHTML = expanded ?
-      '<i class="fas fa-chevron-up"></i> Скрыть' :
-      '<i class="fas fa-chevron-down"></i> Смотреть ещё';
-  }
+  if (btn) btn.innerHTML = expanded ? '<i class="fas fa-chevron-up"></i> Скрыть' : '<i class="fas fa-chevron-down"></i> Смотреть ещё';
 }
 
 function toggleNews(category) {
@@ -765,102 +614,30 @@ function toggleNews(category) {
   renderNews(category);
 }
 
-// =========================================================================
-//  ОБНОВЛЕНИЕ НОВОСТЕЙ (имитация)
-// =========================================================================
 function refreshAllNews() {
   const now = new Date();
   const dateStr = now.toISOString().slice(0,10);
   const timeStr = now.toLocaleTimeString();
-  worldNews.unshift({ date: dateStr, title: `🌍 Обновление новостей (${timeStr})`, summary: 'Имитация обновления.' });
-  russiaNews.unshift({ date: dateStr, title: `🇷🇺 Обновление новостей (${timeStr})`, summary: 'Имитация обновления.' });
+  worldNews.unshift({ date: dateStr, title: `🌍 Обновлено (${timeStr})`, summary: 'Новые данные загружены.' });
+  russiaNews.unshift({ date: dateStr, title: `🇷🇺 Обновлено (${timeStr})`, summary: 'Новые данные загружены.' });
   transfersNews.unshift({ from: 'Новое', to: 'Обновление', players: ['📢 Сегодня'] });
   if (worldNews.length > 20) worldNews.pop();
   if (russiaNews.length > 20) russiaNews.pop();
   if (transfersNews.length > 20) transfersNews.pop();
-  renderNews('world');
-  renderNews('russia');
-  renderNews('transfers');
+  renderNews('world'); renderNews('russia'); renderNews('transfers');
   const btn = document.querySelector('.btn-refresh');
   btn.innerHTML = '<i class="fas fa-check"></i> Обновлено!';
-  setTimeout(() => { btn.innerHTML = '<i class="fas fa-sync-alt"></i> Обновить'; }, 2000);
+  setTimeout(() => btn.innerHTML = '<i class="fas fa-sync-alt"></i> Обновить', 2000);
 }
 
-// =========================================================================
-//  ТЕМА, ЛОГОТИП, ПОЛНОЭКРАННЫЙ РЕЖИМ
-// =========================================================================
-let currentTheme = 'light';
-function toggleTheme() {
-  const body = document.body;
-  const btn = document.getElementById('themeToggle');
-  const navLogo = document.getElementById('logoImg');
-  const heroLogo = document.getElementById('heroLogoImg');
-  const fullscreenLogo = document.getElementById('fullscreenLogoImg');
-  if (currentTheme === 'light') {
-    body.classList.add('dark-theme');
-    btn.innerHTML = '<i class="fas fa-sun"></i>';
-    navLogo.src = 'images/logo-dark.png';
-    heroLogo.src = 'images/logo-dark.png';
-    fullscreenLogo.src = 'images/logo-dark.png';
-    currentTheme = 'dark';
-  } else {
-    body.classList.remove('dark-theme');
-    btn.innerHTML = '<i class="fas fa-moon"></i>';
-    navLogo.src = 'images/logo-light.png';
-    heroLogo.src = 'images/logo-light.png';
-    fullscreenLogo.src = 'images/logo-light.png';
-    currentTheme = 'light';
-  }
-}
-
-let logoExpanded = false;
-function toggleLogo() {
-  const wrapper = document.getElementById('logoWrapper');
-  logoExpanded = !logoExpanded;
-  wrapper.classList.toggle('logo-expanded', logoExpanded);
-}
-
-function openFullscreenLogo() {
-  const overlay = document.getElementById('fullscreenOverlay');
-  const logoImg = document.getElementById('fullscreenLogoImg');
-  const navLogo = document.getElementById('logoImg');
-  logoImg.src = navLogo.src;
-  overlay.classList.add('active');
-  document.body.style.overflow = 'hidden';
-}
-function closeFullscreenLogo() {
-  document.getElementById('fullscreenOverlay').classList.remove('active');
-  document.body.style.overflow = '';
-}
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeFullscreenLogo(); });
-
-// =========================================================================
-//  ЯЗЫК (заголовки вкладок)
-// =========================================================================
-const translations = {
-  ru: { news_title: "Новости биатлона", tab_world: "Мир", tab_russia: "Россия", tab_transfers: "Трансферы" },
-  en: { news_title: "Biathlon News", tab_world: "World", tab_russia: "Russia", tab_transfers: "Transfers" }
-};
-let currentLang = 'ru';
-function updateLanguage(lang) {
-  currentLang = lang;
-  document.querySelectorAll('[data-i18n]').forEach(el => {
-    const key = el.dataset.i18n;
-    el.textContent = translations[lang][key] || key;
-  });
-  document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
-}
-document.querySelectorAll('.lang-btn').forEach(b => {
-  b.addEventListener('click', function() {
-    if (this.dataset.lang === currentLang) return;
-    updateLanguage(this.dataset.lang);
-  });
-});
-
-// =========================================================================
-//  ИГРА
-// =========================================================================
-let gameActive = false, gameShots = 0, gameStartTime = 0, gameTimerInterval = null, gameTargets = [];
+// ========================================================================
+//  МИНИ-ИГРА
+// ========================================================================
+let gameActive = false;
+let gameShots = 0;
+let gameStartTime = 0;
+let gameTimerInterval = null;
+let gameTargets = [];
 
 function startGame() {
   const field = document.getElementById('gameField');
@@ -869,7 +646,9 @@ function startGame() {
   const resultDiv = document.getElementById('gameResult');
   const startBtn = document.getElementById('startGameBtn');
 
-  gameActive = false; gameShots = 0; gameStartTime = 0;
+  gameActive = false;
+  gameShots = 0;
+  gameStartTime = 0;
   if (gameTimerInterval) clearInterval(gameTimerInterval);
   resultDiv.style.display = 'none';
   field.innerHTML = '';
@@ -912,8 +691,7 @@ function showTarget(index) {
   div.dataset.index = target.index;
   div.addEventListener('click', function(e) {
     e.stopPropagation();
-    if (!gameActive) return;
-    if (this.classList.contains('hit')) return;
+    if (!gameActive || this.classList.contains('hit')) return;
     if (gameShots === 0) {
       gameStartTime = Date.now();
       gameTimerInterval = setInterval(updateTimer, 100);
@@ -931,7 +709,7 @@ function showTarget(index) {
       document.getElementById('startGameBtn').textContent = 'Играть снова';
       document.getElementById('startGameBtn').disabled = false;
     } else {
-      setTimeout(() => showTarget(gameShots), 300);
+      setTimeout(() => { showTarget(gameShots); }, 300);
     }
   });
   field.appendChild(div);
@@ -946,7 +724,7 @@ function updateTimer() {
 function showResult(time) {
   const resultDiv = document.getElementById('gameResult');
   const textDiv = document.getElementById('resultText');
-  let athlete, fact;
+  let athlete = '', fact = '';
   if (time < 3.0) {
     athlete = 'Йоханнес Бё';
     fact = 'Йоханнес Бё – пятикратный олимпийский чемпион и 13-кратный чемпион мира. Он славится своей невероятной скоростью на лыжне.';
@@ -975,24 +753,81 @@ function showResult(time) {
   `;
 }
 
-document.getElementById('startGameBtn').addEventListener('click', function() {
-  if (this.textContent === 'Играть снова') startGame();
+// ========================================================================
+//  ТЕМА, ЛОГОТИП, FULLSCREEN, ЯЗЫК
+// ========================================================================
+let currentTheme = 'light';
+
+function toggleTheme() {
+  const body = document.body;
+  const btn = document.getElementById('themeToggle');
+  const logoNav = document.getElementById('navLogoImg');
+  const heroLogo = document.getElementById('heroLogoImg');
+  const fullLogo = document.getElementById('fullscreenLogoImg');
+  const disclaimer = document.getElementById('disclaimerText');
+  if (currentTheme === 'light') {
+    body.classList.add('dark-theme');
+    btn.innerHTML = '<i class="fas fa-sun"></i>';
+    logoNav.src = 'images/logo-dark.png';
+    heroLogo.src = 'images/logo-dark.png';
+    fullLogo.src = 'images/logo-dark.png';
+    currentTheme = 'dark';
+  } else {
+    body.classList.remove('dark-theme');
+    btn.innerHTML = '<i class="fas fa-moon"></i>';
+    logoNav.src = 'images/logo-light.png';
+    heroLogo.src = 'images/logo-light.png';
+    fullLogo.src = 'images/logo-light.png';
+    currentTheme = 'light';
+  }
+}
+
+function openFullscreenLogo() {
+  const overlay = document.getElementById('fullscreenOverlay');
+  const navLogo = document.getElementById('navLogoImg');
+  document.getElementById('fullscreenLogoImg').src = navLogo.src;
+  overlay.classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+function closeFullscreenLogo() {
+  document.getElementById('fullscreenOverlay').classList.remove('active');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeFullscreenLogo(); });
+
+const translations = {
+  ru: { news_title: "Новости биатлона", tab_world: "Мир", tab_russia: "Россия", tab_transfers: "Трансферы" },
+  en: { news_title: "Biathlon News", tab_world: "World", tab_russia: "Russia", tab_transfers: "Transfers" }
+};
+let currentLang = 'ru';
+function updateLanguage(lang) {
+  currentLang = lang;
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.dataset.i18n;
+    el.textContent = translations[lang][key] || key;
+  });
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
+}
+document.querySelectorAll('.lang-btn').forEach(b => {
+  b.addEventListener('click', function() {
+    if (this.dataset.lang === currentLang) return;
+    updateLanguage(this.dataset.lang);
+  });
 });
 
-// =========================================================================
-//  ИНИЦИАЛИЗАЦИЯ
-// =========================================================================
+// ========================================================================
+//  INIT
+// ========================================================================
 renderNews('world');
 renderNews('russia');
 renderNews('transfers');
 updateLanguage('ru');
 document.getElementById('lastUpdated').textContent = '2026-06-27';
-<script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/sw.js')
-      .then(() => console.log('Service Worker зарегистрирован'))
-      .catch(err => console.log('Ошибка SW:', err));
+document.getElementById('startGameBtn').addEventListener('click', function() {
+  if (this.textContent === 'Играть снова') {
+    startGame();
   }
+});
 </script>
 </body>
 </html>
